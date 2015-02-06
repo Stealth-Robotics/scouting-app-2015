@@ -157,8 +157,8 @@ namespace ScoutingData
 			bool evenLen = count % 2 == 0;
 			int lowerId = count / 2;
 			int upperId = evenLen ? lowerId + 1 : lowerId;
-			double lowMed = arr[lowerId].ToDouble(CultureInfo.CurrentCulture.NumberFormat);
-			double upMed = arr[upperId].ToDouble(CultureInfo.CurrentCulture.NumberFormat);
+			double lowMed = arr[lowerId].ToDouble(DEF_FORMAT);
+			double upMed = arr[upperId].ToDouble(DEF_FORMAT);
 			double meanMed = (lowMed + upMed) / 2.0;
 			return meanMed;
 		}

@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Analysis\EventAnalysis.cs" />
     <Compile Include="Analysis\FiveNumberSummary.cs" />
+    <Compile Include="Analysis\NormalModel.cs" />
+    <Compile Include="Analysis\TeamAnalysis.cs" />
     <Compile Include="Data\Alliance.cs" />
     <Compile Include="Data\FrcEvent.cs" />
     <Compile Include="Data\Goal.cs" />
