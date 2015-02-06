@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace ScoutingData.Analysis
 {
@@ -22,15 +23,35 @@ namespace ScoutingData.Analysis
 
 		public double ScaledCdf(double start, double end)
 		{
-			return 0.0; // TODO: do this
+			double zs = ZScore(start);
+			double ze = ZScore(end);
+
+			return Cdf(zs, ze);
 		}
 
 		public static double Cdf(double start, double end)
 		{
-			return 0.0; // TODO: program NormalCdf() in C#
+			StatisticFormula formula = new StatisticFormula();
+
+			if (start == double.NegativeInfinity && end == double.PositiveInfinity)
+			{
+				return 1.0;
+			}
+			else if (start == double.NegativeInfinity)
+			{
+				return formula.NormalDistribution(end);
+			}
+			else if (end == double.PositiveInfinity)
+			{
+				return formula.InverseNormalDistribution(start);
+			}
+
+			double lower = formula.NormalDistribution(start);
+			double upper = formula.NormalDistribution(end);
+			return upper - lower;
 		}
 
-		public double zScore(double val)
+		public double ZScore(double val)
 		{
 			return (val - Mean) / SD;
 		}

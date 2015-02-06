@@ -91,6 +91,12 @@ namespace ScoutingData
 			return (3600 * ts.Hours) + (60 * ts.Minutes) + ts.Seconds;
 		}
 
+		/// <summary>
+		/// Calculates the mean value in the list and converts it to a double
+		/// </summary>
+		/// <typeparam name="T">any numeric value (implements IConvertible)</typeparam>
+		/// <param name="list">list the data is taken from</param>
+		/// <returns>mean of the values</returns>
 		public static double Mean<T>(this IList<T> list) 
 			where T : IConvertible
 		{
@@ -104,11 +110,24 @@ namespace ScoutingData
 			return (double)total;
 		}
 
+		/// <summary>
+		/// Calculates the standard deviation of the list of data
+		/// </summary>
+		/// <typeparam name="T">any numeric value (implements IConvertible)</typeparam>
+		/// <param name="list">list the data is taken from</param>
+		/// <returns>standard deviation of the values</returns>
 		public static double StandardDeviation<T>(this IList<T> list) 
 			where T : IConvertible
 		{
 			return list.StandardDeviation(list.Mean());
 		}
+		/// <summary>
+		/// Calculates the standard deviation of the list of data
+		/// </summary>
+		/// <typeparam name="T">any numeric value (implements IConvertible)</typeparam>
+		/// <param name="list">list the data is taken from</param>
+		/// <param name="mean">mean of the data, for faster calculation</param>
+		/// <returns>standard deviation of the values</returns>
 		public static double StandardDeviation<T>(this IList<T> list, double mean)
 			where T : IConvertible
 		{
@@ -126,6 +145,12 @@ namespace ScoutingData
 			return Math.Sqrt(variance);
 		}
 
+		/// <summary>
+		/// Calculates the 5-number summary of the data (min-Q1-med-Q3-max)
+		/// </summary>
+		/// <typeparam name="T">any numeric type (implements IConvertible)</typeparam>
+		/// <param name="list">list the data is taken from</param>
+		/// <returns>struct containing the values from the 5-number summary</returns>
 		public static FiveNumberSummary Get5NS<T>(this IList<T> list)
 			where T : IConvertible
 		{
@@ -150,6 +175,12 @@ namespace ScoutingData
 			return new FiveNumberSummary(min, q1, med, q3, max);
 		}
 
+		/// <summary>
+		/// Used to calculate the median of an array
+		/// </summary>
+		/// <typeparam name="T">any numeric type (implements IConvertible)</typeparam>
+		/// <param name="arr">array the data is taken from</param>
+		/// <returns>median value in the array</returns>
 		public static double Median<T>(this T[] arr)
 			where T : IConvertible
 		{
@@ -162,10 +193,26 @@ namespace ScoutingData
 			double meanMed = (lowMed + upMed) / 2.0;
 			return meanMed;
 		}
+		/// <summary>
+		/// Used to calculate the median of an array
+		/// </summary>
+		/// <typeparam name="T">any numeric type (implements IConvertible)</typeparam>
+		/// <param name="arr">list the data is taken from</param>
+		/// <returns>median value in the array</returns>
 		public static double Median<T>(this IList<T> list)
 			where T : IConvertible
 		{
 			return list.ToArray().Median();
+		}
+
+		/// <summary>
+		/// Quick function for converting numbers from 0 to 1 into percentages
+		/// </summary>
+		/// <param name="n">number to convert</param>
+		/// <returns>percentage string</returns>
+		public static string ToStringPct(this double n)
+		{
+			return (n * 100).ToString() + "%";
 		}
 	}
 }
