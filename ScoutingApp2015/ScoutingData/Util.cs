@@ -91,17 +91,17 @@ namespace ScoutingData
 			return (3600 * ts.Hours) + (60 * ts.Minutes) + ts.Seconds;
 		}
 
+		#region stats
+
 		/// <summary>
 		/// Calculates the mean value in the list and converts it to a double
 		/// </summary>
-		/// <typeparam name="T">any numeric value (implements IConvertible)</typeparam>
 		/// <param name="list">list the data is taken from</param>
 		/// <returns>mean of the values</returns>
-		public static double Mean<T>(this IList<T> list) 
-			where T : IConvertible
+		public static double Mean(this IList<IConvertible> list)
 		{
 			decimal total = 0;
-			foreach (T t in list)
+			foreach (IConvertible t in list)
 			{
 				total += t.ToDecimal(DEF_FORMAT);
 			}
@@ -113,28 +113,24 @@ namespace ScoutingData
 		/// <summary>
 		/// Calculates the standard deviation of the list of data
 		/// </summary>
-		/// <typeparam name="T">any numeric value (implements IConvertible)</typeparam>
 		/// <param name="list">list the data is taken from</param>
 		/// <returns>standard deviation of the values</returns>
-		public static double StandardDeviation<T>(this IList<T> list) 
-			where T : IConvertible
+		public static double StandardDeviation(this IList<IConvertible> list)
 		{
 			return list.StandardDeviation(list.Mean());
 		}
 		/// <summary>
 		/// Calculates the standard deviation of the list of data
 		/// </summary>
-		/// <typeparam name="T">any numeric value (implements IConvertible)</typeparam>
 		/// <param name="list">list the data is taken from</param>
 		/// <param name="mean">mean of the data, for faster calculation</param>
 		/// <returns>standard deviation of the values</returns>
-		public static double StandardDeviation<T>(this IList<T> list, double mean)
-			where T : IConvertible
+		public static double StandardDeviation(this IList<IConvertible> list, double mean)
 		{
 			decimal sigmaDeviations = 0;
-			foreach (T t in list)
+			foreach (IConvertible ic in list)
 			{
-				decimal val = t.ToDecimal(DEF_FORMAT);
+				decimal val = ic.ToDecimal(DEF_FORMAT);
 				decimal deviation = val - (decimal)mean;
 				decimal devSq = deviation * deviation;
 				sigmaDeviations += devSq;
@@ -148,22 +144,20 @@ namespace ScoutingData
 		/// <summary>
 		/// Calculates the 5-number summary of the data (min-Q1-med-Q3-max)
 		/// </summary>
-		/// <typeparam name="T">any numeric type (implements IConvertible)</typeparam>
 		/// <param name="list">list the data is taken from</param>
 		/// <returns>struct containing the values from the 5-number summary</returns>
-		public static FiveNumberSummary Get5NS<T>(this IList<T> list)
-			where T : IConvertible
+		public static FiveNumberSummary Get5NS(this IList<IConvertible> list)
 		{
-			T[] sortedArr = list.OrderBy((t) => t).ToArray();
+			IConvertible[] sortedArr = list.OrderBy(ic => ic).ToArray();
 			double med = sortedArr.Median();
 			
 			int half = sortedArr.Length / 2;
-			T[] lower = new T[half];
+			IConvertible[] lower = new IConvertible[half];
 			for (int i = 0; i < half; i++)
 			{
 				lower[i] = sortedArr[i];
 			}
-			T[] upper = new T[half];
+			IConvertible[] upper = new IConvertible[half];
 			sortedArr.CopyTo(upper, half);
 
 			double q1 = lower.Median();
@@ -178,11 +172,9 @@ namespace ScoutingData
 		/// <summary>
 		/// Used to calculate the median of an array
 		/// </summary>
-		/// <typeparam name="T">any numeric type (implements IConvertible)</typeparam>
 		/// <param name="arr">array the data is taken from</param>
 		/// <returns>median value in the array</returns>
-		public static double Median<T>(this T[] arr)
-			where T : IConvertible
+		public static double Median(this IConvertible[] arr)
 		{
 			int count = arr.Count();
 			bool evenLen = count % 2 == 0;
@@ -196,14 +188,28 @@ namespace ScoutingData
 		/// <summary>
 		/// Used to calculate the median of an array
 		/// </summary>
-		/// <typeparam name="T">any numeric type (implements IConvertible)</typeparam>
 		/// <param name="arr">list the data is taken from</param>
 		/// <returns>median value in the array</returns>
-		public static double Median<T>(this IList<T> list)
-			where T : IConvertible
+		public static double Median(this IList<IConvertible> list)
 		{
 			return list.ToArray().Median();
 		}
+
+		/// <summary>
+		/// Creates a Distribution object by analyzing the distribution of the list.
+		/// </summary>
+		/// <param name="list">List to be analyzed</param>
+		/// <returns>Distribution object about the list's distribution</returns>
+		public static Distribution MakeDistribution(this IList<IConvertible> list)
+		{
+			double mean = list.Mean();
+			NormalModel norm = new NormalModel(mean, list.StandardDeviation(mean));
+			FiveNumberSummary sum = list.Get5NS();
+
+			return new Distribution(norm, sum);
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Quick function for converting numbers from 0 to 1 into percentages

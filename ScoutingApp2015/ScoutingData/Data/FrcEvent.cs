@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 
 namespace ScoutingData.Data
 {
+	[JsonObject(MemberSerialization.OptIn)]
 	public class FrcEvent
 	{
 		[JsonProperty]

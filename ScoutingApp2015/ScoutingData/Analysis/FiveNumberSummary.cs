@@ -4,22 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
+
 namespace ScoutingData.Analysis
 {
+	[JsonObject(MemberSerialization.OptIn)]
 	public struct FiveNumberSummary
 	{
+		[JsonProperty]
 		public double Min
 		{ get; private set; }
 
+		[JsonProperty]
 		public double Q1
 		{ get; private set; }
 
+		[JsonProperty]
 		public double Med
 		{ get; private set; }
 
+		[JsonProperty]
 		public double Q3
 		{ get; private set; }
 
+		[JsonProperty]
 		public double Max
 		{ get; private set; }
 

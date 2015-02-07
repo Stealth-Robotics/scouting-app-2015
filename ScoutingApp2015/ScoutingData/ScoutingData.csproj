@@ -44,11 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\Distribution.cs" />
     <Compile Include="Analysis\EventAnalysis.cs" />
     <Compile Include="Analysis\FiveNumberSummary.cs" />
     <Compile Include="Analysis\NormalModel.cs" />
     <Compile Include="Analysis\TeamAnalysis.cs" />
     <Compile Include="Data\Alliance.cs" />
+    <Compile Include="Data\AllianceGroup.cs" />
     <Compile Include="Data\FrcEvent.cs" />
     <Compile Include="Data\Goal.cs" />
     <Compile Include="Data\Match.cs" />

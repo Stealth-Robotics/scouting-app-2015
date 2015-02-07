@@ -8,26 +8,9 @@ using Newtonsoft.Json;
 
 namespace ScoutingData.Data
 {
-	public enum AllianceColor
-	{
-		Red,
-		Blue
-	}
-
-	public enum AlliancePosition
-	{
-		A,
-		B,
-		C
-	}
-
 	[JsonObject(MemberSerialization.OptIn)]
-	public class Alliance : IEnumerable<Team>
+	public class Alliance : AllianceGroup<Team>
 	{
-		[JsonProperty]
-		public AllianceColor Color
-		{ get; set; }
-
 		[JsonProperty]
 		public int TeamA_ID
 		{ get; set; }
@@ -40,7 +23,8 @@ namespace ScoutingData.Data
 		public int TeamC_ID
 		{ get; set; }
 
-		public Team TeamA
+		[JsonIgnore]
+		public override Team A
 		{
 			get
 			{
@@ -54,7 +38,8 @@ namespace ScoutingData.Data
 		}
 		Team _teamA;
 
-		public Team TeamB
+		[JsonIgnore]
+		public override Team B
 		{
 			get
 			{
@@ -68,7 +53,8 @@ namespace ScoutingData.Data
 		}
 		Team _teamB;
 
-		public Team TeamC
+		[JsonIgnore]
+		public override Team C
 		{
 			get
 			{
@@ -82,91 +68,14 @@ namespace ScoutingData.Data
 		}
 		Team _teamC;
 
-		public Alliance(Team a, Team b, Team c)
-		{
-			TeamA = a;
-			TeamB = b;
-			TeamC = c;
-		}
+		public Alliance(Team a, Team b, Team c) : base(a, b, c)
+		{ }
 
 		public void PostJsonLoading(FrcEvent e)
 		{
-			TeamA = e.LoadTeam(TeamA_ID);
-			TeamB = e.LoadTeam(TeamB_ID);
-			TeamC = e.LoadTeam(TeamC_ID);
+			A = e.LoadTeam(TeamA_ID);
+			B = e.LoadTeam(TeamB_ID);
+			C = e.LoadTeam(TeamC_ID);
 		}
-
-		#region Interfaces
-
-		public IEnumerator<Team> GetEnumerator()
-		{
-			return new AllianceEnumerator(this);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-
-		internal class AllianceEnumerator : IEnumerator<Team>
-		{
-			int position;
-			Alliance alliance;
-
-			public AllianceEnumerator(Alliance al)
-			{
-				alliance = al;
-				position = 0;
-			}
-
-			public Team Current
-			{
-				get 
-				{
-					switch (position)
-					{
-					case 0:
-						return alliance.TeamA;
-					case 1:
-						return alliance.TeamB;
-					case 2:
-						return alliance.TeamC;
-					default:
-						return alliance.TeamA;
-					}
-				}
-			}
-
-			public void Dispose()
-			{ }
-
-			object IEnumerator.Current
-			{
-				get 
-				{
-					return this.Current; 
-				}
-			}
-
-			public bool MoveNext()
-			{
-				position++;
-
-				if (position > 2)
-				{
-					position = 2;
-					return false;
-				}
-
-				return true;
-			}
-
-			public void Reset()
-			{
-				position = 0;
-			}
-		}
-		
-		#endregion
 	}
 }

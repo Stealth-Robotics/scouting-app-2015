@@ -5,13 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.DataVisualization.Charting;
 
+using Newtonsoft.Json;
+
 namespace ScoutingData.Analysis
 {
+	[JsonObject(MemberSerialization.OptIn)]
 	public struct NormalModel
 	{
+		[JsonProperty]
 		public double Mean
 		{ get; private set; }
 
+		[JsonProperty]
 		public double SD
 		{ get; private set; }
 
