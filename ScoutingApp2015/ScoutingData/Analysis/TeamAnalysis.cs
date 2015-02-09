@@ -12,10 +12,10 @@ namespace ScoutingData.Analysis
 	[JsonObject(MemberSerialization.OptIn)]
 	public class TeamAnalysis
 	{
-		public FrcEvent ParentEvent
+		public FrcEvent Event
 		{ get; private set; }
 
-		public Team LinkedTeam
+		public Team Team
 		{ get; set; }
 
 		#region analysis
@@ -83,18 +83,18 @@ namespace ScoutingData.Analysis
 
 		public TeamAnalysis(FrcEvent e, Team linked)
 		{
-			ParentEvent = e;
-			LinkedTeam = linked;
+			Event = e;
+			Team = linked;
 		}
 
 		public void CalculateSafe()
 		{
-			if (ParentEvent == null)
+			if (Event == null)
 			{
 				Util.DebugLog(LogLevel.Error, "Could not calculate team analysis, as ParentEvent is null.");
 				return;
 			}
-			if (LinkedTeam == null)
+			if (Team == null)
 			{
 				Util.DebugLog(LogLevel.Error, "Could not calculate team analysis, as LinkedTeam is null.");
 				return;
@@ -107,9 +107,9 @@ namespace ScoutingData.Analysis
 		{
 
 			// List of matches the team is in
-			List<Match> matches = ParentEvent.Matches.FindAll((m) =>
+			List<Match> matches = Event.Matches.FindAll((m) =>
 			{
-				return (int)m.GetTeamColor(LinkedTeam) != -1;
+				return (int)m.GetTeamColor(Team) != -1;
 			});
 
 			// ================================================================== //
@@ -117,14 +117,14 @@ namespace ScoutingData.Analysis
 			// Winrate
 			int wins = matches.Count((m) =>
 			{
-				return m.Winner == m.GetTeamColor(LinkedTeam);
+				return m.Winner == m.GetTeamColor(Team);
 			});
 			WinRate = (double)wins / (double)(matches.Count);
 
 			// Scored Points
 			List<int> scoredPoints = matches.ConvertAll<int>((m) =>
 			{
-				List<Goal> goals = m.GetGoalsByTeam(LinkedTeam);
+				List<Goal> goals = m.GetGoalsByTeam(Team);
 				return goals.Aggregate(0, (total, g) => total + g.PointValue());
 			});
 			ScoredPoints = scoredPoints.MakeDistribution();
@@ -132,12 +132,12 @@ namespace ScoutingData.Analysis
 			// Final Score
 			List<int> finalScores = matches.ConvertAll<int>((m) =>
 			{
-				if (m.BlueAlliance.Contains(LinkedTeam))
+				if (m.BlueAlliance.Contains(Team))
 				{
 					return m.BlueFinalScore;
 				}
 
-				if (m.RedAlliance.Contains(LinkedTeam))
+				if (m.RedAlliance.Contains(Team))
 				{
 					return m.RedFinalScore;
 				}
@@ -150,14 +150,14 @@ namespace ScoutingData.Analysis
 			// Penalties
 			List<int> penalties = matches.ConvertAll<int>((m) =>
 			{
-				if (m.BlueAlliance.Contains(LinkedTeam))
+				if (m.BlueAlliance.Contains(Team))
 				{
-					return m.BluePenalties.Count((p) => p.TeamAtFault() == LinkedTeam);
+					return m.BluePenalties.Count((p) => p.TeamAtFault() == Team);
 				}
 
-				if (m.RedAlliance.Contains(LinkedTeam))
+				if (m.RedAlliance.Contains(Team))
 				{
-					return m.RedPenalties.Count((p) => p.TeamAtFault() == LinkedTeam);
+					return m.RedPenalties.Count((p) => p.TeamAtFault() == Team);
 				}
 
 				return -1;
@@ -168,7 +168,7 @@ namespace ScoutingData.Analysis
 			// Violations Per Game
 			int violations = matches.Aggregate(0, (total, m) =>
 			{
-				List<PenaltyBase> localPenal = (m.GetTeamColor(LinkedTeam) == AllianceColor.Red)
+				List<PenaltyBase> localPenal = (m.GetTeamColor(Team) == AllianceColor.Red)
 					? m.RedPenalties : m.BluePenalties;
 
 				return total + localPenal.Count((p) => p is PenaltyViolation);
@@ -176,14 +176,14 @@ namespace ScoutingData.Analysis
 			ViolationsPerGame = (double)violations / (double)matches.Count;
 
 			// Working Currently
-			WorkingCurrently = matches.Last().GetWorking(LinkedTeam);
+			WorkingCurrently = matches.Last().GetWorking(Team);
 			
 			// Responsiveness Rate
-			int responding = matches.Count((m) => m.GetWorking(LinkedTeam));
+			int responding = matches.Count((m) => m.GetWorking(Team));
 			ResponsivenessRate = (double)responding / (double)matches.Count;
 
 			// Defense
-			List<int> defense = matches.ConvertAll<int>((m) => m.GetDefense(LinkedTeam));
+			List<int> defense = matches.ConvertAll<int>((m) => m.GetDefense(Team));
 			Defense = defense.MakeDistribution();
 		}
 	}

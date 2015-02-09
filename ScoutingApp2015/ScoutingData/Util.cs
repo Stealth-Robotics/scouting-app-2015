@@ -19,6 +19,9 @@ namespace ScoutingData
 
 	public static class Util
 	{
+		public static readonly string USERPROFILE =
+			Environment.GetEnvironmentVariable("USERPROFILE");
+
 		internal static readonly IFormatProvider DEF_FORMAT = 
 			CultureInfo.CurrentCulture.NumberFormat;
 

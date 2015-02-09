@@ -18,5 +18,9 @@ namespace ScoutingData.Analysis
 		[JsonProperty]
 		public List<TeamAnalysis> TeamAnalyses
 		{ get; private set; }
+
+		[JsonProperty]
+		public List<MatchAnalysis> MatchAnalyses
+		{ get; private set; }
 	}
 }
