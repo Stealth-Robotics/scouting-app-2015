@@ -48,6 +48,7 @@
     <Compile Include="Analysis\Distribution.cs" />
     <Compile Include="Analysis\EventAnalysis.cs" />
     <Compile Include="Analysis\FiveNumberSummary.cs" />
+    <Compile Include="Analysis\MatchAnalysis.cs" />
     <Compile Include="Analysis\NormalModel.cs" />
     <Compile Include="Analysis\TeamAnalysis.cs" />
     <Compile Include="Data\Alliance.cs" />
