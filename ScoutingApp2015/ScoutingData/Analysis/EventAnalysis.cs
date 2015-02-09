@@ -12,11 +12,11 @@ namespace ScoutingData.Analysis
 	public class EventAnalysis
 	{
 		[JsonProperty]
-		string EventName
+		public string EventName
 		{ get; set; }
 
 		[JsonProperty]
-		List<TeamAnalysis> TeamAnalyses
+		public List<TeamAnalysis> TeamAnalyses
 		{ get; private set; }
 	}
 }

@@ -124,5 +124,47 @@ namespace ScoutingData.Data
 				return null;
 			}
 		}
+
+		public AllianceColor GetTeamColor(Team team)
+		{
+			if (BlueAlliance.Contains(team))
+			{
+				return AllianceColor.Blue;
+			}
+			else if (RedAlliance.Contains(team))
+			{
+				return AllianceColor.Red;
+			}
+			else
+			{
+				Util.DebugLog(LogLevel.Error, "Neither alliance contains team " + team.Number.ToString());
+				return (AllianceColor)(-1); // Make some errors!
+			}
+		}
+
+		public List<Goal> GetGoalsByTeam(Team team)
+		{
+			AllianceColor color = GetTeamColor(team);
+
+			return Goals.FindAll((g) =>
+			{
+				if (g.Global)
+				{
+					return true;
+				}
+
+				if (g.FullAlliance)
+				{
+					if (g.ScoringAlliance.HasValue)
+					{
+						return g.ScoringAlliance == color;
+					}
+
+					return false; // INVALID
+				}
+
+				return g.ScoringTeam == team;
+			});
+		}
 	}
 }

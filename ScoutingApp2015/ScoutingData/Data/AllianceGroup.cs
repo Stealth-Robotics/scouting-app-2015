@@ -55,7 +55,7 @@ namespace ScoutingData.Data
 			return new AllianceEnumerator(this);
 		}
 
-		public IEnumerator IEnumerable.GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
 		}

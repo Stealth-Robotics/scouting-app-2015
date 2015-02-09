@@ -24,7 +24,7 @@ namespace ScoutingData.Analysis
 		/// Ratio of wins out of total games. [= Wins / Matches.Count]
 		/// </summary>
 		[JsonProperty]
-		public float WinRate
+		public double WinRate
 		{ get; private set; }
 
 		/// <summary>
@@ -52,7 +52,7 @@ namespace ScoutingData.Analysis
 		/// Average violations per game. [= Violations / Matches.Count]
 		/// </summary>
 		[JsonProperty]
-		public float ViolationsPerGame
+		public double ViolationsPerGame
 		{ get; private set; }
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace ScoutingData.Analysis
 		/// Responsiveness rate over matches so far [= Matches.CountAll(Responsive) / Matches.Count]
 		/// </summary>
 		[JsonProperty]
-		public float ResponsivenessRate
+		public double ResponsivenessRate
 		{ get; private set; }
 
 		/// <summary>
@@ -89,19 +89,14 @@ namespace ScoutingData.Analysis
 
 		public void CalculateSafe()
 		{
-			bool invalid = false;
 			if (ParentEvent == null)
 			{
-				invalid = true;
 				Util.DebugLog(LogLevel.Error, "Could not calculate team analysis, as ParentEvent is null.");
+				return;
 			}
 			if (LinkedTeam == null)
 			{
-				invalid = true;
 				Util.DebugLog(LogLevel.Error, "Could not calculate team analysis, as LinkedTeam is null.");
-			}
-			if (invalid)
-			{
 				return;
 			}
 
@@ -111,6 +106,81 @@ namespace ScoutingData.Analysis
 		public void Calculate()
 		{
 
+			// List of matches the team is in
+			List<Match> matches = ParentEvent.Matches.FindAll((m) =>
+			{
+				return (int)m.GetTeamColor(LinkedTeam) != -1;
+			});
+
+			// ================================================================== //
+
+			// Winrate
+			int wins = matches.Aggregate(0, (total, m) =>
+			{
+				return m.Winner == m.GetTeamColor(LinkedTeam) ? total + 1 : total;
+			});
+			WinRate = (double)wins / (double)(matches.Count);
+
+			// Scored Points
+			List<int> scoredPoints = matches.ConvertAll<int>((m) =>
+			{
+				List<Goal> goals = m.GetGoalsByTeam(LinkedTeam);
+				return goals.Aggregate(0, (total, g) => total + g.PointValue());
+			});
+			ScoredPoints = scoredPoints.MakeDistribution();
+
+			// Final Score
+			List<int> finalScores = matches.ConvertAll<int>((m) =>
+			{
+				if (m.BlueAlliance.Contains(LinkedTeam))
+				{
+					return m.BlueFinalScore;
+				}
+
+				if (m.RedAlliance.Contains(LinkedTeam))
+				{
+					return m.RedFinalScore;
+				}
+
+				return -1;
+			});
+			finalScores.RemoveAll((n) => n == -1);
+			FinalScore = finalScores.MakeDistribution();
+
+			// Penalties
+			List<int> penalties = matches.ConvertAll<int>((m) =>
+			{
+				if (m.BlueAlliance.Contains(LinkedTeam))
+				{
+					return m.BluePenalties.Aggregate(0, (total, p) => total - p.ScoreChange());
+				}
+
+				if (m.RedAlliance.Contains(LinkedTeam))
+				{
+					return m.RedPenalties.Aggregate(0, (total, p) => total - p.ScoreChange());
+				}
+
+				return -1;
+			});
+			penalties.RemoveAll((n) => n == -1);
+			Penalties = penalties.MakeDistribution();
+
+			// Violations Per Game
+			int violations = 0;
+			foreach (Match m in matches)
+			{
+				List<PenaltyBase> localVio = (m.GetTeamColor(LinkedTeam) == AllianceColor.Red) 
+					? m.RedPenalties : m.BluePenalties;
+
+				foreach (PenaltyBase p in localVio)
+				{
+					if (p is PenaltyViolation)
+					{
+						violations++;
+					}
+				}
+			}
+			ViolationsPerGame = (double)violations / (double)matches.Count;
 		}
 	}
 }

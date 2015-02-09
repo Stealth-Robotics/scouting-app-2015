@@ -64,5 +64,23 @@ namespace ScoutingData.Data
 		{
 			return "Team " + Number.ToString() + ": " + Name;
 		}
+
+		public static bool operator==(Team a, Team b)
+		{
+			object objA = a as object;
+			object objB = b as object;
+
+			if (objA == null && objB == null)
+			{
+				return true;
+			}
+
+			return a.Equals(b);
+		}
+
+		public static bool operator!=(Team a, Team b)
+		{
+			return !(a == b);
+		}
 	}
 }

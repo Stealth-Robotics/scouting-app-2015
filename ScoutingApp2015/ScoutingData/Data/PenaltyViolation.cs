@@ -9,8 +9,15 @@ using Newtonsoft.Json;
 namespace ScoutingData.Data
 {
 	[JsonObject(MemberSerialization.OptIn)]
-	public class PenaltyFoul : PenaltyBase
+	public class PenaltyViolation : PenaltyBase
 	{
+		/// <summary>
+		/// Amount of points deducted from the alliance's score (recorded as positive)
+		/// </summary>
+		[JsonProperty]
+		public int PenaltyValue
+		{ get; set; }
+
 		[JsonProperty]
 		public string Reasoning
 		{ get; set; }
@@ -20,23 +27,24 @@ namespace ScoutingData.Data
 		{ get; set; }
 
 		[JsonProperty]
-		public int BlamedTeamID
+		public int ViolatingTeamID
 		{ get; set; }
 
 		[JsonIgnore]
-		public Team BlamedTeam
+		public Team ViolatingTeam
 		{ get; private set; }
 
-		public PenaltyFoul(string reason, AllianceColor penalizedAlliance, int teamID)
+		public PenaltyViolation(int points, string cause, AllianceColor color, int teamID)
 		{
-			Reasoning = reason;
-			PenalizedAlliance = penalizedAlliance;
-			BlamedTeamID = teamID;
+			PenaltyValue = points;
+			Reasoning = cause;
+			PenalizedAlliance = color;
+			ViolatingTeamID = teamID;
 		}
 
 		public override int ScoreChange()
 		{
-			return -6;
+			return -PenaltyValue;
 		}
 
 		public override AllianceColor AffectedAlliance()
@@ -51,7 +59,7 @@ namespace ScoutingData.Data
 
 		public override void PostJsonLoading(FrcEvent e)
 		{
-			BlamedTeam = e.LoadTeam(BlamedTeamID);
+			ViolatingTeam = e.LoadTeam(ViolatingTeamID);
 		}
 	}
 }

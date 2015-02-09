@@ -36,23 +36,21 @@ namespace ScoutingData.Analysis
 
 		public static double Cdf(double start, double end)
 		{
-			StatisticFormula formula = new StatisticFormula();
-
 			if (start == double.NegativeInfinity && end == double.PositiveInfinity)
 			{
 				return 1.0;
 			}
 			else if (start == double.NegativeInfinity)
 			{
-				return formula.NormalDistribution(end);
+				return Util.Stats.NormalDistribution(end);
 			}
 			else if (end == double.PositiveInfinity)
 			{
-				return formula.InverseNormalDistribution(start);
+				return Util.Stats.InverseNormalDistribution(start);
 			}
 
-			double lower = formula.NormalDistribution(start);
-			double upper = formula.NormalDistribution(end);
+			double lower = Util.Stats.NormalDistribution(start);
+			double upper = Util.Stats.NormalDistribution(end);
 			return upper - lower;
 		}
 

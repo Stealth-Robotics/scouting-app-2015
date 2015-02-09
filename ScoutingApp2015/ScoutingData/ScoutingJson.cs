@@ -30,10 +30,5 @@ namespace ScoutingData
 
 			// init
 		}
-
-		public static void LoadEvents(Uri basePath)
-		{
-
-		}
 	}
 }
