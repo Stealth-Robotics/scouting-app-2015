@@ -194,5 +194,48 @@ namespace ScoutingData.Data
 				return g.ScoringTeam == team;
 			});
 		}
+
+		public bool GetWorking(Team team)
+		{
+			AllianceColor color = GetTeamColor(team);
+			if (color == AllianceColor.Red)
+			{
+				AlliancePosition pos = RedAlliance.GetPositionOf(team);
+				return RedWorking[pos];
+			}
+			else if (color == AllianceColor.Blue)
+			{
+				AlliancePosition pos = BlueAlliance.GetPositionOf(team);
+				return BlueWorking[pos];
+			}
+			else
+			{
+				Util.DebugLog(LogLevel.Critical, "Invalid alliance color: " +
+					color.ToString());
+				throw new IndexOutOfRangeException("Invalid alliance color: " + 
+					color.ToString());
+			}
+		}
+
+		public int GetDefense(Team team)
+		{
+			AllianceColor color = GetTeamColor(team);
+			if (color == AllianceColor.Red)
+			{
+				AlliancePosition pos = RedAlliance.GetPositionOf(team);
+				return RedDefense[pos];
+			}
+			else if (color == AllianceColor.Blue)
+			{
+				AlliancePosition pos = BlueAlliance.GetPositionOf(team);
+				return BlueDefense[pos];
+			}
+			else
+			{
+				Util.DebugLog(LogLevel.Error, "Invalid alliance color: " +
+					color.ToString());
+				return -1;
+			}
+		}
 	}
 }

@@ -57,6 +57,11 @@ namespace ScoutingData.Data
 			return Reasoning;
 		}
 
+		public override Team TeamAtFault()
+		{
+			return ViolatingTeam;
+		}
+
 		public override void PostJsonLoading(FrcEvent e)
 		{
 			ViolatingTeam = e.LoadTeam(ViolatingTeamID);

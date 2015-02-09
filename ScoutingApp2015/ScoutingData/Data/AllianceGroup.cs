@@ -67,6 +67,26 @@ namespace ScoutingData.Data
 			C = c;
 		}
 
+		public AlliancePosition GetPositionOf(T item)
+		{
+			if (A.Equals(item)) // apparently == isn't valid for comparing types 'T' and 'T'
+			{					// why doesn't it default to object.operator==() ?
+				return AlliancePosition.A;
+			}
+			else if (B.Equals(item))
+			{
+				return AlliancePosition.B;
+			}
+			else if (C.Equals(item))
+			{
+				return AlliancePosition.C;
+			}
+			else
+			{
+				return (AlliancePosition)(-1);
+			}
+		}
+
 		#region Interfaces
 
 		public IEnumerator<T> GetEnumerator()

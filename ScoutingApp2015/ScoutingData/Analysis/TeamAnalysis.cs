@@ -115,9 +115,9 @@ namespace ScoutingData.Analysis
 			// ================================================================== //
 
 			// Winrate
-			int wins = matches.Aggregate(0, (total, m) =>
+			int wins = matches.Count((m) =>
 			{
-				return m.Winner == m.GetTeamColor(LinkedTeam) ? total + 1 : total;
+				return m.Winner == m.GetTeamColor(LinkedTeam);
 			});
 			WinRate = (double)wins / (double)(matches.Count);
 
@@ -152,12 +152,12 @@ namespace ScoutingData.Analysis
 			{
 				if (m.BlueAlliance.Contains(LinkedTeam))
 				{
-					return m.BluePenalties.Aggregate(0, (total, p) => total - p.ScoreChange());
+					return m.BluePenalties.Count((p) => p.TeamAtFault() == LinkedTeam);
 				}
 
 				if (m.RedAlliance.Contains(LinkedTeam))
 				{
-					return m.RedPenalties.Aggregate(0, (total, p) => total - p.ScoreChange());
+					return m.RedPenalties.Count((p) => p.TeamAtFault() == LinkedTeam);
 				}
 
 				return -1;
@@ -166,24 +166,25 @@ namespace ScoutingData.Analysis
 			Penalties = penalties.MakeDistribution();
 
 			// Violations Per Game
-			int violations = 0;
-			foreach (Match m in matches)
+			int violations = matches.Aggregate(0, (total, m) =>
 			{
-				List<PenaltyBase> localVio = (m.GetTeamColor(LinkedTeam) == AllianceColor.Red) 
+				List<PenaltyBase> localPenal = (m.GetTeamColor(LinkedTeam) == AllianceColor.Red)
 					? m.RedPenalties : m.BluePenalties;
 
-				foreach (PenaltyBase p in localVio)
-				{
-					if (p is PenaltyViolation)
-					{
-						violations++;
-					}
-				}
-			}
+				return total + localPenal.Count((p) => p is PenaltyViolation);
+			});
 			ViolationsPerGame = (double)violations / (double)matches.Count;
 
 			// Working Currently
+			WorkingCurrently = matches.Last().GetWorking(LinkedTeam);
 			
+			// Responsiveness Rate
+			int responding = matches.Count((m) => m.GetWorking(LinkedTeam));
+			ResponsivenessRate = (double)responding / (double)matches.Count;
+
+			// Defense
+			List<int> defense = matches.ConvertAll<int>((m) => m.GetDefense(LinkedTeam));
+			Defense = defense.MakeDistribution();
 		}
 	}
 }

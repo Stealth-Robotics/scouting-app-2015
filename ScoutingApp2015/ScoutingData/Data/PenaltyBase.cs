@@ -14,6 +14,7 @@ namespace ScoutingData.Data
 		public abstract int ScoreChange();
 		public abstract AllianceColor AffectedAlliance();
 		public abstract string Reason();
+		public abstract Team TeamAtFault();
 
 		public abstract void PostJsonLoading(FrcEvent e);
 	}
