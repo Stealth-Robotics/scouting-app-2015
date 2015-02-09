@@ -181,6 +181,9 @@ namespace ScoutingData.Analysis
 				}
 			}
 			ViolationsPerGame = (double)violations / (double)matches.Count;
+
+			// Working Currently
+			
 		}
 	}
 }

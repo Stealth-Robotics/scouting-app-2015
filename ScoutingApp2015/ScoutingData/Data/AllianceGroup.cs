@@ -25,6 +25,25 @@ namespace ScoutingData.Data
 	[JsonObject(MemberSerialization.OptIn)]
 	public class AllianceGroup<T> : IEnumerable<T>
 	{
+		[JsonIgnore]
+		public T this[AlliancePosition pos]
+		{
+			get
+			{
+				switch (pos)
+				{
+				case AlliancePosition.A:
+					return A;
+				case AlliancePosition.B:
+					return B;
+				case AlliancePosition.C:
+					return C;
+				default:
+					throw new IndexOutOfRangeException("Invalid position: " + pos.ToString());
+				}
+			}
+		}
+
 		[JsonProperty]
 		public AllianceColor Color
 		{ get; set; }

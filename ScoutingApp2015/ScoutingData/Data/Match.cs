@@ -101,6 +101,34 @@ namespace ScoutingData.Data
 		public AllianceColor Winner
 		{ get; set; }
 
+		/// <summary>
+		/// Used to determine which bots are working (red)
+		/// </summary>
+		[JsonProperty]
+		public AllianceGroup<bool> RedWorking
+		{ get; set; }
+
+		/// <summary>
+		/// Used to determine which bots are working (blue)
+		/// </summary>
+		[JsonProperty]
+		public AllianceGroup<bool> BlueWorking
+		{ get; set; }
+
+		/// <summary>
+		/// Defense ratings for red
+		/// </summary>
+		[JsonProperty]
+		public AllianceGroup<int> RedDefense
+		{ get; set; }
+
+		/// <summary>
+		/// Defense ratings for blue
+		/// </summary>
+		[JsonProperty]
+		public AllianceGroup<int> BlueDefense
+		{ get; set; }
+
 		internal void PostJsonLoading(FrcEvent e)
 		{
 			RedAlliance.PostJsonLoading(e);
