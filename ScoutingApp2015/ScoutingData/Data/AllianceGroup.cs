@@ -11,7 +11,8 @@ namespace ScoutingData.Data
 {
 	public enum AllianceColor
 	{
-		Red,
+		NULL = -1,
+		Red = 1,
 		Blue
 	}
 
@@ -85,6 +86,16 @@ namespace ScoutingData.Data
 			{
 				return (AlliancePosition)(-1);
 			}
+		}
+
+		public List<T> ToList()
+		{
+			List<T> res = new List<T>();
+			res.Add(A);
+			res.Add(B);
+			res.Add(C);
+
+			return res;
 		}
 
 		#region Interfaces

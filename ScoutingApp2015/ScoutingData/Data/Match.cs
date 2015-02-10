@@ -11,21 +11,28 @@ namespace ScoutingData.Data
 	public class Match
 	{
 		/// <summary>
-		/// Match Number within the competition event
+		/// Match Number within the competition event [pregame]
 		/// </summary>
 		[JsonProperty]
 		public int Number
 		{ get; set; }
 
 		/// <summary>
-		/// Red Alliance
+		/// Whether the match is completed with appropriate data [pregame=false]
+		/// </summary>
+		[JsonProperty]
+		public bool Pregame
+		{ get; set; }
+
+		/// <summary>
+		/// Red Alliance [pregame]
 		/// </summary>
 		[JsonProperty]
 		public Alliance RedAlliance
 		{ get; set; }
 
 		/// <summary>
-		/// Blue Alliance
+		/// Blue Alliance [pregame]
 		/// </summary>
 		[JsonProperty]
 		public Alliance BlueAlliance
@@ -128,6 +135,19 @@ namespace ScoutingData.Data
 		[JsonProperty]
 		public AllianceGroup<int> BlueDefense
 		{ get; set; }
+
+		/// <summary>
+		/// Creates a (pregame) match setup. All postgame data is put in later.
+		/// </summary>
+		/// <param name="num">Match number</param>
+		/// <param name="red">Red alliance</param>
+		/// <param name="blue">Blue alliance</param>
+		public Match(int num, Alliance red, Alliance blue)
+		{
+			Number = num;
+			RedAlliance = red;
+			BlueAlliance = blue;
+		}
 
 		internal void PostJsonLoading(FrcEvent e)
 		{

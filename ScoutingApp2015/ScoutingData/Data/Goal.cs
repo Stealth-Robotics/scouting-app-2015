@@ -130,6 +130,21 @@ namespace ScoutingData.Data
 			}
 		}
 
+		public AllianceColor GetAlliancePoints()
+		{
+			if (Global)
+			{
+				return AllianceColor.NULL;
+			}
+
+			if (FullAlliance)
+			{
+				return ScoringAlliance.Value;
+			}
+
+			//if ()
+		}
+
 		public int PointValue()
 		{
 			try

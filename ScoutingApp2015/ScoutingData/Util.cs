@@ -128,7 +128,19 @@ namespace ScoutingData
 			}
 		}
 
-		#region stats
+		#region STATISTICS
+
+		public static double Sum<T>(this List<T> list)
+			where T : IConvertible
+		{
+			double total = 0;
+			foreach (T t in list)
+			{
+				total += t.ToDecimal(DEF_FORMAT);
+			}
+
+			return total;
+		}
 
 		/// <summary>
 		/// Calculates the mean value in the list and converts it to a double
@@ -138,11 +150,7 @@ namespace ScoutingData
 		public static double Mean<T>(this List<T> list)
 			where T : IConvertible
 		{
-			decimal total = 0;
-			foreach (T t in list)
-			{
-				total += t.ToDecimal(DEF_FORMAT);
-			}
+			double total = list.Sum();
 
 			total /= (decimal)(list.Count);
 			return (double)total;

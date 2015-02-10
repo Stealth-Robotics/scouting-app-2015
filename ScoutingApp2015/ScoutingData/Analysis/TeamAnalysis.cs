@@ -18,6 +18,10 @@ namespace ScoutingData.Analysis
 		public Team Team
 		{ get; set; }
 
+		[JsonProperty]
+		public int TeamID
+		{ get; set; }
+
 		#region analysis
 		
 		/// <summary>
@@ -85,6 +89,12 @@ namespace ScoutingData.Analysis
 		{
 			Event = e;
 			Team = linked;
+		}
+
+		public void PostJsonLoading(FrcEvent e)
+		{
+			Event = e;
+			Team = e.LoadTeam(TeamID);
 		}
 
 		public void CalculateSafe()
