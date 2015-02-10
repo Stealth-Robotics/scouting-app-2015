@@ -108,6 +108,26 @@ namespace ScoutingData
 			return (3600 * ts.Hours) + (60 * ts.Minutes) + ts.Seconds;
 		}
 
+		/// <summary>
+		/// Adds a value to the dictionary, overwriting if the key is already set
+		/// </summary>
+		/// <typeparam name="TKey">Key type in the Dictionary</typeparam>
+		/// <typeparam name="TVal">Value type in the Dictionary</typeparam>
+		/// <param name="dict">IDictionary to add stuff to</param>
+		/// <param name="key">Key to set or add</param>
+		/// <param name="val">Value the key is set to</param>
+		public static void AddSet<TKey, TVal>(this IDictionary<TKey, TVal> dict, TKey key, TVal val)
+		{
+			if (dict.ContainsKey(key))
+			{
+				dict[key] = val;
+			}
+			else
+			{
+				dict.Add(key, val);
+			}
+		}
+
 		#region stats
 
 		/// <summary>

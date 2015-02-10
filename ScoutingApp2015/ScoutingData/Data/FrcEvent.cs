@@ -19,6 +19,10 @@ namespace ScoutingData.Data
 		public List<Team> CompetingTeams
 		{ get; set; }
 
+		[JsonProperty]
+		public string EventName
+		{ get; set; }
+
 		public Team LoadTeam(int teamID)
 		{
 			return CompetingTeams.Find((t) => t.Number == teamID);
