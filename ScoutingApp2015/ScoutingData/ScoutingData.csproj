@@ -63,7 +63,7 @@
     <Compile Include="Data\Team.cs" />
     <Compile Include="ScoutingJson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sync\MatchSynchronize.cs" />
+    <Compile Include="Sync\MatchMerging.cs" />
     <Compile Include="Sync\RecordedMatch.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>

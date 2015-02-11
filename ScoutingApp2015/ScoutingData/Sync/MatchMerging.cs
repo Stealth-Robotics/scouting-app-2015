@@ -7,15 +7,24 @@ using System.Threading.Tasks;
 
 namespace ScoutingData.Sync
 {
-	public static class MatchSynchronize
+	public static class MatchMerging
 	{
 		public const int PENALTY_THRESHOLD = 15;
 		public const int MATCH_NOT_ENOUGH_DATA_THRESHOLD = 3;
 
-		public static Match FormMatch(FrcEvent e,
+		public static Match FormMatch(FrcEvent frc,
 			AllianceGroup<RecordedMatch> redData, 
 			AllianceGroup<RecordedMatch> blueData)
 		{
+			// Team data count (reliability)
+			int redTeamsCount = redData.Count((rec) => rec != null);
+			int blueTeamsCount = blueData.Count((rec) => rec != null);
+			if (redTeamsCount + blueTeamsCount < 3 ||
+				redTeamsCount == 0 || blueTeamsCount == 0) // not enough data
+			{
+				return null; // Give up
+			}
+
 			Alliance red = new Alliance(redData.A.TrackedTeam, 
 				redData.B.TrackedTeam, redData.C.TrackedTeam);
 			Alliance blue = new Alliance(blueData.A.TrackedTeam,
@@ -38,7 +47,7 @@ namespace ScoutingData.Sync
 				{
 					return modes.First((n) =>
 					{
-						return !(e.Matches.Exists((m) => m.Number == n && !m.Pregame));
+						return !(frc.Matches.Exists((m) => m.Number == n && !m.Pregame));
 					});
 				}
 				catch (InvalidOperationException)
@@ -178,16 +187,17 @@ namespace ScoutingData.Sync
 			result.BlueDefense.C = blueData.C != null ? blueData.C.Defense : 5;
 
 			// DISCREPANCY POINTS
-			int redTeamsCount = redData.Count((rec) => rec != null);
-			int blueTeamsCount = blueData.Count((rec) => rec != null);
-			if (redTeamsCount + blueTeamsCount < 3 ||
-				redTeamsCount == 0 || blueTeamsCount == 0)
-			{
-				return null; // Give up
-			}
-			// TODO: More discrepancy calculations
+			int finalScoreRed = (int)redData.ToList().ConvertAll<int>((rec) => rec.AllianceFinalScore).Mean();
+			int finalScoreBlue = (int)blueData.ToList().ConvertAll<int>((rec) => rec.AllianceFinalScore).Mean(); // round down
+			result.RedFinalScore = finalScoreRed;
+			result.BlueFinalScore = finalScoreBlue;
 
-			return result; // TODO: matchmaking
+			int dpRed = finalScoreRed - redGoalScore;
+			int dpBlue = finalScoreBlue - blueGoalScore;
+			result.RedDiscrepancyPoints = dpRed;
+			result.BlueDiscrepancyPoints = dpBlue;
+
+			return result;
 		}
 	}
 }
