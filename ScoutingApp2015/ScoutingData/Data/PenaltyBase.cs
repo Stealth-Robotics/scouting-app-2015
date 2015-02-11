@@ -11,6 +11,28 @@ namespace ScoutingData.Data
 	[JsonObject]
 	public abstract class PenaltyBase : IPostJson
 	{
+		[JsonProperty]
+		public int TimeOfPenaltyInt
+		{ get; set; }
+
+		[JsonIgnore]
+		public TimeSpan TimeOfPenalty
+		{
+			get
+			{
+				return TimeSpan.FromSeconds((double)TimeOfPenaltyInt);
+			}
+			set
+			{
+				TimeOfPenaltyInt = value.CountedSeconds();
+			}
+		}
+
+		public PenaltyBase(int time)
+		{
+			TimeOfPenaltyInt = time;
+		}
+
 		public abstract int ScoreChange();
 		public abstract AllianceColor AffectedAlliance();
 		public abstract string Reason();

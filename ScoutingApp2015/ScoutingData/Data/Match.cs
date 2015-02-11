@@ -46,6 +46,32 @@ namespace ScoutingData.Data
 		{ get; set; }
 
 		/// <summary>
+		/// All of Blue's goals
+		/// </summary>
+		[JsonIgnore]
+		public List<Goal> BlueGoals
+		{
+			get
+			{
+				return Goals.FindAll((g) => g.GetScoringAlliance(this) == AllianceColor.Blue || 
+					g.GetScoringAlliance(this) == AllianceColor.NULL);
+			}
+		}
+
+		/// <summary>
+		/// All of Red's goals
+		/// </summary>
+		[JsonIgnore]
+		public List<Goal> RedGoals
+		{
+			get
+			{
+				return Goals.FindAll((g) => g.GetScoringAlliance(this) == AllianceColor.Red ||
+					g.GetScoringAlliance(this) == AllianceColor.NULL);
+			}
+		}
+
+		/// <summary>
 		/// List of penalties on both sides
 		/// </summary>
 		[JsonProperty]

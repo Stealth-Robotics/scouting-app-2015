@@ -313,7 +313,7 @@ namespace ScoutingData
 			return res;
 		}
 
-		public static T Mode<T>(this IList<T> list, Func<IList<T>, T> inCaseOfTie)
+		public static T Mode<T>(this IList<T> list, Func<List<T>, T> inCaseOfTie)
 		{
 			Dictionary<T, int> frequencies = list.Frequencies();
 

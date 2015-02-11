@@ -27,7 +27,8 @@ namespace ScoutingData.Data
 		public Team BlamedTeam
 		{ get; private set; }
 
-		public PenaltyFoul(string reason, AllianceColor penalizedAlliance, int teamID)
+		public PenaltyFoul(int time, string reason, AllianceColor penalizedAlliance, 
+			int teamID) : base(time)
 		{
 			Reasoning = reason;
 			PenalizedAlliance = penalizedAlliance;
