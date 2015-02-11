@@ -186,7 +186,7 @@ namespace ScoutingData.Data
 			else
 			{
 				Util.DebugLog(LogLevel.Error, "Neither alliance contains team " + team.Number.ToString());
-				return (AllianceColor)(-1); // Make some errors!
+				return AllianceColor.NULL;
 			}
 		}
 

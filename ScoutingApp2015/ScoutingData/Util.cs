@@ -136,7 +136,7 @@ namespace ScoutingData
 			double total = 0;
 			foreach (T t in list)
 			{
-				total += t.ToDecimal(DEF_FORMAT);
+				total += t.ToDouble(DEF_FORMAT);
 			}
 
 			return total;
@@ -152,7 +152,7 @@ namespace ScoutingData
 		{
 			double total = list.Sum();
 
-			total /= (decimal)(list.Count);
+			total /= (double)(list.Count);
 			return (double)total;
 		}
 

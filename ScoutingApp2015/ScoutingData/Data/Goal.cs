@@ -89,6 +89,7 @@ namespace ScoutingData.Data
 		public bool Global
 		{ get; set; }
 
+		[JsonIgnore]
 		public TimeSpan TimeScored
 		{
 			get
@@ -101,6 +102,7 @@ namespace ScoutingData.Data
 			}
 		}
 
+		[JsonIgnore]
 		public Team ScoringTeam
 		{ get; set; }
 
@@ -130,7 +132,7 @@ namespace ScoutingData.Data
 			}
 		}
 
-		public AllianceColor GetAlliancePoints()
+		public AllianceColor GetScoringAlliance(Match match)
 		{
 			if (Global)
 			{
@@ -142,7 +144,7 @@ namespace ScoutingData.Data
 				return ScoringAlliance.Value;
 			}
 
-			//if ()
+			return match.GetTeamColor(ScoringTeam);
 		}
 
 		public int PointValue()

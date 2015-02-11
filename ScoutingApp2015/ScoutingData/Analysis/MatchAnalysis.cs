@@ -130,12 +130,10 @@ namespace ScoutingData.Analysis
 
 			CalculatePregame();
 
-			if (Pregame)
+			if (!Pregame)
 			{
-				return;
+				Calculate();
 			}
-
-			Calculate();
 		}
 
 		public void CalculatePregame()
@@ -191,7 +189,11 @@ namespace ScoutingData.Analysis
 			BlueDefenseMean = Match.BlueDefense.ToList().Mean();
 
 			// Goal Counts
-			RedGoalCount = 
+			RedGoalCount = Match.Goals.Count((g) => g.GetScoringAlliance(Match) == AllianceColor.Red);
+			BlueGoalCount = Match.Goals.Count((g) => g.GetScoringAlliance(Match) == AllianceColor.Blue);
+
+			// Violations
+			TotalViolations = Match.Penalties.Count((g) => g is PenaltyViolation);
 		}
 	}
 }
