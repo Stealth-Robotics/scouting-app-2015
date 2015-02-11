@@ -57,9 +57,7 @@
     <Compile Include="Data\Goal.cs" />
     <Compile Include="Data\IPostJson.cs" />
     <Compile Include="Data\Match.cs" />
-    <Compile Include="Data\PenaltyBase.cs" />
-    <Compile Include="Data\PenaltyFoul.cs" />
-    <Compile Include="Data\PenaltyViolation.cs" />
+    <Compile Include="Data\Penalty.cs" />
     <Compile Include="Data\Team.cs" />
     <Compile Include="ScoutingJson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

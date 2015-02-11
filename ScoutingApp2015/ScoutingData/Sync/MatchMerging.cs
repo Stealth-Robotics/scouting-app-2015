@@ -141,10 +141,10 @@ namespace ScoutingData.Sync
 			result.Goals = goals;
 
 			// PENALTIES
-			List<PenaltyBase> penalties = new List<PenaltyBase>();
+			List<Penalty> penalties = new List<Penalty>();
 			foreach (RecordedMatch rec in allData)
 			{
-				foreach (PenaltyBase pen in rec.AlliancePenalties)
+				foreach (Penalty pen in rec.AlliancePenalties)
 				{
 					bool nearbyPenalty = penalties.Exists((p) =>
 					{

@@ -51,7 +51,7 @@ namespace ScoutingData.Sync
 		/// List of penalties scored by this team
 		/// </summary>
 		[JsonProperty]
-		public List<PenaltyBase> AlliancePenalties
+		public List<Penalty> AlliancePenalties
 		{ get; private set; }
 
 		/// <summary>
@@ -89,7 +89,7 @@ namespace ScoutingData.Sync
 			TrackedTeamID = team.Number;
 			Alliance = alliance;
 			ScoredGoals = new List<Goal>();
-			AlliancePenalties = new List<PenaltyBase>();
+			AlliancePenalties = new List<Penalty>();
 			Working = true; // default
 			Defense = 10; // default
 			Winner = AllianceColor.NULL; // indeterminate
@@ -101,7 +101,7 @@ namespace ScoutingData.Sync
 			ScoredGoals.Add(g);
 		}
 
-		public void AddPenalty(PenaltyBase p)
+		public void AddPenalty(Penalty p)
 		{
 			AlliancePenalties.Add(p);
 		}

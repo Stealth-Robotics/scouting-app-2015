@@ -53,13 +53,6 @@ namespace ScoutingData.Analysis
 		{ get; private set; }
 
 		/// <summary>
-		/// Average violations per game. [= Violations / Matches.Count]
-		/// </summary>
-		[JsonProperty]
-		public double ViolationsPerGame
-		{ get; private set; }
-
-		/// <summary>
 		/// Responsiveness in the bot's latest game [= Matches.Last.Responsiveness]
 		/// </summary>
 		[JsonProperty]
@@ -174,16 +167,6 @@ namespace ScoutingData.Analysis
 			});
 			penalties.RemoveAll((n) => n == -1);
 			Penalties = penalties.MakeDistribution();
-
-			// Violations Per Game
-			int violations = matches.Aggregate(0, (total, m) =>
-			{
-				List<PenaltyBase> localPenal = (m.GetTeamColor(Team) == AllianceColor.Red)
-					? m.RedPenalties : m.BluePenalties;
-
-				return total + localPenal.Count((p) => p is PenaltyViolation);
-			});
-			ViolationsPerGame = (double)violations / (double)matches.Count;
 
 			// Working Currently
 			WorkingCurrently = matches.Last().GetWorking(Team);
