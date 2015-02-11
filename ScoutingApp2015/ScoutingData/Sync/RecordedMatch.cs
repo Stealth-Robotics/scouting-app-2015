@@ -110,5 +110,10 @@ namespace ScoutingData.Sync
 		{
 			TrackedTeam = e.LoadTeam(TrackedTeamID);
 		}
+
+		public string ToJson()
+		{
+			return JsonConvert.SerializeObject(this, Formatting.Indented);
+		}
 	}
 }

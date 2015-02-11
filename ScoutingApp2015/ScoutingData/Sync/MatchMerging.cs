@@ -199,5 +199,21 @@ namespace ScoutingData.Sync
 
 			return result;
 		}
+
+		public static Match Merge(FrcEvent frc, RecordedMatch redA, RecordedMatch redB, RecordedMatch redC,
+			RecordedMatch blueA, RecordedMatch blueB, RecordedMatch blueC)
+		{
+			redA.PostJsonLoading(frc);
+			redB.PostJsonLoading(frc);
+			redC.PostJsonLoading(frc);
+			blueA.PostJsonLoading(frc);
+			blueB.PostJsonLoading(frc);
+			blueC.PostJsonLoading(frc);
+
+			AllianceGroup<RecordedMatch> red = new AllianceGroup<RecordedMatch>(redA, redB, redC);
+			AllianceGroup<RecordedMatch> blue = new AllianceGroup<RecordedMatch>(blueA, blueB, blueC);
+
+			return FormMatch(frc, red, blue);
+		}
 	}
 }
