@@ -28,6 +28,11 @@ namespace ScoutingData.Sync
 				allData.Add(rec);
 			}
 
+			int matchID = allData.Mode((modes) =>
+			{
+				
+			});
+
 			return null; // TODO: matchmaking
 		}
 	}
