@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace ScoutingData.Data
 {
 	[JsonObject]
-	public abstract class PenaltyBase
+	public abstract class PenaltyBase : IPostJson
 	{
 		public abstract int ScoreChange();
 		public abstract AllianceColor AffectedAlliance();

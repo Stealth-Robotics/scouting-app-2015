@@ -128,9 +128,49 @@ namespace ScoutingData
 			}
 		}
 
+		/// <summary>
+		/// Adds a value to the dictionary, incrementing by an amount if the key is already set
+		/// </summary>
+		/// <typeparam name="TKey">Key type of dictionary</typeparam>
+		/// <typeparam name="TVal">Value type of dictionary. Must be numeric.</typeparam>
+		/// <param name="dict">Dictionary to do this with</param>
+		/// <param name="key">Key for whose value to increment</param>
+		/// <param name="incVal">Amount to increment by</param>
+		/// <param name="startVal">Value to start at when adding new pairs</param>
+		public static void AddIncrement<TKey, TVal>(this IDictionary<TKey, TVal> dict, 
+			TKey key, double incVal, double startVal) where TVal : IConvertible, new()
+		{
+			if (dict.ContainsKey(key))
+			{
+				// this is how you increment generic types
+				IConvertible conv = dict[key].ToDouble(DEF_FORMAT) + 1.0;
+				dict[key] = (TVal)conv.ToType(typeof(TVal), DEF_FORMAT);
+			}
+			else
+			{
+				// this is how you instantiate generic types (that implement IConvertible)
+				IConvertible start = (IConvertible)startVal;
+				dict.Add(key, (TVal)start.ToType(typeof(TVal), DEF_FORMAT));
+			}
+		}
+
+		/// <summary>
+		/// Adds a value to the dictionary with a key of zero, incrementing by one if the 
+		/// key is already set
+		/// </summary>
+		/// <typeparam name="TKey">Key type of dictionary</typeparam>
+		/// <typeparam name="TVal">Value type of dictionary. Must be numeric.</typeparam>
+		/// <param name="dict">Dictionary to do this with</param>
+		/// <param name="key">Key for whose value to increment</param>
+		public static void AddIncrement<TKey, TVal>(this IDictionary<TKey, TVal> dict, TKey key)
+			where TVal : IConvertible, new()
+		{
+			dict.AddIncrement(key, 1, 0);
+		}
+
 		#region STATISTICS
 
-		public static double Sum<T>(this List<T> list)
+		public static double Sum<T>(this IList<T> list)
 			where T : IConvertible
 		{
 			double total = 0;
@@ -147,7 +187,7 @@ namespace ScoutingData
 		/// </summary>
 		/// <param name="list">list the data is taken from</param>
 		/// <returns>mean of the values</returns>
-		public static double Mean<T>(this List<T> list)
+		public static double Mean<T>(this IList<T> list)
 			where T : IConvertible
 		{
 			double total = list.Sum();
@@ -161,7 +201,7 @@ namespace ScoutingData
 		/// </summary>
 		/// <param name="list">list the data is taken from</param>
 		/// <returns>standard deviation of the values</returns>
-		public static double StandardDeviation<T>(this List<T> list)
+		public static double StandardDeviation<T>(this IList<T> list)
 			where T : IConvertible
 		{
 			return list.StandardDeviation(list.Mean());
@@ -172,7 +212,7 @@ namespace ScoutingData
 		/// <param name="list">list the data is taken from</param>
 		/// <param name="mean">mean of the data, for faster calculation</param>
 		/// <returns>standard deviation of the values</returns>
-		public static double StandardDeviation<T>(this List<T> list, double mean)
+		public static double StandardDeviation<T>(this IList<T> list, double mean)
 			where T : IConvertible
 		{
 			decimal sigmaDeviations = 0;
@@ -194,7 +234,7 @@ namespace ScoutingData
 		/// </summary>
 		/// <param name="list">list the data is taken from</param>
 		/// <returns>struct containing the values from the 5-number summary</returns>
-		public static FiveNumberSummary Get5NS<T>(this List<T> list)
+		public static FiveNumberSummary Get5NS<T>(this IList<T> list)
 			where T : IConvertible
 		{
 			T[] sortedArr = list.OrderBy(t => t).ToArray();
@@ -240,7 +280,7 @@ namespace ScoutingData
 		/// </summary>
 		/// <param name="arr">list the data is taken from</param>
 		/// <returns>median value in the array</returns>
-		public static double Median<T>(this List<T> list)
+		public static double Median<T>(this IList<T> list)
 			where T : IConvertible
 		{
 			return list.ToArray().Median();
@@ -251,7 +291,7 @@ namespace ScoutingData
 		/// </summary>
 		/// <param name="list">List to be analyzed</param>
 		/// <returns>Distribution object about the list's distribution</returns>
-		public static Distribution MakeDistribution<T>(this List<T> list)
+		public static Distribution MakeDistribution<T>(this IList<T> list)
 			where T : IConvertible
 		{
 			double mean = list.Mean();
@@ -259,6 +299,48 @@ namespace ScoutingData
 			FiveNumberSummary sum = list.Get5NS();
 
 			return new Distribution(norm, sum);
+		}
+
+		public static Dictionary<T, int> Frequencies<T>(this IList<T> list)
+		{
+			Dictionary<T, int> res = new Dictionary<T, int>();
+
+			foreach (T t in list)
+			{
+				res.AddIncrement(t);
+			}
+
+			return res;
+		}
+
+		public static T Mode<T>(this IList<T> list, Func<IList<T>, T> inCaseOfTie)
+		{
+			Dictionary<T, int> frequencies = list.Frequencies();
+
+			int maxCount = 0;
+			List<T> maxes = new List<T>();
+			foreach (KeyValuePair<T, int> kvp in frequencies)
+			{
+				if (maxes.Count == 0)
+				{
+					maxes.Add(kvp.Key);
+					maxCount = kvp.Value;
+					continue; // NEXT!
+				}
+
+				if (kvp.Value >= maxCount)
+				{
+					if (kvp.Value > maxCount)
+					{
+						maxes.Clear();
+						maxCount = kvp.Value;
+					}
+
+					maxes.Add(kvp.Key);
+				}
+			}
+
+			return inCaseOfTie(maxes);
 		}
 
 		#endregion

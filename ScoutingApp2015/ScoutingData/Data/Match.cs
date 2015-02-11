@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace ScoutingData.Data
 {
 	[JsonObject(MemberSerialization.OptIn)]
-	public class Match
+	public class Match : IPostJson
 	{
 		/// <summary>
 		/// Match Number within the competition event [pregame]
@@ -55,6 +55,7 @@ namespace ScoutingData.Data
 		/// <summary>
 		/// All penalties AGAINST Blue
 		/// </summary>
+		[JsonIgnore]
 		public List<PenaltyBase> BluePenalties
 		{
 			get
@@ -66,6 +67,7 @@ namespace ScoutingData.Data
 		/// <summary>
 		/// All penalties AGAINST Red
 		/// </summary>
+		[JsonIgnore]
 		public List<PenaltyBase> RedPenalties
 		{
 			get
@@ -75,13 +77,13 @@ namespace ScoutingData.Data
 		}
 
 		/// <summary>
-		/// Highly unreliable. Calculated from goals and discrepancy points.
+		/// Calculated as the mean of recorded match final scores for red.
 		/// </summary>
 		public int RedFinalScore
 		{ get; set; }
 
 		/// <summary>
-		/// Highly unreliable. Calculated from goals and discrepancy points.
+		/// Calculated as the mean of recorded match final scores for blue.
 		/// </summary>
 		public int BlueFinalScore
 		{ get; set; }
@@ -149,7 +151,7 @@ namespace ScoutingData.Data
 			BlueAlliance = blue;
 		}
 
-		internal void PostJsonLoading(FrcEvent e)
+		public void PostJsonLoading(FrcEvent e)
 		{
 			RedAlliance.PostJsonLoading(e);
 			BlueAlliance.PostJsonLoading(e);

@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace ScoutingData.Data
 {
 	[JsonObject(MemberSerialization.OptIn)]
-	public class Alliance : AllianceGroup<Team>
+	public class Alliance : AllianceGroup<Team>, IPostJson
 	{
 		[JsonProperty]
 		public int TeamA_ID

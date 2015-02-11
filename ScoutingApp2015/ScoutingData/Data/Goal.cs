@@ -24,7 +24,7 @@ namespace ScoutingData.Data
 	}
 
 	[JsonObject(MemberSerialization.OptIn)]
-	public class Goal
+	public class Goal : IPostJson
 	{
 		/// <summary>
 		/// Primary taxonomy of goals
