@@ -9,8 +9,25 @@ using Newtonsoft.Json;
 namespace ScoutingData.Data
 {
 	[JsonObject(MemberSerialization.OptIn)]
-	public class PenaltyFoul : PenaltyBase
+	public class Penalty : IPostJson
 	{
+		[JsonProperty]
+		public int TimeOfPenaltyInt
+		{ get; set; }
+
+		[JsonIgnore]
+		public TimeSpan TimeOfPenalty
+		{
+			get
+			{
+				return TimeSpan.FromSeconds((double)TimeOfPenaltyInt);
+			}
+			set
+			{
+				TimeOfPenaltyInt = value.CountedSeconds();
+			}
+		}
+
 		[JsonProperty]
 		public string Reasoning
 		{ get; set; }
@@ -27,35 +44,36 @@ namespace ScoutingData.Data
 		public Team BlamedTeam
 		{ get; private set; }
 
-		public PenaltyFoul(int time, string reason, AllianceColor penalizedAlliance, 
-			int teamID) : base(time)
+		public Penalty(int time, string reason, AllianceColor penalizedAlliance, 
+			int teamID)
 		{
+			TimeOfPenaltyInt = time;
 			Reasoning = reason;
 			PenalizedAlliance = penalizedAlliance;
 			BlamedTeamID = teamID;
 		}
 
-		public override int ScoreChange()
+		public int ScoreChange()
 		{
 			return -6;
 		}
 
-		public override AllianceColor AffectedAlliance()
+		public AllianceColor AffectedAlliance()
 		{
 			return PenalizedAlliance;
 		}
 
-		public override string Reason()
+		public string Reason()
 		{
 			return Reasoning;
 		}
 
-		public override Team TeamAtFault()
+		public Team TeamAtFault()
 		{
 			return BlamedTeam;
 		}
 
-		public override void PostJsonLoading(FrcEvent e)
+		public void PostJsonLoading(FrcEvent e)
 		{
 			BlamedTeam = e.LoadTeam(BlamedTeamID);
 		}

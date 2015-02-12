@@ -8,6 +8,6 @@ namespace ScoutingData.Data
 {
 	public interface IPostJson
 	{
-		public void PostJsonLoading(FrcEvent e);
+		void PostJsonLoading(FrcEvent e);
 	}
 }

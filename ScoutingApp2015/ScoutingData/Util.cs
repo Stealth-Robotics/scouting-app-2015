@@ -35,6 +35,11 @@ namespace ScoutingData
 		public static readonly TimeSpan TELEOP = new TimeSpan(0, 1, 15);
 
 		/// <summary>
+		/// Subscribe to add an additional output location for Util.DebugLog().
+		/// </summary>
+		public static event Action<int, string> OnPrint;
+
+		/// <summary>
 		/// Returns StatisticsFormula object for special stats functions
 		/// </summary>
 		public static StatisticFormula Stats
@@ -80,8 +85,9 @@ namespace ScoutingData
 		/// <param name="message">Message logged</param>
 		public static void DebugLog(LogLevel level, string message)
 		{
-			System.Diagnostics.Debugger.Log((int)level, "SCOUTING", 
-				"\n[" + level.ToString().ToUpper() + "] " + message);
+			string output = "\n[" + level.ToString().ToUpper() + "] " + message;
+			System.Diagnostics.Debugger.Log((int)level, "SCOUTING", output);
+			OnPrint((int)level, output);
 		}
 		/// <summary>
 		/// Shortcut for Debug Logging, with category

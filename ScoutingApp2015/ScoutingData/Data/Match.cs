@@ -75,14 +75,14 @@ namespace ScoutingData.Data
 		/// List of penalties on both sides
 		/// </summary>
 		[JsonProperty]
-		public List<PenaltyBase> Penalties
+		public List<Penalty> Penalties
 		{ get; set; }
 
 		/// <summary>
 		/// All penalties AGAINST Blue
 		/// </summary>
 		[JsonIgnore]
-		public List<PenaltyBase> BluePenalties
+		public List<Penalty> BluePenalties
 		{
 			get
 			{
@@ -94,7 +94,7 @@ namespace ScoutingData.Data
 		/// All penalties AGAINST Red
 		/// </summary>
 		[JsonIgnore]
-		public List<PenaltyBase> RedPenalties
+		public List<Penalty> RedPenalties
 		{
 			get
 			{

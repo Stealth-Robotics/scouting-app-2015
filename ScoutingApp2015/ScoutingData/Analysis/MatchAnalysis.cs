@@ -101,13 +101,6 @@ namespace ScoutingData.Analysis
 		public double GameProfileValue
 		{ get; private set; }
 
-		/// <summary>
-		/// Total violations in the match
-		/// </summary>
-		[JsonProperty]
-		public int TotalViolations
-		{ get; private set; }
-
 		#endregion
 
 		public MatchAnalysis(FrcEvent e) : this(e, null, null)
@@ -191,9 +184,6 @@ namespace ScoutingData.Analysis
 			// Goal Counts
 			RedGoalCount = Match.Goals.Count((g) => g.GetScoringAlliance(Match) == AllianceColor.Red);
 			BlueGoalCount = Match.Goals.Count((g) => g.GetScoringAlliance(Match) == AllianceColor.Blue);
-
-			// Violations
-			TotalViolations = Match.Penalties.Count((g) => g is PenaltyViolation);
 		}
 	}
 }
