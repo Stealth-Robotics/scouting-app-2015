@@ -9,15 +9,27 @@ using ScoutingData.Data;
 
 namespace ScoutingData.Analysis
 {
+	/// <summary>
+	/// Base analysis object for team.
+	/// </summary>
 	[JsonObject(MemberSerialization.OptIn)]
 	public class TeamAnalysis
 	{
+		/// <summary>
+		/// Reference to hosting event
+		/// </summary>
 		public FrcEvent Event
 		{ get; private set; }
 
+		/// <summary>
+		/// Reference to corresponding team
+		/// </summary>
 		public Team Team
 		{ get; set; }
 
+		/// <summary>
+		/// ID of corresponding team
+		/// </summary>
 		[JsonProperty]
 		public int TeamID
 		{ get; set; }
@@ -75,21 +87,37 @@ namespace ScoutingData.Analysis
 
 		#endregion
 
+		/// <summary>
+		/// Do not use. May be deleted in the future.
+		/// </summary>
+		/// <param name="e">Analysis for teams</param>
 		public TeamAnalysis(FrcEvent e) : this(e, null)
 		{ }
 
+		/// <summary>
+		/// Instantiates an analysis object
+		/// </summary>
+		/// <param name="e">Host event</param>
+		/// <param name="linked">Corresponding team</param>
 		public TeamAnalysis(FrcEvent e, Team linked)
 		{
 			Event = e;
 			Team = linked;
 		}
 
+		/// <summary>
+		/// Completes any references left out when loaded by JSON
+		/// </summary>
+		/// <param name="e"></param>
 		public void PostJsonLoading(FrcEvent e)
 		{
 			Event = e;
 			Team = e.LoadTeam(TeamID);
 		}
 
+		/// <summary>
+		/// Calculates analysis if necessary references are in place
+		/// </summary>
 		public void CalculateSafe()
 		{
 			if (Event == null)
@@ -106,6 +134,9 @@ namespace ScoutingData.Analysis
 			Calculate();
 		}
 
+		/// <summary>
+		/// Calculates analysis.
+		/// </summary>
 		public void Calculate()
 		{
 

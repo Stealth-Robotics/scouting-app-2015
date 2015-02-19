@@ -35,5 +35,10 @@ namespace ScoutingData.Data
 				m.PostJsonLoading(this);
 			}
 		}
+
+		public Match LoadMatch(int matchID)
+		{
+			return Matches.Find((m) => m.Number == matchID);
+		}
 	}
 }

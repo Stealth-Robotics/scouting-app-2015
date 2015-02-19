@@ -195,7 +195,7 @@ namespace ScoutingData.Data
 		}
 		public static Goal MakeContainerSet(AllianceColor alliance)
 		{
-			return new Goal(GoalType.YellowToteSet, Util.TELEOP.CountedSeconds(), null, alliance, 
+			return new Goal(GoalType.ContainerSet, Util.TELEOP.CountedSeconds(), null, alliance, 
 				true, null, null, true, false);
 		}
 		public static Goal MakeCoopertition(bool stacked, int time)

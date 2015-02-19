@@ -6,23 +6,48 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using ScoutingData.Data;
 
 namespace ScoutingData.Analysis
 {
-	public class MatchAnalysis
+	/// <summary>
+	/// Analytical object for matches. Can be instanced even if match 
+	/// is not completed yet.
+	/// </summary>
+	public class MatchAnalysis : IPostJson
 	{
+		/// <summary>
+		/// Reference to the host event
+		/// </summary>
 		[JsonIgnore]
 		public FrcEvent Event
 		{ get; private set; }
 
+		/// <summary>
+		/// Reference to the corresponding match
+		/// </summary>
 		[JsonIgnore]
 		public Match Match
 		{ get; private set; }
 
+		/// <summary>
+		/// ID of corresponding match
+		/// </summary>
+		[JsonProperty]
+		public int MatchID
+		{ get; private set; }
+
+		/// <summary>
+		/// Reference to the list of analyses of the event's teams
+		/// </summary>
 		[JsonIgnore]
 		public List<TeamAnalysis> TeamAnalyses
 		{ get; private set; }
 
+		/// <summary>
+		/// True if the match has not been completed, in which case this 
+		/// analysis is only predictive.
+		/// </summary>
 		[JsonProperty]
 		public bool Pregame
 		{ get; set; }
@@ -33,26 +58,26 @@ namespace ScoutingData.Analysis
 		/// Mean of red's defense ratings
 		/// </summary>
 		[JsonProperty]
-		public double RedDefenseMean
+		public double? RedDefenseMean
 		{ get; private set; }
 		/// <summary>
 		/// Mean of blue's defense ratings
 		/// </summary>
 		[JsonProperty]
-		public double BlueDefenseMean
+		public double? BlueDefenseMean
 		{ get; private set; }
 
 		/// <summary>
 		/// Total count of red's goals
 		/// </summary>
 		[JsonProperty]
-		public int RedGoalCount
+		public int? RedGoalCount
 		{ get; private set; }
 		/// <summary>
 		/// Total count of blue's goals
 		/// </summary>
 		[JsonProperty]
-		public int BlueGoalCount
+		public int? BlueGoalCount
 		{ get; private set; }
 
 		/// <summary>
@@ -103,22 +128,37 @@ namespace ScoutingData.Analysis
 
 		#endregion
 
-		public MatchAnalysis(FrcEvent e) : this(e, null, null)
+		/// <summary>
+		/// Do not use. Probably won't be any use to you. May be deleted in the future.
+		/// </summary>
+		/// <param name="frc">Event hosting the match</param>
+		public MatchAnalysis(FrcEvent frc) : this(frc, null, null)
 		{ }
 
-		public MatchAnalysis(FrcEvent e, Match m, List<TeamAnalysis> analyses)
+		/// <summary>
+		/// Instantiates a match analysis object with pregame analysis done.
+		/// </summary>
+		/// <param name="frc">Host event</param>
+		/// <param name="m">Corresponding match</param>
+		/// <param name="analyses">List of team analyses</param>
+		public MatchAnalysis(FrcEvent frc, Match m, List<TeamAnalysis> analyses)
 		{
-			Event = e;
+			Event = frc;
 			Match = m;
 			TeamAnalyses = analyses;
+			Pregame = true;
+			CalculatePregame();
 		}
 
-		public void CalculateSafe()
+		/// <summary>
+		/// Calculates all analysis if required references are ready.
+		/// </summary>
+		public bool CalculateSafe()
 		{
 			if (Event == null || Match == null || TeamAnalyses.Count == 0)
 			{
 				Util.DebugLog(LogLevel.Error, "Required Property is null.");
-				return;
+				return false;
 			}
 
 			CalculatePregame();
@@ -127,8 +167,13 @@ namespace ScoutingData.Analysis
 			{
 				Calculate();
 			}
+
+			return true;
 		}
 
+		/// <summary>
+		/// Calculates all pregame analysis for the match
+		/// </summary>
 		public void CalculatePregame()
 		{
 			// Means of Winrates
@@ -175,6 +220,9 @@ namespace ScoutingData.Analysis
 			GameProfileValue = 1 / inverted;
 		}
 
+		/// <summary>
+		/// Calculates all post-game analysis for the match
+		/// </summary>
 		public void Calculate()
 		{
 			// Defense
@@ -182,8 +230,18 @@ namespace ScoutingData.Analysis
 			BlueDefenseMean = Match.BlueDefense.ToList().Mean();
 
 			// Goal Counts
-			RedGoalCount = Match.Goals.Count((g) => g.GetScoringAlliance(Match) == AllianceColor.Red);
-			BlueGoalCount = Match.Goals.Count((g) => g.GetScoringAlliance(Match) == AllianceColor.Blue);
+			RedGoalCount = Match.Goals.Count<Goal>((g) => g.GetScoringAlliance(Match) == AllianceColor.Red);
+			BlueGoalCount = Match.Goals.Count<Goal>((g) => g.GetScoringAlliance(Match) == AllianceColor.Blue);
+		}
+
+		/// <summary>
+		/// Loads the match after instantiated by JSON.
+		/// </summary>
+		/// <param name="e">Event to load the rest of the match from</param>
+		public void PostJsonLoading(FrcEvent e)
+		{
+			Event = e;
+			Match = e.LoadMatch(MatchID);
 		}
 	}
 }
