@@ -1,4 +1,5 @@
-﻿<e:Window x:Class="ScoutingApp.MainWindow"
+﻿<e:Window x:Name="ScoutingMainWindow"
+					x:Class="ScoutingApp.MainWindow"
 					xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:e="http://schemas.codeplex.com/elysium"
@@ -10,80 +11,152 @@
 					par:Manager.AccentBrush="Gray"
 					par:Manager.ContrastBrush="White"
 					Title="Stealth Scouting"
+					Icon="assets/Pencil_PNG.png"
 					Height="500"
-					Width="800">
+					Width="892"
+					Background="#FF171717">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		
+
 		<Grid Grid.Row="0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="3*" />
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
-			
+
 			<Grid Grid.Column="0">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
-				
+
 				<Grid Grid.Row="0">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="2*" />
 						<ColumnDefinition Width="3*" />
 						<ColumnDefinition Width="*" />
 					</Grid.ColumnDefinitions>
-					
-					<!--Top bar-->
+
+					<Button x:Name="TeamSetupBtn"
+									Content="Setup Teams..."
+									Margin="5,5,0,5" />
+					<ComboBox x:Name="TeamsDropDown"
+										Grid.Column="1"
+										SelectedIndex="0"
+										Margin="5">
+						<ComboBoxItem Content="Select a Team..." />
+					</ComboBox>
+					<Rectangle x:Name="ColorRect"
+										 Grid.Column="2"
+										 Margin="0,5"
+										 Fill="#FF4781FF"
+										 Stroke="#FF335CB4"
+										 StrokeThickness="2" />
 				</Grid>
-				
+
 				<TabControl x:Name="AutoTeleopTabs"
-										Grid.Row="1">
+										Grid.Row="1"
+										Margin="5,0,0,5">
 					<TabItem Header="Auto">
-						<!--Auto goals-->
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="*" />
+								<RowDefinition Height="*" />
+							</Grid.RowDefinitions>
+
+							<Grid Grid.Row="0">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+
+								<ToggleButton x:Name="RobotSetToggle"
+															Content="Robot Set"
+															FontSize="36"
+															Margin="5" />
+								<ToggleButton x:Name="ContainerSetToggle"
+															Grid.Column="1"
+															Content="Container Set"
+															FontSize="36"
+															Margin="0,5,5,5" />
+							</Grid>
+
+							<ToggleButton x:Name="ToteSetToggle"
+														Grid.Row="1"
+														FontSize="36"
+														Margin="5,0,5,5">
+								<StackPanel Orientation="Horizontal"
+														HorizontalAlignment="Center"
+														VerticalAlignment="Center">
+									<Button x:Name="ToteSetStackedToggle"
+													FontSize="22"
+													Content="(Stacked)"
+													BorderBrush="#FF171717"
+													BorderThickness="2" />
+									<Label Content="Tote Set"
+												 Foreground="White"
+												 Background="{x:Null}"
+												 Margin="20,0,0,0" />
+								</StackPanel>
+							</ToggleButton>
+						</Grid>
 					</TabItem>
-					
+
 					<TabItem Header="Teleop">
 						<!--Teleop goals-->
 					</TabItem>
 				</TabControl>
 			</Grid>
-			
+
 			<Grid Grid.Column="1">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
-				
+
 				<Button x:Name="SaveBtn"
 								Grid.Row="0"
-								Content="Save..." />
+								Content="Save..."
+								Margin="5" />
 				<ListBox x:Name="GoalsList"
-								 Grid.Row="1">
+								 Grid.Row="1"
+								 Margin="5,0"
+								 BorderThickness="1"
+								 BorderBrush="#FF424242">
 					<ListBoxItem Content="Goals List" />
 				</ListBox>
-				<Grid Grid.Row="2">
+				<Grid Grid.Row="2"
+							Margin="0,0,0,5">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
-						<ColumnDefinition Width="3*" />
+						<ColumnDefinition Width="2*" />
 					</Grid.ColumnDefinitions>
-					
+
 					<Button x:Name="PenaltyBtn"
-									Content="Flag" />
+									Margin="5,5,0,5"
+									ToolTip="Add a penalty">
+						<Image Source="assets/flag.png"
+									 VerticalAlignment="Center"
+									 HorizontalAlignment="Center"
+									 Height="24"
+									 Width="24" />
+					</Button>
 					<Button x:Name="RemoveGoalBtn"
 									Grid.Column="1"
-									Content="Remove Goal" />
+									Content="Remove Goal"
+									Margin="5"
+									ToolTip="Remove selected goal" />
 				</Grid>
 			</Grid>
 		</Grid>
-		
+
 		<ProgressBar x:Name="TimeBar"
-									 Grid.Row="1" />
-		
+								 Grid.Row="1" />
+
 		<Label x:Name="TimeLbl"
 					 Grid.Row="1"
 					 Content="2:15"
