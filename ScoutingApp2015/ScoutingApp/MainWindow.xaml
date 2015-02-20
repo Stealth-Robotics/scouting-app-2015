@@ -10,11 +10,85 @@
 					par:Manager.AccentBrush="Gray"
 					par:Manager.ContrastBrush="White"
 					Title="Stealth Scouting"
-					Height="350"
-					Width="525">
+					Height="500"
+					Width="800">
 	<Grid>
-		<Button Content="Button"
-						HorizontalAlignment="Center"
-						VerticalAlignment="Center" />
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="3*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			
+			<Grid Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				
+				<Grid Grid.Row="0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="2*" />
+						<ColumnDefinition Width="3*" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					
+					<!--Top bar-->
+				</Grid>
+				
+				<TabControl x:Name="AutoTeleopTabs"
+										Grid.Row="1">
+					<TabItem Header="Auto">
+						<!--Auto goals-->
+					</TabItem>
+					
+					<TabItem Header="Teleop">
+						<!--Teleop goals-->
+					</TabItem>
+				</TabControl>
+			</Grid>
+			
+			<Grid Grid.Column="1">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				
+				<Button x:Name="SaveBtn"
+								Grid.Row="0"
+								Content="Save..." />
+				<ListBox x:Name="GoalsList"
+								 Grid.Row="1">
+					<ListBoxItem Content="Goals List" />
+				</ListBox>
+				<Grid Grid.Row="2">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="3*" />
+					</Grid.ColumnDefinitions>
+					
+					<Button x:Name="PenaltyBtn"
+									Content="Flag" />
+					<Button x:Name="RemoveGoalBtn"
+									Grid.Column="1"
+									Content="Remove Goal" />
+				</Grid>
+			</Grid>
+		</Grid>
+		
+		<ProgressBar x:Name="TimeBar"
+									 Grid.Row="1" />
+		
+		<Label x:Name="TimeLbl"
+					 Grid.Row="1"
+					 Content="2:15"
+					 HorizontalAlignment="Right"
+					 FontSize="18"
+					 FontWeight="Bold" />
 	</Grid>
 </e:Window>
