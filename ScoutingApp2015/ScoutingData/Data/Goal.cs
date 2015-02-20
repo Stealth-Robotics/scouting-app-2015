@@ -10,12 +10,15 @@ using ScoutingData;
 
 namespace ScoutingData.Data
 {
+	/// <summary>
+	/// Type of goal scored.
+	/// </summary>
 	public enum GoalType
 	{
 		RobotSet, // Auto
 		YellowToteSet, // Auto [stackable]
 		ContainerSet, // Auto
-		Coopertition, // That's not a word. [stackable]
+		Coopertition, // Sorry FIRST, but that's not a word. [stackable]
 		GrayTote, 
 		ContainerTeleop,
 		RecycledLitter, 
@@ -23,6 +26,9 @@ namespace ScoutingData.Data
 		UnprocessedLitter, // Bonus to opposing team, not a penalty.
 	}
 
+	/// <summary>
+	/// Goals scored, and all possible attributes
+	/// </summary>
 	[JsonObject(MemberSerialization.OptIn)]
 	public class Goal : IPostJson
 	{
@@ -89,6 +95,9 @@ namespace ScoutingData.Data
 		public bool Global
 		{ get; set; }
 
+		/// <summary>
+		/// Time in which the goal was scored. Derived from int form.
+		/// </summary>
 		[JsonIgnore]
 		public TimeSpan TimeScored
 		{
@@ -102,10 +111,28 @@ namespace ScoutingData.Data
 			}
 		}
 
+		/// <summary>
+		/// Reference to scoring team.
+		/// </summary>
 		[JsonIgnore]
 		public Team ScoringTeam
 		{ get; set; }
 
+		/// <summary>
+		/// Creates an instance of goal. Using the static methods is preferrable.
+		/// </summary>
+		/// <param name="type">Type of goal scored</param>
+		/// <param name="timeScored">Time at which the goal was scored, in seconds</param>
+		/// <param name="scorer">Scoring team, null if an alliance or all teams</param>
+		/// <param name="scorerAl">Alliance color of scoring team/alliance, null if all teams</param>
+		/// <param name="auto">True if scored in autonomous, false if in teleop</param>
+		/// <param name="stack">True if a stacked form of the goal, null if inapplicable</param>
+		/// <param name="level">
+		/// Level the container was at when scored, null for all other
+		///	goal types.
+		///	</param>
+		/// <param name="alliance">True if scored by the entire alliance</param>
+		/// <param name="global">True if scored by all participating teams (coopertition)</param>
 		internal Goal(GoalType type, int timeScored, Team scorer, AllianceColor? scorerAl, 
 			bool auto, bool? stack, int? level, bool alliance, bool global)
 		{
@@ -120,6 +147,10 @@ namespace ScoutingData.Data
 			Global = global;
 		}
 
+		/// <summary>
+		/// Performs additional loading once deserialized from JSON
+		/// </summary>
+		/// <param name="e">Event to create references from</param>
 		public void PostJsonLoading(FrcEvent e)
 		{
 			if (ScoringTeamID.HasValue)
@@ -132,11 +163,16 @@ namespace ScoutingData.Data
 			}
 		}
 
+		/// <summary>
+		/// Gets the color for which the points from the goal went to.
+		/// </summary>
+		/// <param name="match">Match to extract data from</param>
+		/// <returns>Color for whom the goal's points went to</returns>
 		public AllianceColor GetScoringAlliance(Match match)
 		{
 			if (Global)
 			{
-				return AllianceColor.NULL;
+				return AllianceColor.Indeterminate;
 			}
 
 			if (FullAlliance)
@@ -147,6 +183,10 @@ namespace ScoutingData.Data
 			return match.GetTeamColor(ScoringTeam);
 		}
 
+		/// <summary>
+		/// Calculates point value of goal
+		/// </summary>
+		/// <returns>Points for scored goal</returns>
 		public int PointValue()
 		{
 			try
@@ -183,42 +223,96 @@ namespace ScoutingData.Data
 		}
 
 		#region wizards
+		/// <summary>
+		/// Instantiates a Robot Set goal (ROBOT SET). [AUTO]
+		/// </summary>
+		/// <param name="alliance">Alliance who made the robot set</param>
+		/// <returns>New Goal of the type Robot Set</returns>
 		public static Goal MakeRobotSet(AllianceColor alliance)
 		{
 			return new Goal(GoalType.RobotSet, Util.TELEOP.CountedSeconds(), null, alliance, 
 				true, null, null, true, false);
 		}
+		/// <summary>
+		/// Instantiates a (Yellow) Tote Set goal (TOTE SET). Can be stacked. [AUTO]
+		/// </summary>
+		/// <param name="stacked">True if totes are stacked (STACKED TOTE SET)</param>
+		/// <param name="alliance">Alliance who transported the totes</param>
+		/// <returns>New Goal of type Yellow Tote Set</returns>
 		public static Goal MakeYellowToteSet(bool stacked, AllianceColor alliance)
 		{
 			return new Goal(GoalType.YellowToteSet, Util.TELEOP.CountedSeconds(), null, alliance, 
 				true, stacked, null, true, false);
 		}
+		/// <summary>
+		/// Instantiates a Container Set goal (CONTAINER SET). [AUTO]
+		/// </summary>
+		/// <param name="alliance">Alliance who transported the containers</param>
+		/// <returns>New Goal of type Container Set</returns>
 		public static Goal MakeContainerSet(AllianceColor alliance)
 		{
 			return new Goal(GoalType.ContainerSet, Util.TELEOP.CountedSeconds(), null, alliance, 
 				true, null, null, true, false);
 		}
+		/// <summary>
+		/// Instantiates a Coopertition goal (COOPERTITION).
+		/// </summary>
+		/// <param name="stacked">True if yellow totes were stacked in coopertition.</param>
+		/// <param name="time">Time at which the totes were arranged</param>
+		/// <returns>New Goal of type Coopertition</returns>
 		public static Goal MakeCoopertition(bool stacked, int time)
 		{
 			return new Goal(GoalType.Coopertition, time, null, null, time < Util.TELEOP.CountedSeconds(), 
 				stacked, null, false, true);
 		}
+		/// <summary>
+		/// Instantiates a Tote goal (TOTE).
+		/// </summary>
+		/// <param name="team">Team who placed the tote</param>
+		/// <param name="time">Time at which the tote was placed</param>
+		/// <returns>New Goal of type Gray Tote</returns>
 		public static Goal MakeGrayTote(Team team, int time)
 		{
 			return new Goal(GoalType.GrayTote, time, team, null, false, null, null, false, false);
 		}
+		/// <summary>
+		/// Instantiates a Contanier goal (CONTAINER).
+		/// </summary>
+		/// <param name="level">Vertical level of the container</param>
+		/// <param name="team">Team who placed the container</param>
+		/// <param name="time">Time at which the container was placed</param>
+		/// <returns>New Goal of type Container</returns>
 		public static Goal MakeContainerTeleop(int level, Team team, int time)
 		{
 			return new Goal(GoalType.ContainerTeleop, time, team, null, false, null, level, false, false);
 		}
+		/// <summary>
+		/// Instantiates a Recycled Litter goal (RECYCLED LITTER).
+		/// </summary>
+		/// <param name="team">Team who recycled the litter</param>
+		/// <param name="time">Time at which the litter was recycled</param>
+		/// <returns>New Goal of type Recycled Litter</returns>
 		public static Goal MakeRecycledLitter(Team team, int time)
 		{
 			return new Goal(GoalType.RecycledLitter, time, team, null, false, null, null, false, false);
 		}
+		/// <summary>
+		/// Instantiates a Landfill Litter goal (LANDFILL LITTER).
+		/// </summary>
+		/// <param name="alliance">Alliance who recycled the litter.</param>
+		/// <returns>New Goal of type Landfill Litter</returns>
 		public static Goal MakeLandfillLitter(AllianceColor alliance)
 		{
 			return new Goal(GoalType.LandfillLitter, 0, null, alliance, false, null, null, true, false);
 		}
+		/// <summary>
+		/// Instantiates an Unprocessed Litter goal (UNPROCESSED LITTER).
+		/// </summary>
+		/// <param name="alliance">
+		/// Alliance who threw the litter, opposite of alliance whose 
+		/// side contains the litter.
+		/// </param>
+		/// <returns>New Goal of type Unprocessed Litter</returns>
 		public static Goal MakeUnprocessedLitter(AllianceColor alliance)
 		{
 			return new Goal(GoalType.UnprocessedLitter, 0, null, alliance, false, null, null, true, false);

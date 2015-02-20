@@ -68,15 +68,15 @@ namespace ScoutingData.Analysis
 			}
 			else if (start == double.NegativeInfinity)
 			{
-				return Util.Stats.NormalDistribution(end);
+				return Stats.StatsFormula.NormalDistribution(end);
 			}
 			else if (end == double.PositiveInfinity)
 			{
-				return Util.Stats.InverseNormalDistribution(start);
+				return Stats.StatsFormula.InverseNormalDistribution(start);
 			}
 
-			double lower = Util.Stats.NormalDistribution(start);
-			double upper = Util.Stats.NormalDistribution(end);
+			double lower = Stats.StatsFormula.NormalDistribution(start);
+			double upper = Stats.StatsFormula.NormalDistribution(end);
 			return upper - lower;
 		}
 

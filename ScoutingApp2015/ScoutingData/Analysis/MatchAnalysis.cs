@@ -191,7 +191,7 @@ namespace ScoutingData.Analysis
 			double rawAdv = RedWinRateMean - BlueWinRateMean;
 			if (rawAdv ==  0)
 			{
-				ExpectedWinner = AllianceColor.NULL;
+				ExpectedWinner = AllianceColor.Indeterminate;
 			}
 			else
 			{

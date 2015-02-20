@@ -11,13 +11,25 @@ using System.IO;
 
 namespace ScoutingData
 {
+	/// <summary>
+	/// Overarching static class with a whole bunch of random stuff
+	/// </summary>
 	public static class ScoutingJson
 	{
+		/// <summary>
+		/// File extension used when saving files
+		/// </summary>
 		public static string Extension
 		{ get; set; }
 
+		/// <summary>
+		/// Root path to use when saving. Possibly obsolete.
+		/// </summary>
 		public static string RootPath
 		{ get; set; }
+		/// <summary>
+		/// Data path to use when saving. Possibly obsolete.
+		/// </summary>
 		public static string DataPath
 		{
 			get

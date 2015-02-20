@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataCollectionDraft));
 			this.progressBar1 = new System.Windows.Forms.ProgressBar();
 			this.label1 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
@@ -35,32 +36,33 @@
 			this.listBox1 = new System.Windows.Forms.ListBox();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.button2 = new System.Windows.Forms.Button();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
-			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			this.checkBox3 = new System.Windows.Forms.CheckBox();
+			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			this.checkBox4 = new System.Windows.Forms.CheckBox();
-			this.button3 = new System.Windows.Forms.Button();
-			this.trackBar1 = new System.Windows.Forms.TrackBar();
-			this.label2 = new System.Windows.Forms.Label();
-			this.trackBar2 = new System.Windows.Forms.TrackBar();
-			this.button4 = new System.Windows.Forms.Button();
-			this.button5 = new System.Windows.Forms.Button();
-			this.button6 = new System.Windows.Forms.Button();
-			this.button7 = new System.Windows.Forms.Button();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
 			this.label3 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.trackBar2 = new System.Windows.Forms.TrackBar();
+			this.trackBar1 = new System.Windows.Forms.TrackBar();
+			this.button4 = new System.Windows.Forms.Button();
+			this.button6 = new System.Windows.Forms.Button();
+			this.button5 = new System.Windows.Forms.Button();
 			this.button8 = new System.Windows.Forms.Button();
+			this.button7 = new System.Windows.Forms.Button();
+			this.button3 = new System.Windows.Forms.Button();
+			this.button2 = new System.Windows.Forms.Button();
 			this.button9 = new System.Windows.Forms.Button();
 			this.button10 = new System.Windows.Forms.Button();
 			this.button11 = new System.Windows.Forms.Button();
+			this.label4 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// progressBar1
@@ -136,6 +138,54 @@
 			this.tabPage1.Text = "Auto";
 			this.tabPage1.UseVisualStyleBackColor = true;
 			// 
+			// checkBox3
+			// 
+			this.checkBox3.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.checkBox3.Location = new System.Drawing.Point(6, 101);
+			this.checkBox3.Name = "checkBox3";
+			this.checkBox3.Size = new System.Drawing.Size(144, 97);
+			this.checkBox3.TabIndex = 0;
+			this.checkBox3.Text = "(Stacked)";
+			this.checkBox3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox3.UseVisualStyleBackColor = true;
+			// 
+			// checkBox2
+			// 
+			this.checkBox2.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.checkBox2.Location = new System.Drawing.Point(6, 101);
+			this.checkBox2.Name = "checkBox2";
+			this.checkBox2.Size = new System.Drawing.Size(398, 97);
+			this.checkBox2.TabIndex = 0;
+			this.checkBox2.Text = "Tote Set";
+			this.checkBox2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox2.UseVisualStyleBackColor = true;
+			// 
+			// checkBox4
+			// 
+			this.checkBox4.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.checkBox4.Location = new System.Drawing.Point(204, 6);
+			this.checkBox4.Name = "checkBox4";
+			this.checkBox4.Size = new System.Drawing.Size(200, 89);
+			this.checkBox4.TabIndex = 0;
+			this.checkBox4.Text = "Container Set";
+			this.checkBox4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox4.UseVisualStyleBackColor = true;
+			// 
+			// checkBox1
+			// 
+			this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
+			this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.checkBox1.Location = new System.Drawing.Point(6, 6);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(192, 89);
+			this.checkBox1.TabIndex = 0;
+			this.checkBox1.Text = "Robot Set";
+			this.checkBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.checkBox1.UseVisualStyleBackColor = true;
+			// 
 			// tabPage2
 			// 
 			this.tabPage2.Controls.Add(this.numericUpDown1);
@@ -157,79 +207,21 @@
 			this.tabPage2.Text = "Teleop";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
-			// button2
+			// numericUpDown1
 			// 
-			this.button2.Location = new System.Drawing.Point(436, 246);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(39, 25);
-			this.button2.TabIndex = 6;
-			this.button2.Text = "Flag";
-			this.button2.UseVisualStyleBackColor = true;
+			this.numericUpDown1.Location = new System.Drawing.Point(342, 123);
+			this.numericUpDown1.Name = "numericUpDown1";
+			this.numericUpDown1.Size = new System.Drawing.Size(62, 20);
+			this.numericUpDown1.TabIndex = 3;
 			// 
-			// checkBox1
+			// label3
 			// 
-			this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
-			this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.checkBox1.Location = new System.Drawing.Point(6, 6);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(192, 89);
-			this.checkBox1.TabIndex = 0;
-			this.checkBox1.Text = "Robot Set";
-			this.checkBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox1.UseVisualStyleBackColor = true;
-			// 
-			// checkBox2
-			// 
-			this.checkBox2.Appearance = System.Windows.Forms.Appearance.Button;
-			this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.checkBox2.Location = new System.Drawing.Point(6, 101);
-			this.checkBox2.Name = "checkBox2";
-			this.checkBox2.Size = new System.Drawing.Size(398, 97);
-			this.checkBox2.TabIndex = 0;
-			this.checkBox2.Text = "Tote Set";
-			this.checkBox2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox2.UseVisualStyleBackColor = true;
-			// 
-			// checkBox3
-			// 
-			this.checkBox3.Appearance = System.Windows.Forms.Appearance.Button;
-			this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.checkBox3.Location = new System.Drawing.Point(6, 101);
-			this.checkBox3.Name = "checkBox3";
-			this.checkBox3.Size = new System.Drawing.Size(144, 97);
-			this.checkBox3.TabIndex = 0;
-			this.checkBox3.Text = "(Stacked)";
-			this.checkBox3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox3.UseVisualStyleBackColor = true;
-			// 
-			// checkBox4
-			// 
-			this.checkBox4.Appearance = System.Windows.Forms.Appearance.Button;
-			this.checkBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.checkBox4.Location = new System.Drawing.Point(204, 6);
-			this.checkBox4.Name = "checkBox4";
-			this.checkBox4.Size = new System.Drawing.Size(200, 89);
-			this.checkBox4.TabIndex = 0;
-			this.checkBox4.Text = "Container Set";
-			this.checkBox4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.checkBox4.UseVisualStyleBackColor = true;
-			// 
-			// button3
-			// 
-			this.button3.Location = new System.Drawing.Point(7, 7);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(230, 52);
-			this.button3.TabIndex = 0;
-			this.button3.Text = "Gray Tote";
-			this.button3.UseVisualStyleBackColor = true;
-			// 
-			// trackBar1
-			// 
-			this.trackBar1.BackColor = System.Drawing.Color.White;
-			this.trackBar1.Location = new System.Drawing.Point(243, 153);
-			this.trackBar1.Name = "trackBar1";
-			this.trackBar1.Size = new System.Drawing.Size(161, 45);
-			this.trackBar1.TabIndex = 1;
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(240, 125);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(96, 13);
+			this.label3.TabIndex = 2;
+			this.label3.Text = "Unprocessed Litter";
 			// 
 			// label2
 			// 
@@ -252,6 +244,14 @@
 			this.trackBar2.TabIndex = 1;
 			this.trackBar2.Value = 1;
 			// 
+			// trackBar1
+			// 
+			this.trackBar1.BackColor = System.Drawing.Color.White;
+			this.trackBar1.Location = new System.Drawing.Point(243, 153);
+			this.trackBar1.Name = "trackBar1";
+			this.trackBar1.Size = new System.Drawing.Size(161, 45);
+			this.trackBar1.TabIndex = 1;
+			// 
 			// button4
 			// 
 			this.button4.Location = new System.Drawing.Point(58, 114);
@@ -260,15 +260,6 @@
 			this.button4.TabIndex = 0;
 			this.button4.Text = "Recycling Container";
 			this.button4.UseVisualStyleBackColor = true;
-			// 
-			// button5
-			// 
-			this.button5.Location = new System.Drawing.Point(7, 65);
-			this.button5.Name = "button5";
-			this.button5.Size = new System.Drawing.Size(230, 43);
-			this.button5.TabIndex = 0;
-			this.button5.Text = "Coopertition";
-			this.button5.UseVisualStyleBackColor = true;
 			// 
 			// button6
 			// 
@@ -279,30 +270,14 @@
 			this.button6.Text = "(Stacked)";
 			this.button6.UseVisualStyleBackColor = true;
 			// 
-			// button7
+			// button5
 			// 
-			this.button7.Location = new System.Drawing.Point(243, 7);
-			this.button7.Name = "button7";
-			this.button7.Size = new System.Drawing.Size(161, 52);
-			this.button7.TabIndex = 0;
-			this.button7.Text = "Recycled Litter";
-			this.button7.UseVisualStyleBackColor = true;
-			// 
-			// numericUpDown1
-			// 
-			this.numericUpDown1.Location = new System.Drawing.Point(342, 123);
-			this.numericUpDown1.Name = "numericUpDown1";
-			this.numericUpDown1.Size = new System.Drawing.Size(62, 20);
-			this.numericUpDown1.TabIndex = 3;
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(240, 125);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(96, 13);
-			this.label3.TabIndex = 2;
-			this.label3.Text = "Unprocessed Litter";
+			this.button5.Location = new System.Drawing.Point(7, 65);
+			this.button5.Name = "button5";
+			this.button5.Size = new System.Drawing.Size(230, 43);
+			this.button5.TabIndex = 0;
+			this.button5.Text = "Coopertition";
+			this.button5.UseVisualStyleBackColor = true;
 			// 
 			// button8
 			// 
@@ -312,6 +287,33 @@
 			this.button8.TabIndex = 0;
 			this.button8.Text = "Landfill Litter";
 			this.button8.UseVisualStyleBackColor = true;
+			// 
+			// button7
+			// 
+			this.button7.Location = new System.Drawing.Point(243, 7);
+			this.button7.Name = "button7";
+			this.button7.Size = new System.Drawing.Size(161, 52);
+			this.button7.TabIndex = 0;
+			this.button7.Text = "Recycled Litter";
+			this.button7.UseVisualStyleBackColor = true;
+			// 
+			// button3
+			// 
+			this.button3.Location = new System.Drawing.Point(7, 7);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(230, 52);
+			this.button3.TabIndex = 0;
+			this.button3.Text = "Gray Tote";
+			this.button3.UseVisualStyleBackColor = true;
+			// 
+			// button2
+			// 
+			this.button2.Location = new System.Drawing.Point(436, 246);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(39, 25);
+			this.button2.TabIndex = 6;
+			this.button2.Text = "Flag";
+			this.button2.UseVisualStyleBackColor = true;
 			// 
 			// button9
 			// 
@@ -334,18 +336,31 @@
 			// button11
 			// 
 			this.button11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+			this.button11.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button11.ForeColor = System.Drawing.Color.White;
 			this.button11.Location = new System.Drawing.Point(347, 14);
 			this.button11.Name = "button11";
 			this.button11.Size = new System.Drawing.Size(83, 43);
 			this.button11.TabIndex = 7;
+			this.button11.Text = "24";
 			this.button11.UseVisualStyleBackColor = false;
+			// 
+			// label4
+			// 
+			this.label4.BackColor = System.Drawing.Color.White;
+			this.label4.Location = new System.Drawing.Point(9, 303);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(563, 105);
+			this.label4.TabIndex = 2;
+			this.label4.Text = resources.GetString("label4.Text");
 			// 
 			// DataCollectionDraft
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(584, 300);
+			this.ClientSize = new System.Drawing.Size(584, 417);
 			this.Controls.Add(this.button11);
+			this.Controls.Add(this.label4);
 			this.Controls.Add(this.button10);
 			this.Controls.Add(this.button9);
 			this.Controls.Add(this.button2);
@@ -361,9 +376,9 @@
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -398,6 +413,7 @@
 		private System.Windows.Forms.Button button9;
 		private System.Windows.Forms.Button button10;
 		private System.Windows.Forms.Button button11;
+		private System.Windows.Forms.Label label4;
 	}
 }
 

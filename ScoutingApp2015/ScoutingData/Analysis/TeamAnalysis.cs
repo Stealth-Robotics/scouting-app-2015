@@ -186,12 +186,12 @@ namespace ScoutingData.Analysis
 			{
 				if (m.BlueAlliance.Contains(Team))
 				{
-					return m.BluePenalties.Count((p) => p.TeamAtFault() == Team);
+					return m.BluePenalties.Count((p) => p.BlamedTeam == Team);
 				}
 
 				if (m.RedAlliance.Contains(Team))
 				{
-					return m.RedPenalties.Count((p) => p.TeamAtFault() == Team);
+					return m.RedPenalties.Count((p) => p.BlamedTeam == Team);
 				}
 
 				return -1;

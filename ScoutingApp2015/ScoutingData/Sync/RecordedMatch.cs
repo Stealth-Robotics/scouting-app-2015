@@ -9,6 +9,9 @@ using ScoutingData.Data;
 
 namespace ScoutingData.Sync
 {
+	/// <summary>
+	/// Recording for a match. This data is serialized and sent to a USB drive.
+	/// </summary>
 	[JsonObject(MemberSerialization.OptIn)]
 	public class RecordedMatch : IPostJson
 	{
@@ -82,6 +85,12 @@ namespace ScoutingData.Sync
 		public int AllianceFinalScore
 		{ get; private set; }
 
+		/// <summary>
+		/// Instantiates a pregame recording of a match
+		/// </summary>
+		/// <param name="number">Match number</param>
+		/// <param name="team">Team number</param>
+		/// <param name="alliance">Alliance number</param>
 		public RecordedMatch(int number, Team team, AllianceColor alliance)
 		{
 			MatchNumber = number;
@@ -92,25 +101,41 @@ namespace ScoutingData.Sync
 			AlliancePenalties = new List<Penalty>();
 			Working = true; // default
 			Defense = 10; // default
-			Winner = AllianceColor.NULL; // indeterminate
+			Winner = AllianceColor.Indeterminate; // indeterminate
 			AllianceFinalScore = 0; // starting value
 		}
 
+		/// <summary>
+		/// Adds a goal to the match recording
+		/// </summary>
+		/// <param name="g">Goal to record</param>
 		public void AddGoal(Goal g)
 		{
 			ScoredGoals.Add(g);
 		}
 
+		/// <summary>
+		/// Adds a penalty to the match recording
+		/// </summary>
+		/// <param name="p">Penalty to record</param>
 		public void AddPenalty(Penalty p)
 		{
 			AlliancePenalties.Add(p);
 		}
 
+		/// <summary>
+		/// Additional loading after deserialization
+		/// </summary>
+		/// <param name="e">Event to load data from</param>
 		public void PostJsonLoading(FrcEvent e)
 		{
 			TrackedTeam = e.LoadTeam(TrackedTeamID);
 		}
 
+		/// <summary>
+		/// Serializes the recording to a JSON string
+		/// </summary>
+		/// <returns>String containing the recording in the form of JSON</returns>
 		public string ToJson()
 		{
 			return JsonConvert.SerializeObject(this, Formatting.Indented);

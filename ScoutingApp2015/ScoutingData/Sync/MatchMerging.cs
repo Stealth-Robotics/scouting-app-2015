@@ -7,11 +7,32 @@ using System.Threading.Tasks;
 
 namespace ScoutingData.Sync
 {
+	/// <summary>
+	/// Static class for merging recorded match data. Not exactly a whole lot
+	/// of methods in this one.
+	/// </summary>
 	public static class MatchMerging
 	{
+		/// <summary>
+		/// Threshold from which to determine penalties as separate. Penalties with
+		/// times less than this amount apart are considered the same penalty.
+		/// </summary>
 		public const int PENALTY_THRESHOLD = 15;
+		
+		/// <summary>
+		/// Threshold for which to determine there is not enough data to form a match.
+		/// If there is only this many match recordings present or less, there is not
+		/// enough data to form a match.
+		/// </summary>
 		public const int MATCH_NOT_ENOUGH_DATA_THRESHOLD = 3;
 
+		/// <summary>
+		/// Forms a match from recorded data
+		/// </summary>
+		/// <param name="frc">Event to load additional data from</param>
+		/// <param name="redData">Group of recordings from red's data</param>
+		/// <param name="blueData">Group of recordings from blue's data</param>
+		/// <returns></returns>
 		public static Match FormMatch(FrcEvent frc,
 			AllianceGroup<RecordedMatch> redData, 
 			AllianceGroup<RecordedMatch> blueData)
@@ -200,6 +221,17 @@ namespace ScoutingData.Sync
 			return result;
 		}
 
+		/// <summary>
+		/// Merges match recordings together after deserialization
+		/// </summary>
+		/// <param name="frc">Event to load data from</param>
+		/// <param name="redA">Team A on Red</param>
+		/// <param name="redB">Team B on Red</param>
+		/// <param name="redC">Team C on Red</param>
+		/// <param name="blueA">Team A on Blue</param>
+		/// <param name="blueB">Team B on Blue</param>
+		/// <param name="blueC">Team C on Blue</param>
+		/// <returns></returns>
 		public static Match Merge(FrcEvent frc, RecordedMatch redA, RecordedMatch redB, RecordedMatch redC,
 			RecordedMatch blueA, RecordedMatch blueB, RecordedMatch blueC)
 		{

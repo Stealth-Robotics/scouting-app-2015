@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 
 namespace ScoutingData.Data
 {
+	/// <summary>
+	/// Match object used to track all non-analysis data from a match
+	/// </summary>
 	[JsonObject(MemberSerialization.OptIn)]
 	public class Match : IPostJson
 	{
@@ -54,7 +57,7 @@ namespace ScoutingData.Data
 			get
 			{
 				return Goals.FindAll((g) => g.GetScoringAlliance(this) == AllianceColor.Blue || 
-					g.GetScoringAlliance(this) == AllianceColor.NULL);
+					g.GetScoringAlliance(this) == AllianceColor.Indeterminate);
 			}
 		}
 
@@ -67,7 +70,7 @@ namespace ScoutingData.Data
 			get
 			{
 				return Goals.FindAll((g) => g.GetScoringAlliance(this) == AllianceColor.Red ||
-					g.GetScoringAlliance(this) == AllianceColor.NULL);
+					g.GetScoringAlliance(this) == AllianceColor.Indeterminate);
 			}
 		}
 
@@ -86,7 +89,7 @@ namespace ScoutingData.Data
 		{
 			get
 			{
-				return Penalties.FindAll((p) => p.AffectedAlliance() == AllianceColor.Blue);
+				return Penalties.FindAll((p) => p.PenalizedAlliance == AllianceColor.Blue);
 			}
 		}
 
@@ -98,7 +101,7 @@ namespace ScoutingData.Data
 		{
 			get
 			{
-				return Penalties.FindAll((p) => p.AffectedAlliance() == AllianceColor.Red);
+				return Penalties.FindAll((p) => p.PenalizedAlliance == AllianceColor.Red);
 			}
 		}
 
@@ -151,14 +154,14 @@ namespace ScoutingData.Data
 		{ get; set; }
 
 		/// <summary>
-		/// Defense ratings for red
+		/// Defense ratings for red, from 0-10
 		/// </summary>
 		[JsonProperty]
 		public AllianceGroup<int> RedDefense
 		{ get; set; }
 
 		/// <summary>
-		/// Defense ratings for blue
+		/// Defense ratings for blue, from 0-10
 		/// </summary>
 		[JsonProperty]
 		public AllianceGroup<int> BlueDefense
@@ -177,6 +180,10 @@ namespace ScoutingData.Data
 			BlueAlliance = blue;
 		}
 
+		/// <summary>
+		/// Additional loading once deserialization is complete
+		/// </summary>
+		/// <param name="e">Event to load data from</param>
 		public void PostJsonLoading(FrcEvent e)
 		{
 			RedAlliance.PostJsonLoading(e);
@@ -188,6 +195,11 @@ namespace ScoutingData.Data
 			}
 		}
 
+		/// <summary>
+		/// Gets the alliance based on color
+		/// </summary>
+		/// <param name="color">Color of the resulting alliance</param>
+		/// <returns>Alliance based on color</returns>
 		public Alliance GetAlliance(AllianceColor color)
 		{
 			switch (color)
@@ -201,6 +213,11 @@ namespace ScoutingData.Data
 			}
 		}
 
+		/// <summary>
+		/// Get alliance color of a team.
+		/// </summary>
+		/// <param name="team">Team whose color to get</param>
+		/// <returns>Color of team, Indeterminate if team isn't found</returns>
 		public AllianceColor GetTeamColor(Team team)
 		{
 			if (BlueAlliance.Contains(team))
@@ -214,10 +231,16 @@ namespace ScoutingData.Data
 			else
 			{
 				Util.DebugLog(LogLevel.Error, "Neither alliance contains team " + team.Number.ToString());
-				return AllianceColor.NULL;
+				return AllianceColor.Indeterminate;
 			}
 		}
 
+		/// <summary>
+		/// Gets all goals scored by a team, including those scored by the
+		/// whole alliance and global goals.
+		/// </summary>
+		/// <param name="team">Team whose goals to retrieve</param>
+		/// <returns>List of goals scored by the team</returns>
 		public List<Goal> GetGoalsByTeam(Team team)
 		{
 			AllianceColor color = GetTeamColor(team);
@@ -243,6 +266,11 @@ namespace ScoutingData.Data
 			});
 		}
 
+		/// <summary>
+		/// Gets whether a team was functioning properly in this match.
+		/// </summary>
+		/// <param name="team">Team in question</param>
+		/// <returns>True if working, false if malfunctioning</returns>
 		public bool GetWorking(Team team)
 		{
 			AllianceColor color = GetTeamColor(team);
@@ -265,6 +293,11 @@ namespace ScoutingData.Data
 			}
 		}
 
+		/// <summary>
+		/// Gets the defense rating of a team.
+		/// </summary>
+		/// <param name="team">Team in question</param>
+		/// <returns>Defense rating of team</returns>
 		public int GetDefense(Team team)
 		{
 			AllianceColor color = GetTeamColor(team);

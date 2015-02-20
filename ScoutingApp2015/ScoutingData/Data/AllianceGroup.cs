@@ -9,13 +9,19 @@ using Newtonsoft.Json;
 
 namespace ScoutingData.Data
 {
+	/// <summary>
+	/// Color of Alliance. -1 is indeterminate.
+	/// </summary>
 	public enum AllianceColor
 	{
-		NULL = -1,
+		Indeterminate = -1,
 		Red = 1,
 		Blue
 	}
 
+	/// <summary>
+	/// Position within alliance (for indexing). A, B, or C.
+	/// </summary>
 	public enum AlliancePosition
 	{
 		A,

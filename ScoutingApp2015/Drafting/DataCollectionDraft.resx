@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label4.Text" xml:space="preserve">
+    <value>This project is for drafting only. No functionality is provided, only design. All designs here are intended for later use in the main WPF project, this year using the Elysium UI library. Do not deploy this project as it literally does nothing, not even resize correctly (try it). Its sole purpose is to determine the ideal layout for the final product, as WinForms is much easier to adjust layout than WPF.</value>
+  </data>
 </root>
