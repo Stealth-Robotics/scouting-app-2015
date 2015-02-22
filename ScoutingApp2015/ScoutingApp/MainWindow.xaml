@@ -13,19 +13,19 @@
 					par:Manager.ContrastBrush="White"
 					Title="Stealth Scouting"
 					Icon="assets/Pencil_PNG.png"
-					Height="500"
 					Width="900"
+					Height="500"
 					Background="#FF171717"
 					MinWidth="800"
 					MinHeight="400"
-					WindowStartupLocation="CenterScreen">
-	
+					WindowStartupLocation="CenterScreen"
+					Loaded="ScoutingMainWindow_Loaded">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-
+		
 		<Grid Grid.Row="0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="3*" />
@@ -45,9 +45,10 @@
 						<ColumnDefinition Width="64" />
 					</Grid.ColumnDefinitions>
 
-					<Button x:Name="TeamSetupBtn"
+					<Button x:Name="MatchSetupBtn"
 									Content="Setup Match..."
-									Margin="5,5,0,5" />
+									Margin="5,5,0,5"
+									Click="MatchSetupBtn_Click" />
 					<ComboBox x:Name="TeamsDropDown"
 										Grid.Column="1"
 										SelectedIndex="0"
@@ -92,7 +93,8 @@
 							<ToggleButton x:Name="ToteSetToggle"
 														Grid.Row="1"
 														FontSize="36"
-														Margin="5,0,5,5">
+														Margin="5,0,5,5"
+														Unchecked="ToteSetToggle_Unchecked">
 								<StackPanel Orientation="Horizontal"
 														HorizontalAlignment="Center"
 														VerticalAlignment="Center">
@@ -302,7 +304,8 @@
 									Grid.Column="1"
 									Content="Remove Goal"
 									Margin="5"
-									ToolTip="Remove selected goal" />
+									ToolTip="Remove selected goal"
+									IsEnabled="False" />
 				</Grid>
 			</Grid>
 		</Grid>
@@ -321,10 +324,9 @@
 										 Foreground="SteelBlue"
 										 Margin="0" />
 
-			<Button x:Name="TimeLbl"
+			<Button x:Name="TimeBtn"
 							Grid.Column="1"
 							Content="1:40"
-							Foreground="White"
 							HorizontalAlignment="Right"
 							FontSize="18"
 							FontWeight="Bold"
