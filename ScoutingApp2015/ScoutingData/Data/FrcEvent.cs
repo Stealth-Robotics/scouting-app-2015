@@ -24,8 +24,8 @@ namespace ScoutingData.Data
 		/// <summary>
 		/// List of all competing teams within the event
 		/// </summary>
-		[JsonProperty]
-		public List<Team> CompetingTeams
+		[JsonIgnore]
+		public TeamsList CompetingTeams
 		{ get; set; }
 
 		/// <summary>
@@ -48,12 +48,14 @@ namespace ScoutingData.Data
 		/// <summary>
 		/// Performs additional loading of matches once loaded from JSON
 		/// </summary>
-		public void PostJsonLoading()
+		public void PostJsonLoading(TeamsList teams)
 		{
 			foreach (Match m in Matches)
 			{
 				m.PostJsonLoading(this);
 			}
+
+			CompetingTeams = teams;
 		}
 
 		/// <summary>

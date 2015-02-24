@@ -1,4 +1,5 @@
 ﻿using ScoutingData;
+using ScoutingData.Data;
 using ScoutingData.Sync;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,9 @@ namespace ScoutingApp
 		public RecordedMatch Record
 		{ get; private set; }
 
+		public FrcEvent Frc
+		{ get; private set; }
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -59,7 +63,7 @@ namespace ScoutingApp
 				return;
 			}
 
-			int val = (int)DefenseSlider.Value;
+			int val = (int)e.NewValue;
 			DefenseLbl.Content = DEFENSE_PREFIX + val.ToString();
 		}
 
@@ -75,15 +79,21 @@ namespace ScoutingApp
 				return;
 			}
 
-			int val = (int)RecyclingLevelSlider.Value;
+			int val = (int)e.NewValue;
 			RecyclingLevelLbl.Content = DEFENSE_PREFIX + val.ToString();
 		}
 
 		private void MatchSetupBtn_Click(object sender, RoutedEventArgs e)
 		{
-			MatchSetupOverlay overlay = new MatchSetupOverlay();
-			//overlay.Show();
-			MessageBox.Show("Overlay not implemented yet.", "Error");
+			SettingsWindow window = new SettingsWindow(Frc, Record.MatchNumber);
+			bool? result = window.ShowDialog();
+
+			if (result == true) // nullable bool
+			{
+				ScoutingAppSettings settings = window.Settings;
+
+				Record = settings.MakeRecord();
+			}
 		}
 
 		private void ToteSetToggle_Unchecked(object sender, RoutedEventArgs e)
@@ -95,9 +105,17 @@ namespace ScoutingApp
 		{
 			timer.Interval = TimeSpan.FromSeconds(1);
 			timer.Tick += timer_Tick;
+
+			InitLoadFiles();
 		}
 
-		void timer_Tick(object sender, EventArgs e)
+		public void InitLoadFiles()
+		{
+			ScoutingJson.Initialize(false);
+			Frc = ScoutingJson.ParseFrcEvent("Default.json", false);
+		}
+
+		private void timer_Tick(object sender, EventArgs e)
 		{
 			Util.DebugLog(LogLevel.Info, "TICK");
 		}

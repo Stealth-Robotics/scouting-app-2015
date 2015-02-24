@@ -25,93 +25,66 @@ namespace ScoutingData
 		/// <summary>
 		/// Root path to use when saving. Possibly obsolete.
 		/// </summary>
-		public static string RootPath
-		{ get; set; }
-		/// <summary>
-		/// Data path to use when saving. Possibly obsolete.
-		/// </summary>
-		public static string DataPath
+		public static string LocalPath
 		{
 			get
 			{
-				return RootPath + @"Data\";
+				return Util.USERPROFILE + "\\" + FolderName + "\\";
 			}
 		}
-
-		internal static DirectoryInfo RootDir
-		{ get; private set; }
-		internal static DirectoryInfo DataDir
-		{ get; private set; }
+		public static string FolderName
+		{ get; set; }
+		public static string UsbPath
+		{
+			get
+			{
+				return DriveLetter + ":\\" + FolderName + "\\";
+			}
+		}
+		public static char DriveLetter
+		{ get; set; }
 
 		public static bool IsInitialized
 		{ get; set; }
 
-		public static List<string> EventFilenames
-		{ get; private set; }
-
-		public static Dictionary<string, string> LoadedFiles
-		{ get; private set; }
-		
-		public static List<FrcEvent> LoadedEvents
-		{ get; private set; }
-
-		public static void Initialize()
+		public static void Initialize(bool reInit)
 		{
-			if (IsInitialized)
+			if (IsInitialized && !reInit)
 			{
 				return;
 			}
 
-			RootPath = Util.USERPROFILE + @"\ScoutingApp2015\";
+			FolderName = "ScoutingApp2015";
+			DriveLetter = 'G';
 			Extension = ".json";
-			EventFilenames = new List<string>();
-			LoadedFiles = new Dictionary<string, string>();
-			LoadedEvents = new List<FrcEvent>();
 
-			InitFiles();
+			InitFiles(false);
 
 			// END INIT
 			IsInitialized = true;
 		}
 
-		public static void InitFiles()
+		public static void InitFiles(bool usbToo)
 		{
-			if (!Directory.Exists(RootPath))
+			if (!Directory.Exists(LocalPath))
 			{
-				RootDir = Directory.CreateDirectory(RootPath);
-			}
-			if (!Directory.Exists(DataPath))
-			{
-				DataDir = Directory.CreateDirectory(DataPath);
+				Directory.CreateDirectory(LocalPath);
 			}
 
-			EventFilenames.Clear();
-			IEnumerable<FileInfo> files = DataDir.EnumerateFiles();
-			foreach (FileInfo fi in files)
+			if (usbToo && Directory.Exists(DriveLetter + ":\\"))
 			{
-				EventFilenames.Add(fi.ToString());
+				if (!Directory.Exists(UsbPath))
+				{
+					Directory.CreateDirectory(UsbPath);
+				}
 			}
 		}
 
-		public static void LoadFile(string filename)
+		public static FrcEvent ParseFrcEvent(string filename, bool usb)
 		{
-			if (!EventFilenames.Contains(filename))
-			{
-				EventFilenames.Add(filename);
-			}
+			Initialize(false);
 
-			string contents = File.ReadAllText(filename);
-			LoadedFiles.AddSet(filename, contents);
-		}
-
-		public static void ParseEvent(string filename)
-		{
-			if (!LoadedFiles.ContainsKey(filename))
-			{
-				return;
-			}
-
-			string contents = LoadedFiles[filename];
+			string contents = File.ReadAllText((usb ? UsbPath : LocalPath) + filename);
 			FrcEvent frc = null;
 			try
 			{
@@ -121,14 +94,43 @@ namespace ScoutingData
 			{
 				Util.DebugLog(LogLevel.Critical, "Could not deserialize file " + filename);
 			}
-			frc.PostJsonLoading();
+
+			return frc;
+		}
+		public static TeamsList ParceTeamsList(string filename, bool usb)
+		{
+			Initialize(false);
+
+			string contents = File.ReadAllText((usb ? UsbPath : LocalPath) + filename);
+			TeamsList list = null;
+			try
+			{
+				list = JsonConvert.DeserializeObject<TeamsList>(contents);
+			}
+			catch (JsonException)
+			{
+				Util.DebugLog(LogLevel.Critical, "Could not deserialize file " + filename);
+			}
+
+			return list;
 		}
 
-		public static void SaveEvent(FrcEvent frc)
+		public static void SaveEvent(FrcEvent frc, bool usb)
 		{
+			Initialize(false);
+
 			string contents = JsonConvert.SerializeObject(frc, Formatting.Indented);
 
-			string filename = DataPath + frc.EventName + Extension;
+			string filename = (usb ? UsbPath : LocalPath) + frc.EventName + Extension;
+			File.WriteAllText(filename, contents);
+		}
+		public static void SaveTeamsList(TeamsList list, bool usb)
+		{
+			Initialize(false);
+
+			string contents = JsonConvert.SerializeObject(list, Formatting.Indented);
+
+			string filename = (usb ? UsbPath : LocalPath) + "Teams" + Extension;
 			File.WriteAllText(filename, contents);
 		}
 	}

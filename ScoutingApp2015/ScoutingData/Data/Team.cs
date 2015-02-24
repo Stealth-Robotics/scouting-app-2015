@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows;
+
 using Newtonsoft.Json;
+using System.Windows.Documents;
 
 namespace ScoutingData.Data
 {
@@ -11,7 +15,7 @@ namespace ScoutingData.Data
 	/// An FRC Team, with all pertaining data
 	/// </summary>
 	[JsonObject(MemberSerialization.OptIn)]
-	public class Team
+	public class Team : IDescribable
 	{
 		/// <summary>
 		/// Team number [PRIMARY KEY]
@@ -112,6 +116,55 @@ namespace ScoutingData.Data
 		public static bool operator!=(Team a, Team b)
 		{
 			return !(a == b);
+		}
+
+		public string GetDescription()
+		{
+			string res = ToString() + "\n";
+			res += "From: " + School + "\n\n";
+			res += "Description:\n";
+			res += Description + "\n\n";
+			res += "Expectations:\n";
+			res += Expectations;
+
+			return res;
+		}
+
+		public StackPanel GetDescriptionWPF()
+		{
+			StackPanel res = new StackPanel();
+			TextBlock txt = new TextBlock();
+			txt.Text = ToString();
+			txt.FontWeight = FontWeights.Bold;
+			res.Children.Add(txt);
+
+			txt = new TextBlock();
+			txt.Inlines.Add(new Bold(new Run("From: ")));
+			txt.Inlines.Add(new Run(School));
+			txt.Margin = new Thickness(0, 5, 0, 5);
+			res.Children.Add(txt);
+
+			txt = new TextBlock();
+			txt.Text = "Description:";
+			txt.FontWeight = FontWeights.Bold;
+			res.Children.Add(txt);
+
+			txt = new TextBlock();
+			txt.Text = Description;
+			txt.Margin = new Thickness(15, 0, 0, 5);
+			res.Children.Add(txt);
+
+			txt = new TextBlock();
+			txt.Text = "Expectations:";
+			txt.FontWeight = FontWeights.Bold;
+			res.Children.Add(txt);
+
+			txt = new TextBlock();
+			txt.Text = Expectations;
+			txt.Margin = new Thickness(15, 0, 0, 0);
+			res.Children.Add(txt);
+
+			return res;
 		}
 	}
 }
