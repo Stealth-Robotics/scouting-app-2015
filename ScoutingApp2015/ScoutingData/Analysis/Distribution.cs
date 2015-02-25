@@ -68,7 +68,7 @@ namespace ScoutingData.Analysis
 			case DistributionDisplayMode.FiveNumSummary:
 				return Summary.ToString();
 			default:
-				throw new ArgumentException("DisplayMode is not a valid state: " + DisplayMode.ToString());
+				return base.ToString();
 			}
 		}
 	}

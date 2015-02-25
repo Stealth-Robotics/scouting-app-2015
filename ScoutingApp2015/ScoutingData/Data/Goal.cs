@@ -96,6 +96,55 @@ namespace ScoutingData.Data
 		{ get; set; }
 
 		/// <summary>
+		/// Used for data binding. Sorta like ToString() but more concise.
+		/// </summary>
+		[JsonIgnore]
+		public string UIForm
+		{
+			get
+			{
+				string res = string.Format(@"[{0:m\:ss}]", TimeScored);
+				res += string.Format(@"[{0:N0}]", PointValue()) + ": ";
+				res += Type.ToString();
+				return res;
+			}
+		}
+
+		/// <summary>
+		/// More data binding. Elaborates upon UIForm.
+		/// </summary>
+		[JsonIgnore]
+		public string UITooltip
+		{
+			get
+			{
+				switch (Type)
+				{
+				case GoalType.RobotSet:
+					return "Robot Set";
+				case GoalType.YellowToteSet:
+					return Stack == true ? "Stacked Tote Set" : "Unstacked Tote Set";
+				case GoalType.ContainerSet:
+					return "Container Set";
+				case GoalType.Coopertition:
+					return Stack == true ? "Stacked Coopertition" : "Unstacked Coopertition";
+				case GoalType.GrayTote:
+					return "Gray Tote Set";
+				case GoalType.ContainerTeleop:
+					return "Level " + Level.Value.ToString() + " Container";
+				case GoalType.RecycledLitter:
+					return "Recycled Litter";
+				case GoalType.LandfillLitter:
+					return "Landfill Litter";
+				case GoalType.UnprocessedLitter:
+					return "Unprocessed Litter";
+				default:
+					return null;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Time in which the goal was scored. Derived from int form.
 		/// </summary>
 		[JsonIgnore]

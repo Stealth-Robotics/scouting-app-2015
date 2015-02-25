@@ -46,7 +46,7 @@ namespace ScoutingData.Data
 				case AlliancePosition.C:
 					return C;
 				default:
-					throw new IndexOutOfRangeException("Invalid position: " + pos.ToString());
+					return default(T);
 				}
 			}
 		}
@@ -67,6 +67,8 @@ namespace ScoutingData.Data
 		public virtual T C
 		{ get; set; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", 
+			"CA2214:DoNotCallOverridableMethodsInConstructors")]
 		public AllianceGroup(T a, T b, T c)
 		{
 			A = a;

@@ -17,6 +17,25 @@ namespace ScoutingData
 		Critical
 	}
 
+	public delegate void Printigate(object sender, PrintEventArgs e);
+
+	public class PrintEventArgs : EventArgs
+	{
+		public string Text
+		{ get; set; }
+
+		public LogLevel Level
+		{ get; set; }
+
+		public int RankLevel
+		{
+			get
+			{
+				return (int)Level;
+			}
+		}
+	}
+
 	/// <summary>
 	/// Utility class containing various functions with no other purpose.
 	/// </summary>
@@ -31,16 +50,21 @@ namespace ScoutingData
 		/// <summary>
 		/// Length of time for an FRC 2015 match, in the form of a TimeSpan object
 		/// </summary>
-		public static readonly TimeSpan MATCH_LENGTH = new TimeSpan(0, 1, 30);
+		public static readonly TimeSpan MATCH_LENGTH = new TimeSpan(0, 2, 30);
 		/// <summary>
-		/// Time left when teleop starts
+		/// Time when teleop starts
 		/// </summary>
-		public static readonly TimeSpan TELEOP = new TimeSpan(0, 1, 15);
+		public static readonly TimeSpan TELEOP = TimeSpan.FromSeconds(15);
+		/// <summary>
+		/// Time when players can start throwing litter noodles into the arena
+		/// </summary>
+		public static readonly TimeSpan TRASH_TOSS = new TimeSpan(0, 2, 15);
 
 		/// <summary>
 		/// Subscribe to add an additional output location for Util.DebugLog().
 		/// </summary>
-		public static event Action<int, string> OnPrint;/// <summary>
+		public static event Printigate OnPrint;
+		/// <summary>
 		/// Clamps a value between a min and max (inclusively), and returns if clamping was necessary.
 		/// </summary>
 		/// <typeparam name="T">Type being compared when clamping. Must extend IComparable</typeparam>
@@ -75,7 +99,8 @@ namespace ScoutingData
 		{
 			string output = "\n[" + level.ToString().ToUpper() + "] " + message;
 			System.Diagnostics.Debugger.Log((int)level, "SCOUTING", output);
-			OnPrint((int)level, output);
+
+			OnPrint(null, new PrintEventArgs() { Level = level, Text = output });
 		}
 		/// <summary>
 		/// Shortcut for Debug Logging, with category

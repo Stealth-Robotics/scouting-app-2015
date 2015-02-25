@@ -49,11 +49,13 @@
 									Content="Setup Match..."
 									Grid.Column="1"
 									Margin="5"
-									Click="MatchSetupBtn_Click" />
+									Click="MatchSetupBtn_Click"
+									FontSize="16" />
 					<ComboBox x:Name="TeamsDropDown"
 										Grid.Column="2"
 										SelectedIndex="0"
-										Margin="5">
+										Margin="5"
+										SelectionChanged="TeamsDropDown_SelectionChanged">
 						<ComboBoxItem Content="Select a Team..." />
 					</ComboBox>
 					<Rectangle x:Name="ColorRect"
@@ -100,7 +102,7 @@
 														HorizontalAlignment="Center"
 														VerticalAlignment="Center">
 									<ToggleButton x:Name="ToteSetStackedToggle"
-																FontSize="22"
+																FontSize="24"
 																Content="(Stacked)"
 																BorderBrush="#FF171717"
 																BorderThickness="2"
@@ -144,7 +146,7 @@
 														VerticalAlignment="Center">
 									<Button x:Name="CoopertitionStackedBtn"
 													Content="(Stacked)"
-													FontSize="14"
+													FontSize="16"
 													Margin="0"
 													BorderBrush="#FF171717"
 													BorderThickness="2" />
@@ -166,6 +168,7 @@
 												Orientation="Vertical"
 												Minimum="1"
 												Maximum="6"
+												par:Slider.ThumbThickness="12"
 												Margin="5,5,0,5"
 												ValueChanged="RecyclingLevelSlider_ValueChanged" />
 								<Label x:Name="RecyclingLevelLbl"
@@ -248,12 +251,14 @@
 												Minimum="0"
 												Maximum="10"
 												Grid.Row="1"
+												par:Slider.ThumbThickness="12"
 												Value="5"
 												Margin="5,0,0,0"
 												VerticalAlignment="Bottom"
 												SmallChange="1"
 												LargeChange="2"
-												ValueChanged="DefenseSlider_ValueChanged" />
+												ValueChanged="DefenseSlider_ValueChanged"
+												TickPlacement="Both" />
 								<Label x:Name="DefenseLbl"
 											 Content="Defense: 5"
 											 Foreground="White"
@@ -268,7 +273,7 @@
 
 			<Grid Grid.Column="1">
 				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" />
+					<RowDefinition Height="48" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
@@ -276,13 +281,19 @@
 				<Button x:Name="SaveBtn"
 								Grid.Row="0"
 								Content="Save..."
-								Margin="5" />
+								Margin="5"
+								FontSize="16" />
 				<ListBox x:Name="GoalsList"
 								 Grid.Row="1"
 								 Margin="5,0"
 								 BorderThickness="1"
 								 BorderBrush="#FF424242">
-					<ListBoxItem Content="Goals List" />
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding UIForm}"
+												 ToolTip="{Binding UITooltip}" />
+						</DataTemplate>
+					</ListBox.ItemTemplate>
 				</ListBox>
 				<Grid Grid.Row="2"
 							Margin="0,0,0,5">
@@ -306,7 +317,7 @@
 									Content="Remove Goal"
 									Margin="5"
 									ToolTip="Remove selected goal"
-									IsEnabled="False" />
+									IsEnabled="{Binding IsGoalSelected}" />
 				</Grid>
 			</Grid>
 		</Grid>
@@ -327,12 +338,13 @@
 
 			<Button x:Name="TimeBtn"
 							Grid.Column="1"
-							Content="1:40"
+							Content="1:40.0"
 							HorizontalAlignment="Right"
 							FontSize="18"
 							FontWeight="Bold"
 							Margin="0"
-							ToolTip="Click to pause/continue timer" />
+							ToolTip="Click to pause/continue timer"
+							Click="TimeBtn_Click" />
 		</Grid>
 	</Grid>
 </e:Window>

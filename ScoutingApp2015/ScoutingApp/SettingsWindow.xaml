@@ -87,13 +87,15 @@
 							Grid.Column="2"
 							Grid.Row="0"
 							MinWidth="0"
-							Margin="5,5,5,0" />
+							Margin="5,5,5,0"
+							Click="EventPathBtn_Click" />
 			<Button x:Name="TeamsPathBtn"
 							Content="..."
 							Grid.Column="2"
 							Grid.Row="1"
 							MinWidth="0"
-							Margin="5" />
+							Margin="5"
+							Click="TeamsPathBtn_Click" />
 		</Grid>
 
 		<Grid Grid.Row="2"
@@ -124,7 +126,7 @@
 							Click="MatchIDDownBtn_Click"
 							Margin="5,0" />
 			<TextBox x:Name="MatchIDBox"
-							 Text="{Binding MatchID}"
+							 Text="{Binding MatchID, Mode=OneWay}"
 							 HorizontalContentAlignment="Center"
 							 Grid.Column="3"
 							 Margin="0"
@@ -202,7 +204,8 @@
 						Grid.Column="2"
 						Grid.Row="4"
 						VerticalAlignment="Bottom"
-						Margin="5,0,5,5" />
+						Margin="5,0,5,5"
+						Click="CancelBtn_Click" />
 		<Button x:Name="OKBtn"
 						Content="OK"
 						MaxHeight="32"
@@ -211,6 +214,7 @@
 						VerticalAlignment="Bottom"
 						Width="{Binding Path=ActualWidth, ElementName=CancelBtn}"
 						Margin="5,0,0,5"
-						HorizontalAlignment="Right" />
+						HorizontalAlignment="Right"
+						Click="OKBtn_Click" />
 	</Grid>
 </e:Window>

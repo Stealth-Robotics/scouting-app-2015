@@ -148,7 +148,16 @@ namespace ScoutingData.Data
 			}
 
 			public void Dispose()
-			{ }
+			{
+				Dispose(true);
+			}
+			protected virtual void Dispose(bool cleanManaged)
+			{ 
+				if (cleanManaged)
+				{
+					Teams = null;
+				}
+			}
 
 			public bool MoveNext()
 			{
