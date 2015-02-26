@@ -17,9 +17,15 @@ namespace ScoutingData
 	public static class ScoutingJson
 	{
 		/// <summary>
-		/// File extension used when saving files
+		/// File extension used when saving event files
 		/// </summary>
-		public static string Extension
+		public static string EventExtension
+		{ get; set; }
+
+		/// <summary>
+		/// File extension used when saving teams list files
+		/// </summary>
+		public static string TeamsListExtension
 		{ get; set; }
 
 		/// <summary>
@@ -56,7 +62,8 @@ namespace ScoutingData
 
 			FolderName = "ScoutingApp2015";
 			DriveLetter = 'G';
-			Extension = ".json";
+			EventExtension = ".frc";
+			TeamsListExtension = ".teams";
 
 			InitFiles(false);
 
@@ -79,12 +86,11 @@ namespace ScoutingData
 				}
 			}
 		}
-
-		public static FrcEvent ParseFrcEvent(string filename, bool usb)
+		public static FrcEvent ParseFrcEvent(string fullPathName)
 		{
 			Initialize(false);
 
-			string contents = File.ReadAllText((usb ? UsbPath : LocalPath) + filename);
+			string contents = File.ReadAllText(fullPathName);
 			FrcEvent frc = null;
 			try
 			{
@@ -92,16 +98,20 @@ namespace ScoutingData
 			}
 			catch (JsonException)
 			{
-				Util.DebugLog(LogLevel.Critical, "Could not deserialize file " + filename);
+				Util.DebugLog(LogLevel.Critical, "Could not deserialize file.");
 			}
 
 			return frc;
 		}
-		public static TeamsList ParceTeamsList(string filename, bool usb)
+		public static FrcEvent ParseFrcEvent(string filename, bool usb)
+		{
+			return ParseFrcEvent(usb ? UsbPath : LocalPath);
+		}
+		public static TeamsList ParseTeamsList(string fullPathName)
 		{
 			Initialize(false);
 
-			string contents = File.ReadAllText((usb ? UsbPath : LocalPath) + filename);
+			string contents = File.ReadAllText(fullPathName);
 			TeamsList list = null;
 			try
 			{
@@ -109,10 +119,14 @@ namespace ScoutingData
 			}
 			catch (JsonException)
 			{
-				Util.DebugLog(LogLevel.Critical, "Could not deserialize file " + filename);
+				Util.DebugLog(LogLevel.Critical, "Could not deserialize file.");
 			}
 
 			return list;
+		}
+		public static TeamsList ParseTeamsList(string filename, bool usb)
+		{
+			return ParseTeamsList(usb ? UsbPath : LocalPath);
 		}
 
 		public static void SaveEvent(FrcEvent frc, bool usb)
@@ -121,7 +135,7 @@ namespace ScoutingData
 
 			string contents = JsonConvert.SerializeObject(frc, Formatting.Indented);
 
-			string filename = (usb ? UsbPath : LocalPath) + frc.EventName + Extension;
+			string filename = (usb ? UsbPath : LocalPath) + frc.EventName + EventExtension;
 			File.WriteAllText(filename, contents);
 		}
 		public static void SaveTeamsList(TeamsList list, bool usb)
@@ -130,7 +144,7 @@ namespace ScoutingData
 
 			string contents = JsonConvert.SerializeObject(list, Formatting.Indented);
 
-			string filename = (usb ? UsbPath : LocalPath) + "Teams" + Extension;
+			string filename = (usb ? UsbPath : LocalPath) + "Teams" + TeamsListExtension;
 			File.WriteAllText(filename, contents);
 		}
 	}

@@ -48,7 +48,7 @@ namespace ScoutingData.Data
 			set
 			{
 				_teamA = value;
-				TeamA_ID = value.Number;
+				TeamA_ID = value != null ? value.Number : -1;
 			}
 		}
 		Team _teamA;
@@ -66,7 +66,7 @@ namespace ScoutingData.Data
 			set
 			{
 				_teamB = value;
-				TeamB_ID = value.Number;
+				TeamB_ID = value != null ? value.Number : -1;
 			}
 		}
 		Team _teamB;
@@ -84,10 +84,20 @@ namespace ScoutingData.Data
 			set
 			{
 				_teamC = value;
-				TeamC_ID = value.Number;
+				TeamC_ID = value != null ? value.Number : -1;
 			}
 		}
 		Team _teamC;
+
+		/// <summary>
+		/// A more Json-friendly constructor
+		/// </summary>
+		public Alliance()
+		{
+			TeamA_ID = -1;
+			TeamB_ID = -1;
+			TeamC_ID = -1;
+		}
 
 		/// <summary>
 		/// Instantiates an Alliance 

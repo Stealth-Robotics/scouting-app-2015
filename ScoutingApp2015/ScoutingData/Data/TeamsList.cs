@@ -9,26 +9,25 @@ using Newtonsoft.Json;
 namespace ScoutingData.Data
 {
 	[JsonObject(MemberSerialization.OptIn)]
-	public class TeamsList : IList<Team>, IPostJson
+	public class TeamsList : IList<Team>
 	{
-		[JsonIgnore]
-		List<Team> Teams
-		{ get; set; }
-
 		[JsonProperty]
-		List<int> TeamIDs
+		List<Team> Teams
 		{ get; set; }
 
 		public TeamsList()
 		{
 			Teams = new List<Team>();
-			TeamIDs = new List<int>();
 		}
 
-		public Team GetTeam(int teamID)
+		public bool IsCorrectlyLoaded()
 		{
-			int index = TeamIDs.IndexOf(teamID);
-			return Teams[index];
+			if (Teams == null)
+			{
+				return false;
+			}
+
+			return Teams.Count > 0;
 		}
 
 		#region IList
@@ -40,13 +39,11 @@ namespace ScoutingData.Data
 		public void Insert(int index, Team item)
 		{
 			Teams.Insert(index, item);
-			TeamIDs.Insert(index, item.Number);
 		}
 
 		public void RemoveAt(int index)
 		{
 			Teams.RemoveAt(index);
-			TeamIDs.RemoveAt(index);
 		}
 
 		public Team this[int index]
@@ -58,25 +55,22 @@ namespace ScoutingData.Data
 			set
 			{
 				Teams[index] = value;
-				TeamIDs[index] = value.Number;
 			}
 		}
 
 		public void Add(Team item)
 		{
 			Teams.Add(item);
-			TeamIDs.Add(item.Number);
 		}
 
 		public void Clear()
 		{
 			Teams.Clear();
-			TeamIDs.Clear();
 		}
 
 		public bool Contains(Team item)
 		{
-			return TeamIDs.Contains(item.Number);
+			return Teams.Contains(item);
 		}
 
 		public void CopyTo(Team[] array, int arrayIndex)
@@ -102,10 +96,7 @@ namespace ScoutingData.Data
 
 		public bool Remove(Team item)
 		{
-			bool t = Teams.Remove(item);
-			bool id = TeamIDs.Remove(item.Number);
-
-			return t && id;
+			return Teams.Remove(item);
 		}
 
 		public IEnumerator<Team> GetEnumerator()
@@ -181,15 +172,6 @@ namespace ScoutingData.Data
 		public Team Find(Predicate<Team> foundItComparer)
 		{
 			return Teams.Find(foundItComparer);
-		}
-
-		public void PostJsonLoading(FrcEvent e)
-		{
-			Teams.Clear();
-			foreach (int i in TeamIDs)
-			{
-				Teams.Add(e.LoadTeam(i));
-			}
 		}
 	}
 }

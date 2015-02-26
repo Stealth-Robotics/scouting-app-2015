@@ -67,6 +67,15 @@ namespace ScoutingData.Data
 		public virtual T C
 		{ get; set; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage",
+			"CA2214:DoNotCallOverridableMethodsInConstructors")]
+		public AllianceGroup()
+		{
+			A = default(T);
+			B = default(T);
+			C = default(T);
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", 
 			"CA2214:DoNotCallOverridableMethodsInConstructors")]
 		public AllianceGroup(T a, T b, T c)
@@ -126,7 +135,7 @@ namespace ScoutingData.Data
 			public AllianceEnumerator(AllianceGroup<T> al)
 			{
 				alliance = al;
-				position = 0;
+				position = -1;
 			}
 
 			public T Current
@@ -173,7 +182,7 @@ namespace ScoutingData.Data
 
 			public void Reset()
 			{
-				position = 0;
+				position = -1;
 			}
 		}
 

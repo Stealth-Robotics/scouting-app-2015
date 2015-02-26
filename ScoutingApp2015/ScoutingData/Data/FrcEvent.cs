@@ -25,7 +25,7 @@ namespace ScoutingData.Data
 		/// List of all competing teams within the event
 		/// </summary>
 		[JsonIgnore]
-		public TeamsList CompetingTeams
+		public TeamsList AllTeams
 		{ get; set; }
 
 		/// <summary>
@@ -42,20 +42,26 @@ namespace ScoutingData.Data
 		/// <returns>Reference to team object with that ID</returns>
 		public Team LoadTeam(int teamID)
 		{
-			return CompetingTeams.Find((t) => t.Number == teamID);
+			return AllTeams.Find((t) => t.Number == teamID);
 		}
 
 		/// <summary>
-		/// Performs additional loading of matches once loaded from JSON
+		/// Performs additional loading of matches once loaded from JSON.
+		/// Not to be confused with IPostJson.PostJsonLoading(FrcEvent).
 		/// </summary>
 		public void PostJsonLoading(TeamsList teams)
 		{
+			AllTeams = teams;
+
 			foreach (Match m in Matches)
 			{
 				m.PostJsonLoading(this);
 			}
+		}
 
-			CompetingTeams = teams;
+		public bool IsCorrectlyLoaded()
+		{
+			return Matches != null && EventName != null;
 		}
 
 		/// <summary>

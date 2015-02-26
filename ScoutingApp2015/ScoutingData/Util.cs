@@ -1,11 +1,14 @@
 ﻿using ScoutingData.Analysis;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Windows.Media;
 
 namespace ScoutingData
 {
@@ -64,6 +67,7 @@ namespace ScoutingData
 		/// Subscribe to add an additional output location for Util.DebugLog().
 		/// </summary>
 		public static event Printigate OnPrint;
+
 		/// <summary>
 		/// Clamps a value between a min and max (inclusively), and returns if clamping was necessary.
 		/// </summary>
@@ -91,16 +95,89 @@ namespace ScoutingData
 		}
 
 		/// <summary>
+		/// Alternative to ToString() for enums, just apply a DescriptionAttribute to
+		/// the enum value.
+		/// </summary>
+		/// <typeparam name="T">Enum type</typeparam>
+		/// <param name="enumerationValue">Value converted to string</param>
+		/// <returns>
+		/// A string provided by the DescriptionAttribute, or 
+		/// enumerationValue.ToString() if there is no DescriptionAttribute applied.
+		/// </returns>
+		public static string GetDescription<T>(this T enumerationValue)
+			where T : struct
+		{
+			Type type = enumerationValue.GetType();
+			if (!type.IsEnum)
+			{
+				throw new ArgumentException("EnumerationValue must be of Enum type", "enumerationValue");
+			}
+
+			//Tries to find a DescriptionAttribute for a potential friendly name
+			//for the enum
+			MemberInfo[] memberInfo = type.GetMember(enumerationValue.ToString());
+			if (memberInfo != null && memberInfo.Length > 0)
+			{
+				object[] attrs = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+				if (attrs != null && attrs.Length > 0)
+				{
+					//Pull out the description value
+					return ((DescriptionAttribute)attrs[0]).Description;
+				}
+			}
+			//If we have no description attribute, just return the ToString of the enum
+			return enumerationValue.ToString();
+
+		}
+
+		public static Color MakeColor(int a, int r, int g, int b)
+		{
+			return new Color() { A = (byte)a, R = (byte)r, G = (byte)g, B = (byte)b };
+		}
+		public static Color MakeColor(string src)
+		{
+			string hexString = src.TrimStart('#');
+
+			if (hexString.Length != 6 && hexString.Length != 8)
+			{
+				return Colors.Transparent;
+			}
+
+			hexString = hexString.ToUpper();
+
+			if (hexString.Length == 6)
+			{
+				hexString = "FF" + hexString;
+			}
+
+			string aStr = hexString.Substring(0, 2);
+			string rStr = hexString.Substring(2, 2);
+			string gStr = hexString.Substring(4, 2);
+			string bStr = hexString.Substring(6, 2);
+
+			byte a = byte.Parse(aStr, NumberStyles.HexNumber);
+			byte r = byte.Parse(rStr, NumberStyles.HexNumber);
+			byte g = byte.Parse(gStr, NumberStyles.HexNumber);
+			byte b = byte.Parse(bStr, NumberStyles.HexNumber);
+
+			return MakeColor(a, r, g, b);
+		}
+
+		/// <summary>
 		/// Shortcut for Debug Logging
 		/// </summary>
 		/// <param name="level">Seriousness of message</param>
 		/// <param name="message">Message logged</param>
 		public static void DebugLog(LogLevel level, string message)
 		{
-			string output = "\n[" + level.ToString().ToUpper() + "] " + message;
+			string output = "[" + level.ToString().ToUpper() + "] " + message + "\n";
 			System.Diagnostics.Debugger.Log((int)level, "SCOUTING", output);
 
-			OnPrint(null, new PrintEventArgs() { Level = level, Text = output });
+			if (OnPrint != null)
+			{
+				OnPrint(null, new PrintEventArgs() { Level = level, Text = output });
+			}
 		}
 		/// <summary>
 		/// Shortcut for Debug Logging, with category

@@ -12,24 +12,28 @@
 					WindowStartupLocation="CenterScreen"
 					Title="Stealth Scouting"
 					Loaded="ScoutingMainWindow_Loaded">
+	<!--Top-level Grid (including time bar)-->
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		
+
+		<!--Main Grid-->
 		<Grid Grid.Row="0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="3*" />
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
 
+			<!--Main Grid (Left)-->
 			<Grid Grid.Column="0">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
+				<!--Top Grid-->
 				<Grid Grid.Row="0">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
@@ -55,27 +59,28 @@
 										Grid.Column="2"
 										SelectedIndex="0"
 										Margin="5"
-										SelectionChanged="TeamsDropDown_SelectionChanged">
-						<ComboBoxItem Content="Select a Team..." />
-					</ComboBox>
-					<Rectangle x:Name="ColorRect"
-										 Grid.Column="3"
-										 Margin="0,5"
-										 Fill="#FFFF4747"
-										 Stroke="#FFB43333"
-										 StrokeThickness="2" />
+										SelectionChanged="TeamsDropDown_SelectionChanged" />
+					<Button x:Name="TeamInfoBtn"
+									Grid.Column="3"
+									Content="Info..."
+									Margin="0,5"
+									MinWidth="0"
+									Background="#FFFF2222"
+									BorderBrush="{Binding Background, RelativeSource={RelativeSource Self}}" />
 				</Grid>
 
 				<TabControl x:Name="AutoTeleopTabs"
 										Grid.Row="1"
 										Margin="5,0,0,5">
 					<TabItem Header="Auto">
+						<!--Main Auto Grid-->
 						<Grid>
 							<Grid.RowDefinitions>
 								<RowDefinition Height="*" />
 								<RowDefinition Height="*" />
 							</Grid.RowDefinitions>
 
+							<!--Robot Set, Container Set-->
 							<Grid Grid.Row="0">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="*" />
@@ -85,19 +90,22 @@
 								<ToggleButton x:Name="RobotSetToggle"
 															Content="Robot Set"
 															FontSize="36"
-															Margin="5" />
+															Margin="5"
+															IsEnabled="False" />
 								<ToggleButton x:Name="ContainerSetToggle"
 															Grid.Column="1"
 															Content="Container Set"
 															FontSize="36"
-															Margin="0,5,5,5" />
+															Margin="0,5,5,5"
+															IsEnabled="False" />
 							</Grid>
 
 							<ToggleButton x:Name="ToteSetToggle"
 														Grid.Row="1"
 														FontSize="36"
 														Margin="5,0,5,5"
-														Unchecked="ToteSetToggle_Unchecked">
+														Unchecked="ToteSetToggle_Unchecked"
+														IsEnabled="False">
 								<StackPanel Orientation="Horizontal"
 														HorizontalAlignment="Center"
 														VerticalAlignment="Center">
@@ -106,7 +114,8 @@
 																Content="(Stacked)"
 																BorderBrush="#FF171717"
 																BorderThickness="2"
-																Checked="ToteSetStackedToggle_Checked" />
+																Checked="ToteSetStackedToggle_Checked"
+																IsEnabled="False" />
 									<TextBlock Text="Tote Set"
 														 Margin="20,0,0,0" />
 								</StackPanel>
@@ -115,6 +124,7 @@
 					</TabItem>
 
 					<TabItem Header="Teleop">
+						<!--Main Teleop Grid-->
 						<Grid Margin="5,0,5,5">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="3*" />
@@ -131,16 +141,22 @@
 											Grid.Column="0"
 											Grid.Row="0"
 											FontSize="22"
-											Margin="0,0,5,0" />
+											Margin="0,0,5,0"
+											IsEnabled="False"
+											Click="GrayToteBtn_Click" />
 							<Button x:Name="RecycledLitterBtn"
 											Content="Recycled Litter"
 											Grid.Column="1"
 											Grid.Row="0"
-											FontSize="22" />
+											FontSize="22"
+											IsEnabled="False"
+											Click="RecycledLitterBtn_Click" />
 							<Button x:Name="CoopertitionBtn"
 											Grid.Column="0"
 											Grid.Row="1"
-											Margin="0,5,5,5">
+											Margin="0,5,5,5"
+											IsEnabled="False"
+											Click="CoopertitionBtn_Click">
 								<StackPanel Orientation="Horizontal"
 														HorizontalAlignment="Center"
 														VerticalAlignment="Center">
@@ -149,13 +165,16 @@
 													FontSize="16"
 													Margin="0"
 													BorderBrush="#FF171717"
-													BorderThickness="2" />
+													BorderThickness="2"
+													IsEnabled="False"
+													Click="CoopertitionStackedBtn_Click" />
 									<TextBlock Text="Coopertition"
 														 VerticalAlignment="Center"
 														 FontSize="22"
 														 Margin="15,0,0,0" />
 								</StackPanel>
 							</Button>
+							<!--Recycling Container Grid-->
 							<Grid Grid.Column="0"
 										Grid.Row="2">
 								<Grid.ColumnDefinitions>
@@ -191,14 +210,20 @@
 												Grid.Column="2"
 												Content="Recycling Container"
 												FontSize="22"
-												Margin="0,0,5,0" />
+												Margin="0,0,5,0"
+												IsEnabled="False"
+												Click="RecyclingBtn_Click" />
 							</Grid>
 							<Button x:Name="LandfillLitterBtn"
 											Grid.Row="1"
 											Grid.Column="1"
 											Content="Landfill Litter"
 											FontSize="22"
-											Margin="0,5" />
+											Margin="0,5"
+											IsEnabled="False"
+											Click="LandfillLitterBtn_Click" />
+
+							<!--Unprocessed Litter and Defense-->
 							<Grid Grid.Column="1"
 										Grid.Row="2">
 								<Grid.RowDefinitions>
@@ -217,7 +242,8 @@
 									<Label Content="Unprocessed Litter:"
 												 Foreground="White"
 												 FontSize="14"
-												 Margin="0,0,5,0" />
+												 Margin="0,0,5,0"
+												 IsEnabled="False" />
 									<!--<ex:IntegerUpDown x:Name="UnprocessedLitterUpDown"
 																		Grid.Column="1"
 																		Value="1"
@@ -231,20 +257,24 @@
 													Width="32"
 													FontWeight="Bold"
 													MinWidth="0"
-													Click="UnprocessedLitterDownBtn_Click" />
+													Click="UnprocessedLitterDownBtn_Click"
+													IsEnabled="False" />
 									<TextBox x:Name="UnprocessedLitterCount"
 													 Text="0"
 													 HorizontalContentAlignment="Center"
 													 Grid.Column="2"
 													 Margin="5,0"
-													 BorderThickness="1" />
+													 BorderThickness="1"
+													 ToolTip="Litter count on the OPPOSING team's side."
+													 IsEnabled="False" />
 									<Button x:Name="UnprocessedLitterUpBtn"
 													Content="&gt;"
 													Grid.Column="3"
 													FontWeight="Bold"
 													MinWidth="0"
 													Width="31"
-													Click="UnprocessedLitterUpBtn_Click" />
+													Click="UnprocessedLitterUpBtn_Click"
+													IsEnabled="False" />
 								</Grid>
 
 								<Slider x:Name="DefenseSlider"
@@ -271,9 +301,11 @@
 				</TabControl>
 			</Grid>
 
+			<!--Sidebar (Right) Grid-->
 			<Grid Grid.Column="1">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="48" />
+					<RowDefinition Height="44" />
 					<RowDefinition Height="*" />
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
@@ -283,19 +315,24 @@
 								Content="Save..."
 								Margin="5"
 								FontSize="16" />
+				<ToggleButton x:Name="IsWorkingToggle"
+											Grid.Row="1"
+											Content="Working"
+											IsChecked="True"
+											Margin="5,0,5,5"
+											Unchecked="IsWorkingToggle_Unchecked"
+											Checked="IsWorkingToggle_Checked"
+											Background="#FF40FF40"
+											BorderThickness="0" />
 				<ListBox x:Name="GoalsList"
-								 Grid.Row="1"
+								 Grid.Row="2"
 								 Margin="5,0"
 								 BorderThickness="1"
-								 BorderBrush="#FF424242">
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<TextBlock Text="{Binding UIForm}"
-												 ToolTip="{Binding UITooltip}" />
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>
-				<Grid Grid.Row="2"
+								 BorderBrush="#FF424242"
+								 SelectionChanged="GoalsList_SelectionChanged" />
+
+				<!--Penalty and Remove Goals Buttons-->
+				<Grid Grid.Row="3"
 							Margin="0,0,0,5">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
@@ -305,7 +342,8 @@
 					<Button x:Name="PenaltyBtn"
 									Margin="5,5,0,5"
 									ToolTip="Add a penalty"
-									MinWidth="0">
+									MinWidth="0"
+									IsEnabled="False">
 						<Image Source="assets/flag.png"
 									 VerticalAlignment="Center"
 									 HorizontalAlignment="Center"
@@ -317,28 +355,30 @@
 									Content="Remove Goal"
 									Margin="5"
 									ToolTip="Remove selected goal"
-									IsEnabled="{Binding IsGoalSelected}" />
+									Click="RemoveGoalBtn_Click"
+									IsEnabled="False" />
 				</Grid>
 			</Grid>
 		</Grid>
-		
+
+		<!--Time Bar Grid-->
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
-			
+
 			<e:ProgressBar x:Name="TimeBar"
 										 Height="Auto"
 										 Maximum="135"
-										 Value="100"
+										 Value="0"
 										 Style="{DynamicResource ProgressBarWide}"
 										 Foreground="SteelBlue"
 										 Margin="0" />
 
 			<Button x:Name="TimeBtn"
 							Grid.Column="1"
-							Content="1:40.0"
+							Content="0:00.0"
 							HorizontalAlignment="Right"
 							FontSize="18"
 							FontWeight="Bold"

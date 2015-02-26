@@ -62,28 +62,28 @@ namespace ScoutingData.Sync
 		/// </summary>
 		[JsonProperty]
 		public bool Working
-		{ get; private set; }
+		{ get; set; }
 
 		/// <summary>
 		/// Objective rating of robot's defensive capabilities, out of 10
 		/// </summary>
 		[JsonProperty]
 		public int Defense
-		{ get; private set; }
+		{ get; set; }
 
 		/// <summary>
 		/// Winner of the match
 		/// </summary>
 		[JsonProperty]
 		public AllianceColor Winner
-		{ get; private set; }
+		{ get; set; }
 
 		/// <summary>
 		/// Final score of team's alliance
 		/// </summary>
 		[JsonProperty]
 		public int AllianceFinalScore
-		{ get; private set; }
+		{ get; set; }
 
 		/// <summary>
 		/// Instantiates a pregame recording of a match

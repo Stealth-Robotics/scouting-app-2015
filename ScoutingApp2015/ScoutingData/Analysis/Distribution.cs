@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,9 @@ namespace ScoutingData.Analysis
 	/// </summary>
 	public enum DistributionDisplayMode
 	{
+		[Description("Mean & SD")]
 		MeanSD,
+		[Description("Five-number Summary")]
 		FiveNumSummary
 	}
 

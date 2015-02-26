@@ -51,7 +51,6 @@ namespace ScoutingData.Data
 		/// <summary>
 		/// All of Blue's goals
 		/// </summary>
-		[JsonIgnore]
 		public List<Goal> BlueGoals
 		{
 			get
@@ -64,7 +63,6 @@ namespace ScoutingData.Data
 		/// <summary>
 		/// All of Red's goals
 		/// </summary>
-		[JsonIgnore]
 		public List<Goal> RedGoals
 		{
 			get
@@ -84,7 +82,6 @@ namespace ScoutingData.Data
 		/// <summary>
 		/// All penalties AGAINST Blue
 		/// </summary>
-		[JsonIgnore]
 		public List<Penalty> BluePenalties
 		{
 			get
@@ -96,7 +93,6 @@ namespace ScoutingData.Data
 		/// <summary>
 		/// All penalties AGAINST Red
 		/// </summary>
-		[JsonIgnore]
 		public List<Penalty> RedPenalties
 		{
 			get
@@ -189,9 +185,12 @@ namespace ScoutingData.Data
 			RedAlliance.PostJsonLoading(e);
 			BlueAlliance.PostJsonLoading(e);
 
-			foreach (Goal g in Goals)
+			if (!Pregame)
 			{
-				g.PostJsonLoading(e);
+				foreach (Goal g in Goals)
+				{
+					g.PostJsonLoading(e);
+				}
 			}
 		}
 
@@ -316,6 +315,27 @@ namespace ScoutingData.Data
 				Util.DebugLog(LogLevel.Error, "Invalid alliance color: " +
 					color.ToString());
 				return -1;
+			}
+		}
+
+		public Team GetTeamByInclusiveIndex(int index)
+		{
+			switch (index)
+			{
+			case 0:
+				return RedAlliance.A;
+			case 1:
+				return RedAlliance.B;
+			case 2:
+				return RedAlliance.C;
+			case 3:
+				return BlueAlliance.A;
+			case 4:
+				return BlueAlliance.B;
+			case 5:
+				return BlueAlliance.C;
+			default:
+				return null;
 			}
 		}
 	}
