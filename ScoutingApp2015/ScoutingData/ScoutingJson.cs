@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 
 using ScoutingData.Data;
 using System.IO;
+using ScoutingData.Sync;
 
 namespace ScoutingData
 {
@@ -26,6 +27,12 @@ namespace ScoutingData
 		/// File extension used when saving teams list files
 		/// </summary>
 		public static string TeamsListExtension
+		{ get; set; }
+
+		/// <summary>
+		/// File extension used when saving match records
+		/// </summary>
+		public static string MatchRecordExtension
 		{ get; set; }
 
 		/// <summary>
@@ -61,9 +68,10 @@ namespace ScoutingData
 			}
 
 			FolderName = "ScoutingApp2015";
-			DriveLetter = 'G';
+			DriveLetter = Util.GetFirstUsbDrivePath()[0]; // the 'G' in "G:\"
 			EventExtension = ".frc";
 			TeamsListExtension = ".teams";
+			MatchRecordExtension = ".match";
 
 			InitFiles(false);
 
@@ -146,6 +154,13 @@ namespace ScoutingData
 
 			string filename = (usb ? UsbPath : LocalPath) + "Teams" + TeamsListExtension;
 			File.WriteAllText(filename, contents);
+		}
+		public static void SaveMatchRecord(RecordedMatch rec, string path)
+		{
+			Initialize(false);
+
+			string contents = JsonConvert.SerializeObject(rec, Formatting.Indented);
+			File.WriteAllText(path, contents);
 		}
 	}
 }

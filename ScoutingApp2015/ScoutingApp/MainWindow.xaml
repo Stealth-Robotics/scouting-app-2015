@@ -4,7 +4,7 @@
 					xmlns:e="http://schemas.codeplex.com/elysium"
 					xmlns:par="http://schemas.codeplex.com/elysium/params"
 					xmlns:ex="http://schemas.extra.com/ui"
-					Style="{DynamicResource DarkViridianWindow}"
+					Style="{DynamicResource DarkMainWindow}"
 					Width="900"
 					Height="500"
 					MinWidth="800"
@@ -44,10 +44,13 @@
 
 					<Button x:Name="ConfigBtn"
 									Margin="5,5,0,5"
-									MinWidth="0">
-						<Image Source="assets/gear.png"
+									MinWidth="0"
+									ToolTip="Program Settings"
+									Click="ConfigBtn_Click">
+						<Image Source="assets/wrench.png"
 									 MinWidth="0"
-									 Stretch="None" />
+									 Width="24"
+									 Height="24" />
 					</Button>
 					<Button x:Name="MatchSetupBtn"
 									Content="Setup Match..."
@@ -66,13 +69,37 @@
 									Margin="0,5"
 									MinWidth="0"
 									Background="#FFFF2222"
-									BorderBrush="{Binding Background, RelativeSource={RelativeSource Self}}" />
+									BorderBrush="{Binding Background, RelativeSource={RelativeSource Self}}"
+									Click="TeamInfoBtn_Click">
+						<Button.ToolTip>
+							<StackPanel Orientation="Vertical"
+													Margin="5,0">
+								<TextBlock x:Name="InfoDescriptionTxtHeader"
+													 Text="Description:"
+													 FontWeight="Bold" />
+								<TextBlock x:Name="InfoDescriptionTxt"
+													 Margin="15,0,0,0"
+													 Foreground="#FFB8B8B8" />
+								<TextBlock x:Name="InfoExpectationsTxtHeader" 
+													 Text="Expectations:"
+													 FontWeight="Bold" />
+								<TextBlock x:Name="InfoExpectationsTxt"
+													 Margin="15,0,0,0"
+													 Foreground="#FFB8B8B8" />
+								<TextBlock Text="Click to edit team info."
+													 Margin="0,5" />
+							</StackPanel>
+						</Button.ToolTip>
+					</Button>
 				</Grid>
 
 				<TabControl x:Name="AutoTeleopTabs"
 										Grid.Row="1"
-										Margin="5,0,0,5">
-					<TabItem Header="Auto">
+										Margin="5,0,0,0"
+										SelectedIndex="0">
+					<TabItem Header="Auto"
+									 par:Design.AccentBrush="{x:Static e:AccentBrushes.Green}"
+									 par:Manager.AccentBrush="{x:Static e:AccentBrushes.Mango}">
 						<!--Main Auto Grid-->
 						<Grid>
 							<Grid.RowDefinitions>
@@ -123,7 +150,9 @@
 						</Grid>
 					</TabItem>
 
-					<TabItem Header="Teleop">
+					<TabItem Header="Teleop"
+									 par:Design.AccentBrush="{x:Static e:AccentBrushes.Green}"
+									 par:Manager.AccentBrush="{x:Static e:AccentBrushes.Sky}">
 						<!--Main Teleop Grid-->
 						<Grid Margin="5,0,5,5">
 							<Grid.ColumnDefinitions>
@@ -189,7 +218,10 @@
 												Maximum="6"
 												par:Slider.ThumbThickness="12"
 												Margin="5,5,0,5"
-												ValueChanged="RecyclingLevelSlider_ValueChanged" />
+												ValueChanged="RecyclingLevelSlider_ValueChanged"
+												SmallChange="1"
+												ToolTip="Recycling container level"
+												IsSnapToTickEnabled="True" />
 								<Label x:Name="RecyclingLevelLbl"
 											 Content="Level: 1"
 											 Grid.Column="1"
@@ -288,7 +320,9 @@
 												SmallChange="1"
 												LargeChange="2"
 												ValueChanged="DefenseSlider_ValueChanged"
-												TickPlacement="Both" />
+												TickPlacement="Both"
+												IsSnapToTickEnabled="True"
+												ToolTip="Slide to rate the team's defense" />
 								<Label x:Name="DefenseLbl"
 											 Content="Defense: 5"
 											 Foreground="White"
@@ -314,7 +348,9 @@
 								Grid.Row="0"
 								Content="Save..."
 								Margin="5"
-								FontSize="16" />
+								FontSize="16"
+								Click="SaveBtn_Click"
+								IsEnabled="False" />
 				<ToggleButton x:Name="IsWorkingToggle"
 											Grid.Row="1"
 											Content="Working"
@@ -323,17 +359,19 @@
 											Unchecked="IsWorkingToggle_Unchecked"
 											Checked="IsWorkingToggle_Checked"
 											Background="#FF40FF40"
-											BorderThickness="0" />
+											BorderThickness="0"
+											ToolTip="Click to toggle robot's working status." />
 				<ListBox x:Name="GoalsList"
 								 Grid.Row="2"
 								 Margin="5,0"
 								 BorderThickness="1"
 								 BorderBrush="#FF424242"
-								 SelectionChanged="GoalsList_SelectionChanged" />
+								 SelectionChanged="GoalsList_SelectionChanged"
+								 ToolTip="Goals scored so far." />
 
 				<!--Penalty and Remove Goals Buttons-->
 				<Grid Grid.Row="3"
-							Margin="0,0,0,5">
+							Margin="0">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
 						<ColumnDefinition Width="2*" />
@@ -341,9 +379,10 @@
 
 					<Button x:Name="PenaltyBtn"
 									Margin="5,5,0,5"
-									ToolTip="Add a penalty"
+									ToolTip="Add a penalty. Penalties are logged as if they occured the second you clicked this button."
 									MinWidth="0"
-									IsEnabled="False">
+									IsEnabled="False"
+									Click="PenaltyBtn_Click">
 						<Image Source="assets/flag.png"
 									 VerticalAlignment="Center"
 									 HorizontalAlignment="Center"
@@ -362,9 +401,11 @@
 		</Grid>
 
 		<!--Time Bar Grid-->
-		<Grid Grid.Row="1">
+		<Grid Grid.Row="1"
+					Margin="5,0,5,5">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
@@ -374,17 +415,30 @@
 										 Value="0"
 										 Style="{DynamicResource ProgressBarWide}"
 										 Foreground="SteelBlue"
-										 Margin="0" />
+										 Margin="0,0,5,0"
+										 ToolTip="Progress through the current game." />
 
 			<Button x:Name="TimeBtn"
 							Grid.Column="1"
-							Content="0:00.0"
+							Content="Start"
 							HorizontalAlignment="Right"
 							FontSize="18"
 							FontWeight="Bold"
-							Margin="0"
+							Margin="0,0,5,0"
 							ToolTip="Click to pause/continue timer"
 							Click="TimeBtn_Click" />
+			<Button x:Name="StopBtn"
+							Grid.Column="2"
+							MinWidth="0"
+							ToolTip="Click to stop the timer"
+							Width="48"
+							IsEnabled="False"
+							Click="StopBtn_Click">
+				<Rectangle Fill="White"
+									 Stroke="White"
+									 Width="12"
+									 Height="12" />
+			</Button>
 		</Grid>
 	</Grid>
 </e:Window>

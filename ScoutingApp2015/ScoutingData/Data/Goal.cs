@@ -206,6 +206,7 @@ namespace ScoutingData.Data
 			Stack = stack;
 			FullAlliance = alliance;
 			Global = global;
+			Level = level;
 		}
 
 		public override string ToString()

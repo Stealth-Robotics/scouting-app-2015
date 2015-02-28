@@ -219,6 +219,12 @@ namespace ScoutingData.Data
 		/// <returns>Color of team, Indeterminate if team isn't found</returns>
 		public AllianceColor GetTeamColor(Team team)
 		{
+			if (team == null)
+			{
+				Util.DebugLog(LogLevel.Critical, "Team is null.");
+				return AllianceColor.Indeterminate;
+			}
+
 			if (BlueAlliance.Contains(team))
 			{
 				return AllianceColor.Blue;

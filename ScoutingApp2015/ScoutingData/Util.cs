@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -59,9 +60,9 @@ namespace ScoutingData
 		/// </summary>
 		public static readonly TimeSpan TELEOP = TimeSpan.FromSeconds(15);
 		/// <summary>
-		/// Time when players can start throwing litter noodles into the arena
+		/// Time when players can no longer throw litter noodles into the arena
 		/// </summary>
-		public static readonly TimeSpan TRASH_TOSS = new TimeSpan(0, 2, 15);
+		public static readonly TimeSpan TRASH_TOSS_STOP = new TimeSpan(0, 2, 10);
 
 		/// <summary>
 		/// Subscribe to add an additional output location for Util.DebugLog().
@@ -188,6 +189,48 @@ namespace ScoutingData
 		public static void DebugLog(LogLevel level, string category, string message)
 		{
 			DebugLog(level, "[" + category + "] " + message);
+		}
+
+		/// <summary>
+		/// Gets whether a path is on a removable device or not
+		/// </summary>
+		/// <param name="path">Path to check</param>
+		/// <returns>True if the path is a removable device, false otherwise.</returns>
+		public static bool IsPathOnRemovableDevice(string path)
+		{
+			DriveInfo[] infos = DriveInfo.GetDrives();
+
+			foreach (DriveInfo inf in infos)
+			{
+				if (inf.DriveType == DriveType.Removable)
+				{
+					if (path.StartsWith(inf.Name))
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Gets path of the first (letter) removable drive on the machine.
+		/// </summary>
+		/// <returns>Path of removable device, or null if none were found.</returns>
+		public static string GetFirstUsbDrivePath()
+		{
+			string[] drives = Environment.GetLogicalDrives();
+			
+			foreach (string s in drives)
+			{
+				if (IsPathOnRemovableDevice(s))
+				{
+					return s;
+				}
+			}
+
+			return null;
 		}
 
 		///////////////////////

@@ -328,7 +328,7 @@
 			</Style.Triggers>
 		</Style>
 
-		<Style x:Key="DarkViridianWindow"
+		<Style x:Key="DarkMainWindow"
 					 BasedOn="{StaticResource {x:Type metro:Window}}"
 					 TargetType="metro:Window">
 			<Setter Property="Background"
@@ -336,15 +336,28 @@
 			<Setter Property="params:Design.Theme"
 							Value="Dark" />
 			<Setter Property="params:Design.AccentBrush"
-							Value="{x:Static metro:AccentBrushes.Viridian}" />
+							Value="{x:Static metro:AccentBrushes.Green}" />
 			<Setter Property="params:Design.ContrastBrush"
 							Value="White" />
 			<Setter Property="params:Manager.Theme"
 							Value="Dark" />
 			<Setter Property="params:Manager.AccentBrush"
-							Value="{x:Static metro:AccentBrushes.Viridian}" />
+							Value="{x:Static metro:AccentBrushes.Green}" />
 			<Setter Property="params:Manager.ContrastBrush"
 							Value="White" />
+		</Style>
+
+		<Style x:Key="LightOverlay"
+					 BasedOn="{StaticResource {x:Type metro:Window}}"
+					 TargetType="metro:Window">
+			<Setter Property="params:Design.Theme"
+							Value="Light" />
+			<Setter Property="params:Design.AccentBrush"
+							Value="{x:Static metro:AccentBrushes.Viridian}" />
+			<Setter Property="params:Manager.Theme"
+							Value="Light" />
+			<Setter Property="params:Manager.AccentBrush"
+							Value="{x:Static metro:AccentBrushes.Viridian}" />
 		</Style>
 	</Application.Resources>
 </Application>

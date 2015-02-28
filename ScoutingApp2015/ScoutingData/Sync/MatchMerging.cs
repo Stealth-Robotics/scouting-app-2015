@@ -11,7 +11,7 @@ namespace ScoutingData.Sync
 	/// Static class for merging recorded match data. Not exactly a whole lot
 	/// of methods in this one.
 	/// </summary>
-	public static class MatchMerging
+	public static class Merging
 	{
 		/// <summary>
 		/// Threshold from which to determine penalties as separate. Penalties with
@@ -25,6 +25,18 @@ namespace ScoutingData.Sync
 		/// enough data to form a match.
 		/// </summary>
 		public const int MATCH_NOT_ENOUGH_DATA_THRESHOLD = 3;
+
+		/// <summary>
+		/// Adjusts team info from recorded match
+		/// </summary>
+		/// <param name="frc"></param>
+		/// <param name="data"></param>
+		public static void AdjustTeamInfo(FrcEvent frc, RecordedMatch data)
+		{
+			Team t = frc.LoadTeam(data.TrackedTeamID);
+			t.Description = data.TeamDescription;
+			t.Expectations = data.TeamExpectations;
+		}
 
 		/// <summary>
 		/// Forms a match from recorded data

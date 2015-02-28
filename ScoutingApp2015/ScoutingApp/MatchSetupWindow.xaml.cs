@@ -23,9 +23,9 @@ using System.Windows.Interop;
 namespace ScoutingApp
 {
 	/// <summary>
-	/// Interaction logic for SettingsWindow.xaml
+	/// Interaction logic for MatchSetupWindow.xaml
 	/// </summary>
-	public partial class SettingsWindow : Elysium.Controls.Window
+	public partial class MatchSetupWindow : Elysium.Controls.Window
 	{
 		public LoadMatchSettings Settings
 		{ get; private set; }
@@ -37,6 +37,8 @@ namespace ScoutingApp
 		{ get; private set; }
 
 		bool hasLoaded = false;
+
+		int maxMatchID = -1;
 
 		public int MatchID
 		{
@@ -54,6 +56,16 @@ namespace ScoutingApp
 				}
 
 				Pregame = Settings.Frc.LoadMatch(value);
+				
+				int max = 0;
+				foreach (Match m in Settings.Frc.Matches)
+				{
+					if (m.Number > max)
+					{
+						max = m.Number;
+					}
+				}
+				maxMatchID = max;
 
 				MatchIDBox.Text = value.ToString();
 				if (Pregame.Pregame)
@@ -163,7 +175,7 @@ namespace ScoutingApp
 
 		#endregion
 
-		public SettingsWindow(FrcEvent frc, int lastMatchID, 
+		public MatchSetupWindow(FrcEvent frc, int lastMatchID, 
 			bool cantTakeNoForAnAnswer) : base()
 		{
 			Settings = new LoadMatchSettings();
@@ -183,6 +195,30 @@ namespace ScoutingApp
 			InitializeComponent();
 		}
 
+		public void UpdateTeamPreviews()
+		{
+			if (Settings.Frc == null)
+			{
+				return;
+			}
+
+			RedATxt.Text = RedA.ToString();
+			RedBTxt.Text = RedB.ToString();
+			RedCTxt.Text = RedC.ToString();
+
+			BlueATxt.Text = BlueA.ToString();
+			BlueBTxt.Text = BlueB.ToString();
+			BlueCTxt.Text = BlueC.ToString();
+
+			RedATxt.ToolTip = InfoRedA;
+			RedBTxt.ToolTip = InfoRedB;
+			RedCTxt.ToolTip = InfoRedC;
+
+			BlueATxt.ToolTip = InfoBlueA;
+			BlueBTxt.ToolTip = InfoBlueB;
+			BlueCTxt.ToolTip = InfoBlueC;
+		}
+
 		public void DoContextualLoading()
 		{
 			if (CantTakeNo)
@@ -191,6 +227,7 @@ namespace ScoutingApp
 					File.Exists(EventPathBox.Text);
 			}
 
+			bool matchIDReady = true;
 			if (File.Exists(EventPathBox.Text))
 			{
 				FrcEvent frc = ScoutingJson.ParseFrcEvent(EventPathBox.Text);
@@ -206,12 +243,14 @@ namespace ScoutingApp
 				{
 					EventPathBox.Foreground = new SolidColorBrush(Colors.Red);
 					EventPathBox.ToolTip = "File is invalid or corrupted.";
+					matchIDReady = false;
 				}
 			}
 			else
 			{
 				EventPathBox.Foreground = new SolidColorBrush(Colors.Red);
 				EventPathBox.ToolTip = "File does not exist.";
+				matchIDReady = false;
 			}
 
 			if (Settings.Frc != null && File.Exists(TeamsPathBox.Text))
@@ -231,13 +270,20 @@ namespace ScoutingApp
 				{
 					TeamsPathBox.Foreground = new SolidColorBrush(Colors.Red);
 					TeamsPathBox.ToolTip = "File is invalid or corrupted.";
+					matchIDReady = false;
 				}
 			}
 			else
 			{
 				TeamsPathBox.Foreground = new SolidColorBrush(Colors.Red);
 				TeamsPathBox.ToolTip = "File does not exist.";
+				matchIDReady = false;
 			}
+
+			MatchIDDownBtn.IsEnabled = matchIDReady;
+			MatchIDUpBtn.IsEnabled = matchIDReady;
+
+			UpdateTeamPreviews();
 		}
 
 		private void MatchIDDownBtn_Click(object sender, RoutedEventArgs e)
@@ -255,7 +301,7 @@ namespace ScoutingApp
 			int val = -1;
 			bool canParse = int.TryParse(MatchIDBox.Text, out val);
 
-			if (!canParse)
+			if (!canParse || val <= 0 || val > maxMatchID)
 			{
 				MatchIDBox.Text = MatchID.ToString();
 			}
@@ -318,6 +364,7 @@ namespace ScoutingApp
 			hasLoaded = true;
 
 			DoContextualLoading();
+			UpdateTeamPreviews();
 		}
 
 		private void PathBoxesChanged(object sender, TextChangedEventArgs e)

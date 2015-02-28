@@ -86,6 +86,20 @@ namespace ScoutingData.Sync
 		{ get; set; }
 
 		/// <summary>
+		/// New team description provided by scout
+		/// </summary>
+		[JsonProperty]
+		public string TeamDescription
+		{ get; set; }
+
+		/// <summary>
+		/// New team expectations provided by scout
+		/// </summary>
+		[JsonProperty]
+		public string TeamExpectations
+		{ get; set; }
+
+		/// <summary>
 		/// Instantiates a pregame recording of a match
 		/// </summary>
 		/// <param name="number">Match number</param>
@@ -96,6 +110,8 @@ namespace ScoutingData.Sync
 			MatchNumber = number;
 			TrackedTeam = team;
 			TrackedTeamID = team.Number;
+			TeamDescription = team.Description;
+			TeamExpectations = team.Expectations;
 			Alliance = alliance;
 			ScoredGoals = new List<Goal>();
 			AlliancePenalties = new List<Penalty>();

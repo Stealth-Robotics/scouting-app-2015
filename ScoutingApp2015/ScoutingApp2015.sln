@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoutingData", "ScoutingData\ScoutingData.csproj", "{36FE5482-5590-4813-9EC1-1EDAAEB46077}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drafting", "Drafting\Drafting.csproj", "{302D5955-5CFC-441F-93FF-952972EAA242}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1AC2357E-F746-4299-AB5B-9799CBB10C36}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -26,10 +24,6 @@ Global
 		{36FE5482-5590-4813-9EC1-1EDAAEB46077}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36FE5482-5590-4813-9EC1-1EDAAEB46077}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36FE5482-5590-4813-9EC1-1EDAAEB46077}.Release|Any CPU.Build.0 = Release|Any CPU
-		{302D5955-5CFC-441F-93FF-952972EAA242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{302D5955-5CFC-441F-93FF-952972EAA242}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{302D5955-5CFC-441F-93FF-952972EAA242}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{302D5955-5CFC-441F-93FF-952972EAA242}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2FA8DC92-E1B9-4499-B403-1CBEB2EF6727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2FA8DC92-E1B9-4499-B403-1CBEB2EF6727}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FA8DC92-E1B9-4499-B403-1CBEB2EF6727}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -66,6 +66,21 @@ namespace ScoutingData.Data
 		{ get; private set; }
 
 		/// <summary>
+		/// Used for data binding. Sorta like ToString() but more concise.
+		/// </summary>
+		[JsonIgnore]
+		public string UIForm
+		{
+			get
+			{
+				string res = string.Format(@"[{0:m\:ss}]", TimeOfPenalty);
+				res += string.Format(@"[{0:D2}]", ScoreChange()) + ": ";
+				res += Reasoning;
+				return res;
+			}
+		}
+
+		/// <summary>
 		/// Instantiates a new penalty object
 		/// </summary>
 		/// <param name="time">Time the penalty was scored</param>

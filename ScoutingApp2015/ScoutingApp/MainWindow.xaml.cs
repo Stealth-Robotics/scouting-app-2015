@@ -1,4 +1,5 @@
-﻿using ScoutingData;
+﻿using Framework.UI.Controls;
+using ScoutingData;
 using ScoutingData.Data;
 using ScoutingData.Sync;
 using System;
@@ -25,6 +26,7 @@ namespace ScoutingApp
 	/// </summary>
 	public sealed partial class MainWindow : Elysium.Controls.Window
 	{
+		#region Constants
 		public const string DEFENSE_PREFIX = "Defense: ";
 		public const string LEVEL_PREFIX = "Level: ";
 
@@ -37,8 +39,19 @@ namespace ScoutingApp
 		public static readonly Color WORKING_GREEN = Util.MakeColor("FF40FF40");
 		public static readonly Color MALFUNCTIONING_RED = Util.MakeColor("FF880000");
 
-		public DispatcherTimer timer;
-		public Stopwatch watch;
+		public static readonly Color AUTO_COLOR = Colors.Yellow;
+		public static readonly Color TELEOP_COLOR = Colors.Lime;
+		public static readonly Color CHAOS_COLOR = Util.MakeColor("FFAA0000");
+		#endregion
+
+		public DispatcherTimer DispTimer
+		{ get; private set; }
+
+		public Stopwatch Watch
+		{ get; private set; }
+
+		public bool IsSettingUp
+		{ get; private set; }
 
 		public RecordedMatch Record
 		{ get; private set; }
@@ -72,6 +85,14 @@ namespace ScoutingApp
 				{
 					SetEnabledAuto(false);
 					SetEnabledTeleop(false);
+
+					TeamsDropDown.IsEnabled = true;
+					MatchSetupBtn.IsEnabled = true;
+				}
+				else
+				{
+					TeamsDropDown.IsEnabled = false;
+					MatchSetupBtn.IsEnabled = false;
 				}
 			}
 		}
@@ -92,8 +113,8 @@ namespace ScoutingApp
 		{
 			ScoutingAppSettings.Initialize();
 
-			timer = new DispatcherTimer();
-			watch = new Stopwatch();
+			DispTimer = new DispatcherTimer();
+			Watch = new Stopwatch();
 
 			InitializeComponent();
 		}
@@ -113,12 +134,20 @@ namespace ScoutingApp
 				AddGoal(Goal.MakeYellowToteSet(
 					ToteSetStackedToggle.IsChecked == true, Color));
 			}
+		}
 
-			if (ScoutingAppSettings.PauseOnTeleop)
-			{
-				timer.Stop();
-				watch.Stop();
-			}
+		public void EndGame()
+		{
+			GameInProgress = false;
+			PenaltyBtn.IsEnabled = false;
+
+			SaveBtn.IsEnabled = true;
+
+			TimeBar.Tag = "AUTO";
+			Time = TimeSpan.Zero;
+			TimeBtn.Content = "Start";
+			TimeBtn.IsEnabled = false;
+			TimeBar.Value = 0;
 		}
 
 		public void SetEnabledAuto(bool en)
@@ -142,9 +171,39 @@ namespace ScoutingApp
 			UnprocessedLitterCount.IsEnabled = en;
 		}
 
+		private void UpdateInfoTooltip()
+		{
+			InfoDescriptionTxt.Text = Record.TeamDescription;
+			InfoExpectationsTxt.Text = Record.TeamExpectations;
+
+			if (Record.TeamDescription.Trim() != "")
+			{
+				InfoDescriptionTxt.Visibility = System.Windows.Visibility.Visible;
+				InfoDescriptionTxtHeader.Visibility = System.Windows.Visibility.Visible;
+			}
+			else
+			{
+				InfoDescriptionTxt.Visibility = System.Windows.Visibility.Collapsed;
+				InfoDescriptionTxtHeader.Visibility = System.Windows.Visibility.Collapsed;
+			}
+
+			if (Record.TeamExpectations.Trim() != "")
+			{
+				InfoExpectationsTxt.Visibility = System.Windows.Visibility.Visible;
+				InfoExpectationsTxtHeader.Visibility = System.Windows.Visibility.Visible;
+			}
+			else
+			{
+				InfoExpectationsTxt.Visibility = System.Windows.Visibility.Collapsed;
+				InfoExpectationsTxtHeader.Visibility = System.Windows.Visibility.Collapsed;
+			}
+		}
+
 		private void RunSetup(bool cantTakeNoForAnAnswer)
 		{
-			SettingsWindow window = new SettingsWindow(Frc, Record != null ? Record.MatchNumber : 0,
+			IsSettingUp = true;
+
+			MatchSetupWindow window = new MatchSetupWindow(Frc, Record != null ? Record.MatchNumber : 0,
 				cantTakeNoForAnAnswer);
 			bool? result = window.ShowDialog();
 
@@ -157,6 +216,7 @@ namespace ScoutingApp
 				LoadMatchSettings settings = window.Settings;
 
 				Record = settings.MakeRecord();
+				GoalsList.Items.Clear();
 				PregameMatch = settings.GetMatch();
 				Color = AllianceColor.Red;
 
@@ -167,7 +227,11 @@ namespace ScoutingApp
 					TeamsDropDown.Items.Add(tdc);
 				}
 				TeamsDropDown.SelectedIndex = 0;
+
+				TimeBtn.IsEnabled = true;
 			}
+
+			IsSettingUp = false;
 		}
 
 		public void AddGoal(Goal g)
@@ -182,10 +246,64 @@ namespace ScoutingApp
 			GoalsList.Items.Add(item);
 		}
 
-		////////////////////
-		// EVENT HANDLERS //
-		////////////////////
+		public void PauseTimer()
+		{
+			DispTimer.Stop();
+			Watch.Stop();
 
+			StopBtn.IsEnabled = true;
+		}
+		public void StartTimer()
+		{
+			DispTimer.Start();
+			Watch.Start();
+
+			StopBtn.IsEnabled = false;
+		}
+
+		#region Event Handlers
+
+		private void timer_Tick(object sender, EventArgs e)
+		{
+			Time = TimeSpan.FromMilliseconds(Watch.ElapsedMilliseconds);
+
+			TimeBtn.Content = string.Format(@"{0:m\:ss\.f}", Time);
+			TimeBar.Value = Time.TotalSeconds;
+
+			if (Time < Util.TELEOP && (string)TimeBar.Tag != "AUTO")
+			{
+				TimeBar.Foreground = new SolidColorBrush(AUTO_COLOR);
+				TimeBar.Tag = "AUTO";
+			}
+			else if (Time >= Util.TELEOP && Time < Util.TRASH_TOSS_STOP &&
+				(string)TimeBar.Tag != "TELEOP")
+			{
+				TimeBar.Foreground = new SolidColorBrush(TELEOP_COLOR);
+				TimeBar.Tag = "TELEOP";
+
+				if (ScoutingAppSettings.PauseOnTeleop)
+				{
+					PauseTimer();
+				}
+				else
+				{
+					DoTeleopStuff();
+				}
+			}
+			else if (Time >= Util.TRASH_TOSS_STOP && (string)TimeBar.Tag != "CHAOS")
+			{
+				TimeBar.Foreground = new SolidColorBrush(CHAOS_COLOR);
+				TimeBar.Tag = "CHAOS";
+			}
+			else if (Time >= Util.MATCH_LENGTH)
+			{
+				TimeBar.Foreground = new SolidColorBrush(Colors.Gray);
+				PauseTimer();
+				EndGame();
+			}
+		}
+
+		#region Goals and Stuff
 		private void UnprocessedLitterDownBtn_Click(object sender, RoutedEventArgs e)
 		{
 			int count = int.Parse(UnprocessedLitterCount.Text);
@@ -228,104 +346,9 @@ namespace ScoutingApp
 			RecyclingLevelLbl.Content = LEVEL_PREFIX + val.ToString();
 		}
 
-		private void MatchSetupBtn_Click(object sender, RoutedEventArgs e)
-		{
-			RunSetup(false);
-		}
-
 		private void ToteSetToggle_Unchecked(object sender, RoutedEventArgs e)
 		{
 			ToteSetStackedToggle.IsChecked = false;
-		}
-
-		private void ScoutingMainWindow_Loaded(object sender, RoutedEventArgs e)
-		{
-			timer.Interval = UPDATE_INTERVAL;
-			timer.Tick += timer_Tick;
-
-			ScoutingJson.Initialize(false);
-
-			RunSetup(true);
-		}
-
-		private void timer_Tick(object sender, EventArgs e)
-		{
-			Time = TimeSpan.FromMilliseconds(watch.ElapsedMilliseconds);
-
-			TimeBtn.Content = string.Format(@"{0:m\:ss\.f}", Time);
-			TimeBar.Value = Time.TotalSeconds;
-
-			if (Time < Util.TELEOP && (string)TimeBar.Tag != "AUTO")
-			{
-				TimeBar.Foreground = new SolidColorBrush(Colors.Yellow);
-				TimeBar.Tag = "AUTO";
-			}
-			else if (Time >= Util.TELEOP && Time < Util.TRASH_TOSS && 
-				(string)TimeBar.Tag != "TELEOP")
-			{
-				TimeBar.Foreground = new SolidColorBrush(Colors.SteelBlue);
-				TimeBar.Tag = "TELEOP";
-
-				DoTeleopStuff();
-			}
-			else if (Time >= Util.TRASH_TOSS && (string)TimeBar.Tag != "CHAOS")
-			{
-				TimeBar.Foreground = new SolidColorBrush(Colors.Red);
-				TimeBar.Tag = "CHAOS";
-			}
-			else if (Time >= Util.MATCH_LENGTH)
-			{
-				TimeBar.Foreground = new SolidColorBrush(Colors.Gray);
-				GameInProgress = false;
-			}
-		}
-
-		private void TimeBtn_Click(object sender, RoutedEventArgs e)
-		{
-			if (timer.IsEnabled)
-			{
-				timer.Stop();
-				watch.Stop();
-			}
-			else
-			{
-				if (Time.CountedSeconds() == Util.TELEOP.CountedSeconds()) // on post-auto resume
-				{
-					SetEnabledAuto(false);
-					SetEnabledTeleop(true);
-
-					AutoTeleopTabs.SelectedIndex = 1;
-				}
-
-				if (!GameInProgress) // start
-				{
-					GameInProgress = true;
-					SetEnabledAuto(true);
-				}
-
-				timer.Start();
-				watch.Start();
-			}
-		}
-
-		private void TeamsDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			int index = TeamsDropDown.SelectedIndex;
-
-			SelectedTeam = PregameMatch.GetTeamByInclusiveIndex(index);
-
-			Color = PregameMatch.GetTeamColor(SelectedTeam);
-
-			Record = new RecordedMatch(Record.MatchNumber, SelectedTeam, Color);
-
-			if (PregameMatch.GetTeamColor(SelectedTeam) == AllianceColor.Red)
-			{
-				TeamInfoBtn.Background = new SolidColorBrush(RED_ALLIANCE);
-			}
-			else // blue (or indeterminate, but that'll never happen)
-			{
-				TeamInfoBtn.Background = new SolidColorBrush(BLUE_ALLIANCE);
-			}
 		}
 
 		private void GrayToteBtn_Click(object sender, RoutedEventArgs e)
@@ -366,7 +389,80 @@ namespace ScoutingApp
 
 		private void RecyclingBtn_Click(object sender, RoutedEventArgs e)
 		{
-			AddGoal(Goal.MakeRecycledLitter(SelectedTeam, Time.CountedSeconds()));
+			AddGoal(Goal.MakeContainerTeleop((int)RecyclingLevelSlider.Value, SelectedTeam,
+				Time.CountedSeconds()));
+		}
+
+		#endregion
+
+		private void ScoutingMainWindow_Loaded(object sender, RoutedEventArgs e)
+		{
+			DispTimer.Interval = UPDATE_INTERVAL;
+			DispTimer.Tick += timer_Tick;
+
+			ScoutingJson.Initialize(false);
+
+			RunSetup(true);
+		}
+
+		private void MatchSetupBtn_Click(object sender, RoutedEventArgs e)
+		{
+			RunSetup(false);
+		}
+		private void TimeBtn_Click(object sender, RoutedEventArgs e)
+		{
+			if (DispTimer.IsEnabled)
+			{
+				PauseTimer();
+			}
+			else
+			{
+				if (Time.CountedSeconds() == Util.TELEOP.CountedSeconds()) // on post-auto resume
+				{
+					SetEnabledAuto(false);
+					SetEnabledTeleop(true);
+
+					AutoTeleopTabs.SelectedIndex = 1;
+
+					DoTeleopStuff();
+				}
+
+				if (!GameInProgress) // start
+				{
+					GameInProgress = true;
+					SetEnabledAuto(true);
+					PenaltyBtn.IsEnabled = true;
+				}
+
+				StartTimer();
+			}
+		}
+
+		private void TeamsDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (IsSettingUp)
+			{
+				return;
+			}
+
+			int index = TeamsDropDown.SelectedIndex;
+
+			SelectedTeam = PregameMatch.GetTeamByInclusiveIndex(index);
+
+			Color = PregameMatch.GetTeamColor(SelectedTeam);
+
+			Record = new RecordedMatch(Record.MatchNumber, SelectedTeam, Color);
+
+			if (PregameMatch.GetTeamColor(SelectedTeam) == AllianceColor.Red)
+			{
+				TeamInfoBtn.Background = new SolidColorBrush(RED_ALLIANCE);
+			}
+			else // blue (or indeterminate, but that'll never happen)
+			{
+				TeamInfoBtn.Background = new SolidColorBrush(BLUE_ALLIANCE);
+			}
+
+			UpdateInfoTooltip();
 		}
 
 		private void IsWorkingToggle_Unchecked(object sender, RoutedEventArgs e)
@@ -406,15 +502,95 @@ namespace ScoutingApp
 			Goal g = lbi.Tag as Goal;
 			if (g == null)
 			{
+				Penalty p = lbi.Tag as Penalty;
+				if (p != null)
+				{
+					Record.AlliancePenalties.Remove(p);
+					GoalsList.Items.Remove(lbi);
+				}
+
 				return;
 			}
 
+			if (g.Type == GoalType.Coopertition)
+			{
+				CoopertitionBtn.IsEnabled = true;
+				CoopertitionStackedBtn.IsEnabled = true;
+			}
+
 			Record.ScoredGoals.Remove(g);
+			GoalsList.Items.Remove(lbi);
 		}
 
 		private void GoalsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			RemoveGoalBtn.IsEnabled = IsGoalSelected;
+		}
+
+		private void SaveBtn_Click(object sender, RoutedEventArgs e)
+		{
+			SaveOverlay saveOverlay = new SaveOverlay(Record, TeamsDropDown.SelectedIndex);
+			saveOverlay.Owner = System.Windows.Window.GetWindow(this);
+			bool? result = saveOverlay.ShowDialog();
+		}
+
+		private void StopBtn_Click(object sender, RoutedEventArgs e)
+		{
+			EndGame();
+		}
+
+		private void PenaltyBtn_Click(object sender, RoutedEventArgs e)
+		{
+			int clickedTime = Time.CountedSeconds();
+
+			PenaltyOverlay penOverlay = new PenaltyOverlay();
+			penOverlay.Owner = System.Windows.Window.GetWindow(this);
+			bool? result = penOverlay.ShowDialog();
+
+			if (result == true) // Nullable<bool>
+			{
+				Penalty p = new Penalty(clickedTime, penOverlay.Reasoning, 
+					Color, SelectedTeam);
+
+				Record.AlliancePenalties.Add(p);
+
+				ListBoxItem lbi = new ListBoxItem();
+				lbi.Content = p.UIForm;
+				lbi.Foreground = new SolidColorBrush(MALFUNCTIONING_RED);
+				lbi.FontWeight = FontWeights.SemiBold;
+				lbi.ToolTip = "Penalty: " + p.Reasoning;
+				lbi.Tag = p;
+
+				GoalsList.Items.Add(lbi);
+			}
+		}
+
+		private void TeamInfoBtn_Click(object sender, RoutedEventArgs e)
+		{
+			InfoOverlay info = new InfoOverlay(Record);
+			info.Owner = System.Windows.Window.GetWindow(this);
+			info.OKBtn.Click += InfoOverlay_OKBtn_Click;
+
+			info.Show();
+		}
+
+		private void InfoOverlay_OKBtn_Click(object sender, RoutedEventArgs e)
+		{
+			Button okBtn = sender as Button;
+			InfoOverlay info = System.Windows.Window.GetWindow(okBtn) as InfoOverlay;
+
+			Record.TeamDescription = info.DescriptionBox.Text;
+			Record.TeamExpectations = info.ExpectationsBox.Text;
+
+			UpdateInfoTooltip();
+		}
+
+		#endregion
+
+		private void ConfigBtn_Click(object sender, RoutedEventArgs e)
+		{
+			ConfigOverlay cfg = new ConfigOverlay();
+			cfg.ShowDialog();
 		}
 	}
 
