@@ -21,6 +21,14 @@ namespace ScoutingIO.Views
 	/// </summary>
 	public partial class TeamsView : UserControl
 	{
+		TeamsViewModel ViewModel
+		{
+			get
+			{
+				return Resources["ViewModel"] as TeamsViewModel;
+			}
+		}
+
 		public event EventHandler<TeamsViewModel> SendData;
 
 		public TeamsView()
@@ -34,6 +42,11 @@ namespace ScoutingIO.Views
 			{
 				SendData(sender, e);
 			}
+		}
+
+		public void SendInitData()
+		{
+			ViewModel.DoSendData();
 		}
 	}
 }

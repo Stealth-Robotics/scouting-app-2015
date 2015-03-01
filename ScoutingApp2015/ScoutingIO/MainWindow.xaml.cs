@@ -39,6 +39,14 @@ namespace ScoutingIO
 			}
 		}
 
+		public TeamsView TeamsV
+		{
+			get
+			{
+				return TeamsTab.Content as TeamsView;
+			}
+		}
+
 		public MainWindow()
 		{
 			ScoutingData.ScoutingJson.Initialize(false);
@@ -60,11 +68,17 @@ namespace ScoutingIO
 		private void EventView_SendMatchesData(object sender, EventArgs<EventViewModel> e)
 		{
 			MatchV.SendData(sender, e);
+			TeamsV.SendInitData();
 		}
 
 		private void TeamsView_SendData(object sender, EventArgs<TeamsViewModel> e)
 		{
 			EventV.SendTeamsData(sender, e);
+		}
+
+		private void window_Loaded(object sender, RoutedEventArgs e)
+		{
+			TeamsV.SendInitData();
 		}
 	}
 }
