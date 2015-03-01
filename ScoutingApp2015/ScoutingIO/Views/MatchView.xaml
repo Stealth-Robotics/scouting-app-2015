@@ -213,7 +213,7 @@
 		<DataGrid x:Name="MatchesDataGrid"
 							Grid.Row="2"
 							ColumnHeaderHeight="24"
-							ItemsSource="{Binding Customers, Mode=TwoWay, Source={StaticResource ViewModel}}">
+							ItemsSource="{Binding Matches, Mode=TwoWay, Source={StaticResource ViewModel}}">
 		</DataGrid>
 	</Grid>
 </UserControl>

@@ -165,14 +165,13 @@ namespace ScoutingData
 			string contents = JsonConvert.SerializeObject(frc, Formatting.Indented);
 			File.WriteAllText(path, contents);
 		}
-		public static void SaveTeamsList(TeamsList list, bool usb)
+		public static void SaveTeamsList(TeamsList list, string path)
 		{
 			Initialize(false);
 
 			string contents = JsonConvert.SerializeObject(list, Formatting.Indented);
 
-			string filename = (usb ? UsbPath : LocalPath) + "Teams" + TeamsListExtension;
-			File.WriteAllText(filename, contents);
+			File.WriteAllText(path, contents);
 		}
 		public static void SaveMatchRecord(RecordedMatch rec, string path)
 		{

@@ -31,6 +31,14 @@ namespace ScoutingIO
 			}
 		}
 
+		public EventView EventV
+		{
+			get
+			{
+				return EventTab.Content as EventView;
+			}
+		}
+
 		public MainWindow()
 		{
 			ScoutingData.ScoutingJson.Initialize(false);
@@ -52,6 +60,11 @@ namespace ScoutingIO
 		private void EventView_SendMatchesData(object sender, EventArgs<EventViewModel> e)
 		{
 			MatchV.SendData(sender, e);
+		}
+
+		private void TeamsView_SendData(object sender, EventArgs<TeamsViewModel> e)
+		{
+			EventV.SendTeamsData(sender, e);
 		}
 	}
 }

@@ -92,6 +92,9 @@
     <Compile Include="Dialogs\NewEventDialog.xaml.cs">
       <DependentUpon>NewEventDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\NewTeamDialog.xaml.cs">
+      <DependentUpon>NewTeamDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GenericEventArgs.cs" />
     <Compile Include="ViewModel\DoStuffCommand.cs" />
     <Compile Include="ViewModel\DoStuffWithStuffCommand.cs" />
@@ -108,6 +111,10 @@
       <DependentUpon>TeamsView.xaml</DependentUpon>
     </Compile>
     <Page Include="Dialogs\NewEventDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\NewTeamDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

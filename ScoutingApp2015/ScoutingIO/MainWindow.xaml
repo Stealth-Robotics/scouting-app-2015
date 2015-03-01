@@ -32,9 +32,15 @@
 												GoToTeams="EventView_GoToTeams"
 												SendMatchesData="EventView_SendMatchesData" />
 			</TabItem>
+			
 			<TabItem x:Name="MatchTab"
 							 Header="Matches">
 				<view:MatchView />
+			</TabItem>
+			
+			<TabItem x:Name="TeamsTab"
+							 Header="Teams">
+				<view:TeamsView SendData="TeamsView_SendData" />
 			</TabItem>
 		</TabControl>
 	</Grid>

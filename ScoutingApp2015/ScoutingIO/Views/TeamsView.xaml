@@ -6,6 +6,7 @@
 						 xmlns:e="http://schemas.codeplex.com/elysium"
 						 xmlns:par="http://schemas.codeplex.com/elysium/params"
 						 xmlns:vm="clr-namespace:ScoutingIO.ViewModel"
+						 xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
 						 par:Design.AccentBrush="{x:Static e:AccentBrushes.Orange}"
 						 par:Manager.AccentBrush="{x:Static e:AccentBrushes.Orange}"
 						 par:Design.Theme="Light"
@@ -14,7 +15,8 @@
 						 d:DesignHeight="300"
 						 d:DesignWidth="500">
 	<UserControl.Resources>
-		
+		<vm:TeamsViewModel x:Key="ViewModel"
+											 SendData="TeamsViewModel_SendData" />
 	</UserControl.Resources>
 	
 	<Grid Margin="5">
@@ -29,7 +31,7 @@
 					Margin="0,0,0,5">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto"
-													MinWidth="74" />
+													MinWidth="80" />
 				<ColumnDefinition />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
@@ -42,17 +44,19 @@
 							 Grid.Column="1"
 							 BorderThickness="1"
 							 FontSize="14"
-							 Margin="0,0,5,0" />
+							 Margin="0,0,5,0"
+							 Text="{Binding FilePath, Source={StaticResource ViewModel}}" />
 			<Button x:Name="PathBtn"
 							Content="..."
 							Grid.Column="2"
-							MinWidth="36" />
+							MinWidth="36"
+							Command="{Binding OpenTeamsFileCmd, Mode=OneWay, Source={StaticResource ViewModel}}" />
 		</Grid>
 
 		<Grid Grid.Row="1"
 					Margin="0,0,0,5">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="74" />
+				<ColumnDefinition Width="80" />
 				<ColumnDefinition Width="4*" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="9*" />
@@ -70,7 +74,8 @@
 							 Grid.Column="1"
 							 HorizontalContentAlignment="Center"
 							 BorderThickness="1"
-							 FontSize="14" />
+							 FontSize="14"
+							 Text="{Binding TeamNumber_String, Source={StaticResource ViewModel}}" />
 			<TextBlock Text="Name:"
 								 Grid.Column="2"
 								 FontWeight="SemiBold"
@@ -81,22 +86,27 @@
 			<TextBox x:Name="NameBox"
 							 Grid.Column="3"
 							 BorderThickness="1"
-							 FontSize="14" />
+							 FontSize="14"
+							 Text="{Binding TeamName, Source={StaticResource ViewModel}}" />
 			<Button x:Name="NewTeamBtn"
 							Grid.Column="4"
 							Content="New..."
 							MinWidth="64"
-							Margin="5,0,0,0" />
+							Margin="5,0,0,0"
+							ToolTip="Create new team"
+							Command="{Binding NewTeamCmd, Mode=OneWay, Source={StaticResource ViewModel}}" />
 			<Button x:Name="DeleteTeamBtn"
 							Grid.Column="5"
 							Content="Delete"
 							MinWidth="64"
-							Margin="5,0,0,0" />
+							Margin="5,0,0,0"
+							Command="{Binding DeleteTeamCmd, Mode=OneWay, Source={StaticResource ViewModel}}" />
 		</Grid>
 		<Grid Grid.Row="2"
 					Margin="0,0,0,5">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" 
+													MinWidth="80" />
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
 
@@ -109,7 +119,8 @@
 			<TextBlock Text="Location:" />
 			<TextBox x:Name="LocationBox"
 							 Grid.Column="1"
-							 BorderThickness="1" />
+							 BorderThickness="1"
+							 Text="{Binding TeamLocation, Source={StaticResource ViewModel}}" />
 			<TextBlock Text="Description:"
 								 Grid.Row="1"
 								 Margin="0,5,5,0" />
@@ -119,7 +130,8 @@
 							 BorderThickness="1"
 							 AutoWordSelection="True"
 							 ToolTip="A short description of the robot's appearance"
-							 Margin="0,5,0,0" />
+							 Margin="0,5,0,0"
+							 Text="{Binding TeamDescription, Source={StaticResource ViewModel}}" />
 			<TextBlock Text="Expectations:"
 								 Grid.Row="2"
 								 Margin="0,5,5,0" />
@@ -132,12 +144,35 @@
 							 AutoWordSelection="True"
 							 TextWrapping="WrapWithOverflow"
 							 ToolTip="Expectations of the robot in-game (strategy, functionality, etc.)"
-							 Margin="0,5,0,0" />
+							 Margin="0,5,0,0"
+							 Text="{Binding TeamExpectations, Source={StaticResource ViewModel}}"
+							 VerticalContentAlignment="Top"
+							 VerticalScrollBarVisibility="Auto" />
 		</Grid>
 
 		<DataGrid x:Name="TeamsGrid"
-							Grid.Row="3">
-
+							FrozenColumnCount="1"
+							Grid.Row="3"
+							ItemsSource="{Binding TeamsUI, Source={StaticResource ViewModel}}"
+							CanUserResizeRows="False"
+							SelectedItem="{Binding SelectedTeam, Source={StaticResource ViewModel}}"
+							IsSynchronizedWithCurrentItem="True"
+							CanUserAddRows="False"
+							CanUserDeleteRows="False"
+							SelectionMode="Single"
+							VerticalScrollBarVisibility="Visible">
+			<i:Interaction.Triggers>
+				<!--
+				<i:EventTrigger EventName="SelectionChanged">
+					<i:InvokeCommandAction Command="{Binding SelectionChangedCmd, Mode=OneWay, 
+						Source={StaticResource ViewModel}}" CommandParameter="{Binding Path=SelectedItem, 
+						RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" />
+				</i:EventTrigger>-->
+				<i:EventTrigger EventName="CellEditEnding">
+					<i:InvokeCommandAction Command="{Binding CellEditedCmd, Mode=OneWay,
+						Source={StaticResource ViewModel}}" />
+				</i:EventTrigger>
+			</i:Interaction.Triggers>
 		</DataGrid>
 	</Grid>
 </UserControl>

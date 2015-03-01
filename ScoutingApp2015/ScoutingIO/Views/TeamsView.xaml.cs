@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScoutingIO.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,19 @@ namespace ScoutingIO.Views
 	/// </summary>
 	public partial class TeamsView : UserControl
 	{
+		public event EventHandler<TeamsViewModel> SendData;
+
 		public TeamsView()
 		{
 			InitializeComponent();
+		}
+
+		private void TeamsViewModel_SendData(object sender, EventArgs<TeamsViewModel> e)
+		{
+			if (SendData != null)
+			{
+				SendData(sender, e);
+			}
 		}
 	}
 }

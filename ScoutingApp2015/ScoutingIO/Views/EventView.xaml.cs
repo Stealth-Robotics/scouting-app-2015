@@ -68,5 +68,13 @@ namespace ScoutingIO.Views
 		{
 			OnSendMatchesData(this, new EventArgs<EventViewModel>(ViewModel));
 		}
+
+		public void SendTeamsData(object sender, EventArgs<TeamsViewModel> e)
+		{
+			if (ViewModel != null)
+			{
+				ViewModel.SendTeamsData(sender, e);
+			}
+		}
 	}
 }

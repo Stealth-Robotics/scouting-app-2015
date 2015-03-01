@@ -270,5 +270,15 @@ namespace ScoutingIO.ViewModel
 		{
 			ScoutingJson.SaveEvent(Event, EventPath);
 		}
+
+		public void SendTeamsData(object sender, EventArgs<TeamsViewModel> e)
+		{
+			TeamsList list = e.Arg.Teams;
+
+			if (list != null)
+			{
+				Event.PostJsonLoading(list);
+			}
+		}
 	}
 }

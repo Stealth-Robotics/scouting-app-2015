@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace ScoutingData.Data
 {
 	[JsonObject(MemberSerialization.OptIn)]
-	public class TeamsList : IList<Team>
+	public class TeamsList : IList<Team>, INotifyPropertyChanged
 	{
 		[JsonProperty]
 		List<Team> Teams
@@ -30,6 +31,11 @@ namespace ScoutingData.Data
 			return Teams.Count > 0;
 		}
 
+		public bool Contains(int teamID)
+		{
+			return Teams.Exists((t) => t.Number == teamID);
+		}
+
 		#region IList
 		public int IndexOf(Team item)
 		{
@@ -39,11 +45,13 @@ namespace ScoutingData.Data
 		public void Insert(int index, Team item)
 		{
 			Teams.Insert(index, item);
+			OnPropertyChanged();
 		}
 
 		public void RemoveAt(int index)
 		{
 			Teams.RemoveAt(index);
+			OnPropertyChanged();
 		}
 
 		public Team this[int index]
@@ -55,17 +63,20 @@ namespace ScoutingData.Data
 			set
 			{
 				Teams[index] = value;
+				OnPropertyChanged();
 			}
 		}
 
 		public void Add(Team item)
 		{
 			Teams.Add(item);
+			OnPropertyChanged();
 		}
 
 		public void Clear()
 		{
 			Teams.Clear();
+			OnPropertyChanged();
 		}
 
 		public bool Contains(Team item)
@@ -96,7 +107,9 @@ namespace ScoutingData.Data
 
 		public bool Remove(Team item)
 		{
-			return Teams.Remove(item);
+			bool res = Teams.Remove(item);
+			OnPropertyChanged();
+			return res;
 		}
 
 		public IEnumerator<Team> GetEnumerator()
@@ -169,9 +182,19 @@ namespace ScoutingData.Data
 
 		#endregion
 
+		public void OnPropertyChanged()
+		{
+			if (PropertyChanged != null)
+			{
+				PropertyChanged(this, new PropertyChangedEventArgs("Teams_Adjusted"));
+			}
+		}
+
 		public Team Find(Predicate<Team> foundItComparer)
 		{
 			return Teams.Find(foundItComparer);
 		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
 	}
 }

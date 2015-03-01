@@ -367,17 +367,17 @@ namespace ScoutingIO.ViewModel
 
 		#endregion
 
-		public ICollectionView Customers
+		public ICollectionView Matches
 		{ get; private set; }
 
-		List<MatchModel> Customers_List
+		List<MatchModel> Matches_List
 		{
 			get
 			{
 				List<MatchModel> res = EventVM.Event.Matches.ConvertAll<MatchModel>(
 					(m) => new MatchModel(this, m));
-				OnPropertyChanged("Customers_List");
-				Customers = CollectionViewSource.GetDefaultView(res);
+				OnPropertyChanged("Matches_List");
+				Matches = CollectionViewSource.GetDefaultView(res);
 				return res;
 			}
 		}
