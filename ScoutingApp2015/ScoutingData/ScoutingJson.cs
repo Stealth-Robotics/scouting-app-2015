@@ -68,7 +68,16 @@ namespace ScoutingData
 			}
 
 			FolderName = "ScoutingApp2015";
-			DriveLetter = Util.GetFirstUsbDrivePath()[0]; // the 'G' in "G:\"
+            string path = Util.GetFirstUsbDrivePath();
+            if (path != null)
+            {
+                DriveLetter = Util.GetFirstUsbDrivePath()[0]; // the 'G' in "G:\"
+            }
+            else
+            {
+                DriveLetter = 'C';
+                System.Windows.MessageBox.Show("No USB drive could be found. Please insert a USB key and restart the app.");
+            }
 			EventExtension = ".frc";
 			TeamsListExtension = ".teams";
 			MatchRecordExtension = ".match";
