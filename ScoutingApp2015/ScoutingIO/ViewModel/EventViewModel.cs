@@ -207,7 +207,7 @@ namespace ScoutingIO.ViewModel
 
 		public void NewEvent()
 		{
-			NewEventDlg ned = new NewEventDlg(EventPath);
+			NewEventDialog ned = new NewEventDialog(EventPath);
 			bool? res = ned.ShowDialog();
 
 			if (res == true) // Nullable<bool>
