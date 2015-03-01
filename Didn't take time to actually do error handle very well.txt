@@ -1,1 +1,3 @@
 Please do change where/how the error message is done. I didn't look at the code very much, so I just put it where the crash happened.
+
+This isn't complete yet. At all. Error message handling is done when I have a working build and functionality is complete. The IO app is using MVVM, so much of the functionality is linked together. If the functionality needed is not complete yet (for example, matches depending on teams), it will crash.
