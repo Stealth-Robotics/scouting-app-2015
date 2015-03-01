@@ -36,7 +36,7 @@ namespace ScoutingData
 		{ get; set; }
 
 		/// <summary>
-		/// Root path to use when saving. Possibly obsolete.
+		/// Default local path when saving and loading
 		/// </summary>
 		public static string LocalPath
 		{
@@ -45,8 +45,16 @@ namespace ScoutingData
 				return Util.USERPROFILE + "\\" + FolderName + "\\";
 			}
 		}
+
+		/// <summary>
+		/// Name of folder appended to path when saving and loading
+		/// </summary>
 		public static string FolderName
 		{ get; set; }
+
+		/// <summary>
+		/// Default removable device path when saving and loading (possibly obsolete)
+		/// </summary>
 		public static string UsbPath
 		{
 			get
@@ -54,12 +62,23 @@ namespace ScoutingData
 				return DriveLetter + ":\\" + FolderName + "\\";
 			}
 		}
+
+		/// <summary>
+		/// Drive letter of loaded USB drive
+		/// </summary>
 		public static char DriveLetter
 		{ get; set; }
 
+		/// <summary>
+		/// If the I/O has initialized or not
+		/// </summary>
 		public static bool IsInitialized
 		{ get; set; }
 
+		/// <summary>
+		/// Initializes the static properties. Call at the beginning point of your app.
+		/// </summary>
+		/// <param name="reInit">Set to true to re-initialize to default values</param>
 		public static void Initialize(bool reInit)
 		{
 			if (IsInitialized && !reInit)
@@ -68,7 +87,8 @@ namespace ScoutingData
 			}
 
 			FolderName = "ScoutingApp2015";
-			DriveLetter = Util.GetFirstUsbDrivePath()[0]; // the 'G' in "G:\"
+			string rem = Util.GetFirstUsbDrivePath();
+			DriveLetter = (rem != null ? rem[0] : 'G');
 			EventExtension = ".frc";
 			TeamsListExtension = ".teams";
 			MatchRecordExtension = ".match";
@@ -107,6 +127,7 @@ namespace ScoutingData
 			catch (JsonException)
 			{
 				Util.DebugLog(LogLevel.Critical, "Could not deserialize file.");
+				return null;
 			}
 
 			return frc;
@@ -137,14 +158,12 @@ namespace ScoutingData
 			return ParseTeamsList(usb ? UsbPath : LocalPath);
 		}
 
-		public static void SaveEvent(FrcEvent frc, bool usb)
+		public static void SaveEvent(FrcEvent frc, string path)
 		{
 			Initialize(false);
 
 			string contents = JsonConvert.SerializeObject(frc, Formatting.Indented);
-
-			string filename = (usb ? UsbPath : LocalPath) + frc.EventName + EventExtension;
-			File.WriteAllText(filename, contents);
+			File.WriteAllText(path, contents);
 		}
 		public static void SaveTeamsList(TeamsList list, bool usb)
 		{

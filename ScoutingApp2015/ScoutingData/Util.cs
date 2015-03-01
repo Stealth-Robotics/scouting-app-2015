@@ -220,17 +220,55 @@ namespace ScoutingData
 		/// <returns>Path of removable device, or null if none were found.</returns>
 		public static string GetFirstUsbDrivePath()
 		{
-			string[] drives = Environment.GetLogicalDrives();
-			
-			foreach (string s in drives)
+			DriveInfo[] infos = DriveInfo.GetDrives();
+
+			foreach (DriveInfo di in infos)
 			{
-				if (IsPathOnRemovableDevice(s))
+				if (di.DriveType == DriveType.Removable)
 				{
-					return s;
+					return di.Name;
 				}
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Gets the path of the folder containing the file
+		/// </summary>
+		/// <param name="filePath">Path to the file in question</param>
+		/// <returns>Path of the folder containing the file</returns>
+		public static string GetFolderPath(string filePath)
+		{
+			int lastBS = filePath.LastIndexOf('\\');
+			if (lastBS == -1)
+			{
+				return "0";
+			}
+
+			return filePath.Substring(0, lastBS + 1);
+		}
+
+		/// <summary>
+		/// Gets the name of the file, excluding the containing folder path
+		/// </summary>
+		/// <param name="filePath">Path to the file in question</param>
+		/// <param name="extension">Whether to include the extension in the result</param>
+		/// <returns>Name of the file, without the folder path</returns>
+		public static string GetFileName(string filePath, bool extension)
+		{
+			string name = filePath.Substring(GetFolderPath(filePath).Length);
+
+			if (!extension)
+			{
+				int firstDot = name.IndexOf('.');
+				if (firstDot != -1)
+				{
+					name = name.Substring(0, firstDot);
+				}
+			}
+
+			return name;
 		}
 
 		///////////////////////

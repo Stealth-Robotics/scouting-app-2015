@@ -24,7 +24,6 @@ namespace ScoutingData.Data
 		/// <summary>
 		/// List of all competing teams within the event
 		/// </summary>
-		[JsonIgnore]
 		public TeamsList AllTeams
 		{ get; set; }
 
@@ -34,6 +33,18 @@ namespace ScoutingData.Data
 		[JsonProperty]
 		public string EventName
 		{ get; set; }
+
+		/// <summary>
+		/// True once the teams list has loaded
+		/// </summary>
+		public bool HasLoadedTeams
+		{ get; private set; }
+
+		public FrcEvent(string name)
+		{
+			Matches = new List<Match>();
+			EventName = name;
+		}
 
 		/// <summary>
 		/// Loads a team from an ID
@@ -57,6 +68,8 @@ namespace ScoutingData.Data
 			{
 				m.PostJsonLoading(this);
 			}
+
+			HasLoadedTeams = true;
 		}
 
 		public bool IsCorrectlyLoaded()
