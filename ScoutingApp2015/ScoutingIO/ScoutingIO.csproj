@@ -89,8 +89,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Dialogs\NewEventDlg.xaml.cs">
-      <DependentUpon>NewEventDlg.xaml</DependentUpon>
+    <Compile Include="Dialogs\NewEventDialog.xaml.cs">
+      <DependentUpon>NewEventDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="GenericEventArgs.cs" />
     <Compile Include="ViewModel\DoStuffCommand.cs" />
@@ -103,7 +103,7 @@
     <Compile Include="Views\MatchView.xaml.cs">
       <DependentUpon>MatchView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Dialogs\NewEventDlg.xaml">
+    <Page Include="Dialogs\NewEventDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
