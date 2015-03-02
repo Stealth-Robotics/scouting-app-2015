@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 using ScoutingData.Data;
 using System.Windows.Input;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace ScoutingIO.ViewModel
 {
 	public class MatchViewModel : INotifyPropertyChanged
 	{
-		bool loadingMatch = false;
+		bool isRefreshingAboveStuff = false;
 
 		public EventViewModel EventVM
 		{
@@ -39,12 +40,8 @@ namespace ScoutingIO.ViewModel
 			{
 				_selectedMatch = value;
 
-				if (!loadingMatch)
-				{
-					Match_Number_String = value.Number.ToString();
-				}
-
 				OnPropertyChanged("SelectedMatch");
+				OnPropertyChanged("Match_Number_String");
 			}
 		}
 		Match _selectedMatch;
@@ -53,28 +50,56 @@ namespace ScoutingIO.ViewModel
 		{
 			get
 			{
-				return _match_Number_String;
+				if (SelectedMatch != null)
+				{
+					return SelectedMatch.Number.ToString();
+				}
+				else
+				{
+					return "-NULL-";
+				}
 			}
 			set
 			{
+				if (value == "-NULL-")
+				{
+					return;
+				}
+
 				int i = -1;
 				bool worked = int.TryParse(value, out i);
 				if (worked)
 				{
-					if (i > 0)
-					{
-						_match_Number = i;
-						_match_Number_String = value;
-						OnPropertyChanged("Match_Number_String");
-					}
+					SelectedMatch = EventVM.Event.LoadMatch(i);
+				}
+
+				OnPropertyChanged("Match_Number_String");
+			}
+		}
+
+		public SolidColorBrush Match_Number_Color
+		{
+			get
+			{
+				if (SelectedMatch == null)
+				{
+					return new SolidColorBrush(Colors.Red);
+				}
+				else
+				{
+					return new SolidColorBrush(Colors.Black);
 				}
 			}
 		}
-		string _match_Number_String;
-		int _match_Number;
 
-		// Over 250 lines to do what is pretty easy to explain
-		// in less than 5. THIS is why #region exists.
+		// Over here to eliminate scrolling need
+		void Break()
+		{
+			System.Diagnostics.Debugger.Break();
+		}
+
+		// Over 300 lines to do what is pretty easy to explain
+		// in less than 3. THIS is why #region exists.
 		#region TeamNumbers
 
 		#region Red A
@@ -82,19 +107,35 @@ namespace ScoutingIO.ViewModel
 		{
 			get
 			{
-				return _redA_Number_String;
+				if (SelectedMatch != null)
+				{
+					return SelectedMatch.RedAlliance.A.Number.ToString();
+				}
+				else
+				{
+					return "-NULL-";
+				}
 			}
 			set
 			{
+				if (value == "-NULL-")
+				{
+					return;
+				}
+
 				int i = -1;
 				bool worked = int.TryParse(value, out i);
 				if (worked)
 				{
-					_redA_Number = i;
-					_redA_Number_String = value;
 					OnPropertyChanged("RedA_Number_String");
 
 					Team t = EventVM.Event.LoadTeam(i);
+					SelectedMatch.RedAlliance.A = t;
+
+					Match m = SelectedMatch;
+					OnPropertyChanged("Match_Adjusted");
+					SelectedMatch = m;
+
 					if (t != null)
 					{
 						RedA_Tooltip = t.GetDescription();
@@ -103,13 +144,9 @@ namespace ScoutingIO.ViewModel
 					{
 						RedA_Tooltip = "Team does not exist.";
 					}
-
-					SelectedMatch.RedAlliance.A = t;
 				}
 			}
 		}
-		string _redA_Number_String;
-		int _redA_Number;
 		public string RedA_Tooltip
 		{
 			get
@@ -130,19 +167,35 @@ namespace ScoutingIO.ViewModel
 		{
 			get
 			{
-				return _redB_Number_String;
+				if (SelectedMatch != null)
+				{
+					return SelectedMatch.RedAlliance.B.Number.ToString();
+				}
+				else
+				{
+					return "-NULL-";
+				}
 			}
 			set
 			{
+				if (value == "-NULL-")
+				{
+					return;
+				}
+
 				int i = -1;
 				bool worked = int.TryParse(value, out i);
 				if (worked)
 				{
-					_redB_Number = i;
-					_redB_Number_String = value;
-					OnPropertyChanged("RedB_Number_String");
+					OnPropertyChanged("RedC_Number_String");
 
 					Team t = EventVM.Event.LoadTeam(i);
+					SelectedMatch.RedAlliance.B = t;
+
+					Match m = SelectedMatch;
+					OnPropertyChanged("Match_Adjusted");
+					SelectedMatch = m;
+
 					if (t != null)
 					{
 						RedB_Tooltip = t.GetDescription();
@@ -151,13 +204,9 @@ namespace ScoutingIO.ViewModel
 					{
 						RedB_Tooltip = "Team does not exist.";
 					}
-
-					SelectedMatch.RedAlliance.B = t;
 				}
 			}
 		}
-		string _redB_Number_String;
-		int _redB_Number;
 		public string RedB_Tooltip
 		{
 			get
@@ -178,34 +227,46 @@ namespace ScoutingIO.ViewModel
 		{
 			get
 			{
-				return _redC_Number_String;
+				if (SelectedMatch != null)
+				{
+					return SelectedMatch.RedAlliance.C.Number.ToString();
+				}
+				else
+				{
+					return "-NULL-";
+				}
 			}
 			set
 			{
+				if (value == "-NULL-")
+				{
+					return;
+				}
+
 				int i = -1;
 				bool worked = int.TryParse(value, out i);
 				if (worked)
 				{
-					_redC_Number = i;
-					_redC_Number_String = value;
-					OnPropertyChanged("RedA_Number_String");
+					OnPropertyChanged("RedC_Number_String");
 
 					Team t = EventVM.Event.LoadTeam(i);
+					SelectedMatch.RedAlliance.C = t;
+
+					Match m = SelectedMatch;
+					OnPropertyChanged("Match_Adjusted");
+					SelectedMatch = m;
+
 					if (t != null)
 					{
-						RedC_Tooltip = t.GetDescription();
+						RedB_Tooltip = t.GetDescription();
 					}
 					else
 					{
-						RedC_Tooltip = "Team does not exist.";
+						RedB_Tooltip = "Team does not exist.";
 					}
-
-					SelectedMatch.RedAlliance.C = t;
 				}
 			}
 		}
-		string _redC_Number_String;
-		int _redC_Number;
 		public string RedC_Tooltip
 		{
 			get
@@ -215,7 +276,7 @@ namespace ScoutingIO.ViewModel
 			set
 			{
 				_redC_Tooltip = value;
-				OnPropertyChanged("RedA_Tooltip");
+				OnPropertyChanged("RedC_Tooltip");
 			}
 		}
 		string _redC_Tooltip;
@@ -226,19 +287,35 @@ namespace ScoutingIO.ViewModel
 		{
 			get
 			{
-				return _blueA_Number_String;
+				if (SelectedMatch != null)
+				{
+					return SelectedMatch.BlueAlliance.A.Number.ToString();
+				}
+				else
+				{
+					return "-NULL-";
+				}
 			}
 			set
 			{
+				if (value == "-NULL-")
+				{
+					return;
+				}
+
 				int i = -1;
 				bool worked = int.TryParse(value, out i);
 				if (worked)
 				{
-					_blueA_Number = i;
-					_blueA_Number_String = value;
 					OnPropertyChanged("BlueA_Number_String");
 
 					Team t = EventVM.Event.LoadTeam(i);
+					SelectedMatch.BlueAlliance.A = t;
+
+					Match m = SelectedMatch;
+					OnPropertyChanged("Match_Adjusted");
+					SelectedMatch = m;
+
 					if (t != null)
 					{
 						BlueA_Tooltip = t.GetDescription();
@@ -247,13 +324,9 @@ namespace ScoutingIO.ViewModel
 					{
 						BlueA_Tooltip = "Team does not exist.";
 					}
-
-					SelectedMatch.BlueAlliance.A = t;
 				}
 			}
 		}
-		string _blueA_Number_String;
-		int _blueA_Number;
 		public string BlueA_Tooltip
 		{
 			get
@@ -274,19 +347,35 @@ namespace ScoutingIO.ViewModel
 		{
 			get
 			{
-				return _blueB_Number_String;
+				if (SelectedMatch != null)
+				{
+					return SelectedMatch.BlueAlliance.B.Number.ToString();
+				}
+				else
+				{
+					return "-NULL-";
+				}
 			}
 			set
 			{
+				if (value == "-NULL-")
+				{
+					return;
+				}
+
 				int i = -1;
 				bool worked = int.TryParse(value, out i);
 				if (worked)
 				{
-					_blueB_Number = i;
-					_blueB_Number_String = value;
 					OnPropertyChanged("BlueB_Number_String");
 
 					Team t = EventVM.Event.LoadTeam(i);
+					SelectedMatch.BlueAlliance.B = t;
+
+					Match m = SelectedMatch;
+					OnPropertyChanged("Match_Adjusted");
+					SelectedMatch = m;
+
 					if (t != null)
 					{
 						BlueB_Tooltip = t.GetDescription();
@@ -295,13 +384,9 @@ namespace ScoutingIO.ViewModel
 					{
 						BlueB_Tooltip = "Team does not exist.";
 					}
-
-					SelectedMatch.BlueAlliance.B = t;
 				}
 			}
 		}
-		string _blueB_Number_String;
-		int _blueB_Number;
 		public string BlueB_Tooltip
 		{
 			get
@@ -322,19 +407,35 @@ namespace ScoutingIO.ViewModel
 		{
 			get
 			{
-				return _blueC_Number_String;
+				if (SelectedMatch != null)
+				{
+					return SelectedMatch.BlueAlliance.C.Number.ToString();
+				}
+				else
+				{
+					return "-NULL-";
+				}
 			}
 			set
 			{
+				if (value == "-NULL-")
+				{
+					return;
+				}
+
 				int i = -1;
 				bool worked = int.TryParse(value, out i);
 				if (worked)
 				{
-					_blueC_Number = i;
-					_blueC_Number_String = value;
-					OnPropertyChanged("BlueA_Number_String");
+					OnPropertyChanged("BlueC_Number_String");
 
 					Team t = EventVM.Event.LoadTeam(i);
+					SelectedMatch.BlueAlliance.C = t;
+
+					Match m = SelectedMatch;
+					OnPropertyChanged("Match_Adjusted");
+					SelectedMatch = m;
+
 					if (t != null)
 					{
 						BlueC_Tooltip = t.GetDescription();
@@ -343,8 +444,6 @@ namespace ScoutingIO.ViewModel
 					{
 						BlueC_Tooltip = "Team does not exist.";
 					}
-
-					SelectedMatch.BlueAlliance.A = t;
 				}
 			}
 		}
@@ -368,20 +467,34 @@ namespace ScoutingIO.ViewModel
 		#endregion
 
 		public ICollectionView Matches
-		{ get; private set; }
-
-		List<MatchModel> Matches_List
 		{
 			get
 			{
-				List<MatchModel> res = EventVM.Event.Matches.ConvertAll<MatchModel>(
-					(m) => new MatchModel(this, m));
-				OnPropertyChanged("Matches_List");
-				Matches = CollectionViewSource.GetDefaultView(res);
-				return res;
+				return _matches;
+			}
+			private set
+			{
+				_matches = value;
+				OnPropertyChanged("Matches");
 			}
 		}
+		ICollectionView _matches;
 
+		public MatchModel SelectedMatchModel
+		{
+			get
+			{
+				return _selectedMatchModel;
+			}
+			set
+			{
+				_selectedMatchModel = value;
+				OnPropertyChanged("SelectedMatchModel");
+			}
+		}
+		MatchModel _selectedMatchModel;
+
+		#region commands
 		public ICommand TeamPickCmd
 		{ get; private set; }
 
@@ -391,75 +504,121 @@ namespace ScoutingIO.ViewModel
 		public ICommand DeleteMatchCmd
 		{ get; private set; }
 
+		public ICommand CellEditedCmd
+		{ get; private set; }
+
 		// DEBUG
 		public ICommand BreakCmd
 		{ get; private set; }
+		#endregion
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		// CTOR
 		public MatchViewModel()
 		{
-			PropertyChanged += OnMatchIDChanged;
-			//PropertyChanged += OnEventChanged;
+			//
 
 			TeamPickCmd = new DoStuffWithStuffCommand((stuffWith) => 
 				{ OnTeamPick(stuffWith as string); }, obj => true);
 
 			BreakCmd = new DoStuffCommand(Break, obj => true);
-		}
 
-		void Break()
-		{
-			System.Diagnostics.Debugger.Break();
+			CellEditedCmd = new DoStuffCommand(OnCellEdited, obj => true);
 		}
 
 		public void OnPropertyChanged(string prop)
 		{
-			if (PropertyChanged != null)
-			{
-				PropertyChanged(this, new PropertyChangedEventArgs(prop));
-			}
-		}
-
-		public void OnMatchIDChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName != "Match_Number_String" || loadingMatch)
-			{
-				return; // none of my business
-			}
-
-			loadingMatch = true;
-			SelectedMatch = EventVM.Event.LoadMatch(_match_Number);
-
-			if (SelectedMatch != null)
-			{
-				RedA_Number_String = SelectedMatch.RedAlliance.TeamA_ID.ToString();
-				RedB_Number_String = SelectedMatch.RedAlliance.TeamB_ID.ToString();
-				RedC_Number_String = SelectedMatch.RedAlliance.TeamC_ID.ToString();
-
-				BlueA_Number_String = SelectedMatch.BlueAlliance.TeamA_ID.ToString();
-				BlueB_Number_String = SelectedMatch.BlueAlliance.TeamB_ID.ToString();
-				BlueC_Number_String = SelectedMatch.BlueAlliance.TeamC_ID.ToString();
-			}
-
-			loadingMatch = false;
-		}
-
-		public void OnEventChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName != "EventVM")
+			if (PropertyChanged == null)
 			{
 				return;
 			}
 
+			PropertyChanged(this, new PropertyChangedEventArgs(prop));
+
+			if (prop == "SelectedMatch")
+			{
+				OnSelectedMatchChanged();
+			}
+
+			if (prop == "EventVM")
+			{
+				OnPropertyChanged("SelectedMatch");
+			}
+
+			if (prop == "SelectedMatchModel")
+			{
+				OnSelectedMatchModelChanged();
+			}
+
+			if (prop == "Match_Adjusted")
+			{
+				RefreshDatagrid();
+			}
+		}
+
+		public void OnSelectedMatchChanged()
+		{
+			OnPropertyChanged("Match_Number_String");
+			OnPropertyChanged("Match_Number_Color");
+
+			OnPropertyChanged("RedA_Number_String");
+			OnPropertyChanged("RedB_Number_String");
+			OnPropertyChanged("RedC_Number_String");
+			OnPropertyChanged("BlueA_Number_String");
+			OnPropertyChanged("BlueB_Number_String");
+			OnPropertyChanged("BlueC_Number_String");
+
+			SaveAll();
+		}
+
+		public void OnSelectedMatchModelChanged()
+		{
+			SelectedMatch = SelectedMatchModel.GetMatch();
+		}
+
+		public void DoInit()
+		{
 			SelectedMatch = EventVM.Event.Matches.FirstOrDefault();
-			Match_Number_String = SelectedMatch.Number.ToString();
+			OnPropertyChanged("Match_Number_String");
+			RefreshDatagrid();
+		}
+
+		private void RefreshDatagrid()
+		{
+			List<MatchModel> lmm = new List<MatchModel>();
+			foreach (Match m in EventVM.Event.Matches)
+			{
+				lmm.Add(new MatchModel(this, m));
+			}
+
+			Matches = CollectionViewSource.GetDefaultView(lmm);
 		}
 		
 		public void SendData(object sender, EventArgs<EventViewModel> e)
 		{
 			EventVM = e.Arg;
+			DoInit();
+		}
+
+		public void OnCellEdited()
+		{
+			OnPropertyChanged("Match_Number_String");
+		}
+
+		public void SaveAll()
+		{
+			EventVM.SaveAll();
+		}
+
+		public static bool IsPropertyTeamNumber(string p)
+		{
+			return p == "RedA_Number_String" ||
+				p == "RedB_Number_String" || 
+				p == "RedC_Number_String" || 
+				p == "BlueA_Number_String" || 
+				p == "BlueB_Number_String" || 
+				p == "BlueC_Number_String";
 		}
 
 		public void OnTeamPick(string teamPosition)
@@ -493,7 +652,7 @@ namespace ScoutingIO.ViewModel
 			MatchViewModel vm;
 			Match match;
 
-			public int No
+			public int Number
 			{
 				get
 				{
@@ -506,7 +665,7 @@ namespace ScoutingIO.ViewModel
 
 					// it also switches to it too
 					vm.Match_Number_String = value.ToString();
-					OnPropertyChanged("No");
+					OnPropertyChanged("Number");
 				}
 			}
 
@@ -514,13 +673,11 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return vm._redA_Number;
+					return match.RedAlliance.A.Number;
 				}
 				set
 				{
-					// kinda stupid but it keeps the line count for the
-					// team numbers region out of the thousands
-					vm.RedA_Number_String = value.ToString();
+					match.RedAlliance.A = LoadTeam(value);
 					OnPropertyChanged("RedA");
 				}
 			}
@@ -528,13 +685,11 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return vm._redB_Number;
+					return match.RedAlliance.B.Number;
 				}
 				set
 				{
-					// kinda stupid but it keeps the line count for the
-					// team numbers region out of the thousands
-					vm.RedB_Number_String = value.ToString();
+					match.RedAlliance.B = LoadTeam(value);
 					OnPropertyChanged("RedB");
 				}
 			}
@@ -542,13 +697,11 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return vm._redC_Number;
+					return match.RedAlliance.C.Number;
 				}
 				set
 				{
-					// kinda stupid but it keeps the line count for the
-					// team numbers region out of the thousands
-					vm.RedC_Number_String = value.ToString();
+					match.RedAlliance.C = LoadTeam(value);
 					OnPropertyChanged("RedC");
 				}
 			}
@@ -556,13 +709,11 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return vm._blueA_Number;
+					return match.BlueAlliance.A.Number;
 				}
 				set
 				{
-					// kinda stupid but it keeps the line count for the
-					// team numbers region out of the thousands
-					vm.BlueA_Number_String = value.ToString();
+					match.BlueAlliance.A = LoadTeam(value);
 					OnPropertyChanged("BlueA");
 				}
 			}
@@ -570,13 +721,11 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return vm._blueB_Number;
+					return match.BlueAlliance.B.Number;
 				}
 				set
 				{
-					// kinda stupid but it keeps the line count for the
-					// team numbers region out of the thousands
-					vm.BlueB_Number_String = value.ToString();
+					match.BlueAlliance.B = LoadTeam(value);
 					OnPropertyChanged("BlueB");
 				}
 			}
@@ -584,13 +733,11 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return vm._blueC_Number;
+					return match.BlueAlliance.C.Number;
 				}
 				set
 				{
-					// kinda stupid but it keeps the line count for the
-					// team numbers region out of the thousands
-					vm.BlueC_Number_String = value.ToString();
+					match.BlueAlliance.C = LoadTeam(value);
 					OnPropertyChanged("BlueC");
 				}
 			}
@@ -603,12 +750,33 @@ namespace ScoutingIO.ViewModel
 				match = arg_match;
 			}
 
+			public Team LoadTeam(int id)
+			{
+				return vm.EventVM.Event.LoadTeam(id);
+			}
+
 			public void OnPropertyChanged(string propName)
 			{
 				if (PropertyChanged != null)
 				{
 					PropertyChanged(this, new PropertyChangedEventArgs(propName));
 				}
+			}
+
+			// Java style to avoid the DataGrid seeing this as a property
+			public Match GetMatch()
+			{
+				return match;
+			}
+
+			public override string ToString()
+			{
+				return RedA.ToString() + "-" +
+					RedB.ToString() + "-" +
+					RedC.ToString() + " vs " +
+					BlueA.ToString() + "-" +
+					BlueB.ToString() + "-" +
+					BlueC.ToString();
 			}
 		}
 	}

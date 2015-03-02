@@ -21,6 +21,8 @@ namespace ScoutingIO.Views
 	/// </summary>
 	public partial class TeamsView : UserControl
 	{
+		bool isSending = false;
+
 		TeamsViewModel ViewModel
 		{
 			get
@@ -46,7 +48,12 @@ namespace ScoutingIO.Views
 
 		public void SendInitData()
 		{
-			ViewModel.DoSendData();
+			if (!isSending)
+			{
+				isSending = true;
+				ViewModel.DoSendData();
+				isSending = false;
+			}
 		}
 	}
 }

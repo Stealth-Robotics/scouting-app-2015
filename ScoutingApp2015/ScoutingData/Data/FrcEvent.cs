@@ -84,7 +84,13 @@ namespace ScoutingData.Data
 		/// <returns>Reference to match object with that ID</returns>
 		public Match LoadMatch(int matchID)
 		{
-			return Matches.Find((m) => m.Number == matchID);
+			Match res = null;
+			if (Matches.Exists((m) => m.Number == matchID))
+			{
+				res = Matches.Find((m) => m.Number == matchID);
+			}
+
+			return res;
 		}
 	}
 }

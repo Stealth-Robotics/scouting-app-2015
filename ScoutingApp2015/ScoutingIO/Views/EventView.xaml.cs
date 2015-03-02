@@ -76,5 +76,10 @@ namespace ScoutingIO.Views
 				ViewModel.SendTeamsData(sender, e);
 			}
 		}
+
+		public void SendInitData()
+		{
+			ViewModel.DoSendData();
+		}
 	}
 }

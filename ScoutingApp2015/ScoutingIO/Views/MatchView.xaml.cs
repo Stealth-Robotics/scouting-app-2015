@@ -21,6 +21,14 @@ namespace ScoutingIO.Views
 	/// </summary>
 	public partial class MatchView : UserControl
 	{
+		public MatchViewModel ViewModel
+		{
+			get
+			{
+				return Resources["ViewModel"] as MatchViewModel;
+			}
+		}
+
 		public MatchView()
 		{
 			InitializeComponent();
@@ -28,9 +36,12 @@ namespace ScoutingIO.Views
 
 		public void SendData(object sender, EventArgs<EventViewModel> e)
 		{
-			MatchViewModel vm = Resources["ViewModel"] as MatchViewModel;
+			ViewModel.SendData(sender, e);
+		}
 
-			vm.SendData(sender, e);
+		public void SendInitData()
+		{
+			ViewModel.DoInit();
 		}
 	}
 }

@@ -79,6 +79,7 @@ namespace ScoutingIO
 		private void window_Loaded(object sender, RoutedEventArgs e)
 		{
 			TeamsV.SendInitData();
+			EventV.SendInitData();
 		}
 	}
 }

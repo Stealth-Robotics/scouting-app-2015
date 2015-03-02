@@ -344,5 +344,15 @@ namespace ScoutingData.Data
 				return null;
 			}
 		}
+
+		public override string ToString()
+		{
+			return RedAlliance.A.Number.ToString() + "-" +
+				RedAlliance.B.Number.ToString() + "-" +
+				RedAlliance.C.Number.ToString() + " vs " +
+				BlueAlliance.A.Number.ToString() + "-" +
+				BlueAlliance.B.Number.ToString() + "-" +
+				BlueAlliance.C.Number.ToString();
+		}
 	}
 }

@@ -6,6 +6,7 @@
 						 xmlns:e="http://schemas.codeplex.com/elysium"
 						 xmlns:par="http://schemas.codeplex.com/elysium/params"
 						 xmlns:vm="clr-namespace:ScoutingIO.ViewModel"
+						 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 						 par:Design.AccentBrush="{x:Static e:AccentBrushes.Orange}"
 						 par:Manager.AccentBrush="{x:Static e:AccentBrushes.Orange}"
 						 par:Design.Theme="Light"
@@ -42,7 +43,8 @@
 								 Width="72"
 								 HorizontalContentAlignment="Center"
 								 Text="{Binding Match_Number_String, Source={StaticResource ViewModel}}"
-								 BorderThickness="1" />
+								 BorderThickness="1"
+								 Foreground="{Binding Match_Number_Color, Source={StaticResource ViewModel}}" />
 			</StackPanel>
 
 			<StackPanel Orientation="Horizontal"
@@ -125,35 +127,47 @@
 							 Grid.Row="0"
 							 HorizontalContentAlignment="Center"
 							 BorderThickness="1"
-							 Margin="0,0,0,5" />
+							 Margin="0,0,0,5"
+							 Text="{Binding RedA_Number_String, Source={StaticResource ViewModel}}"
+							 ToolTip="{Binding RedA_Tooltip, Source={StaticResource ViewModel}}" />
 			<TextBox x:Name="RedBBox"
 							 Grid.Column="1"
 							 Grid.Row="1"
 							 HorizontalContentAlignment="Center"
 							 BorderThickness="1"
-							 Margin="0,0,0,5" />
+							 Margin="0,0,0,5"
+							 Text="{Binding RedB_Number_String, Source={StaticResource ViewModel}}"
+							 ToolTip="{Binding RedB_Tooltip, Source={StaticResource ViewModel}}" />
 			<TextBox x:Name="RedCBox"
 							 Grid.Column="1"
 							 Grid.Row="2"
 							 HorizontalContentAlignment="Center"
-							 BorderThickness="1" />
+							 BorderThickness="1"
+							 Text="{Binding RedC_Number_String, Source={StaticResource ViewModel}}"
+							 ToolTip="{Binding RedC_Tooltip, Source={StaticResource ViewModel}}" />
 			<TextBox x:Name="BlueABox"
 							 Grid.Column="5"
 							 Grid.Row="0"
 							 HorizontalContentAlignment="Center"
 							 BorderThickness="1"
-							 Margin="0,0,0,5" />
+							 Margin="0,0,0,5"
+							 Text="{Binding BlueA_Number_String, Source={StaticResource ViewModel}}"
+							 ToolTip="{Binding BlueA_Tooltip, Source={StaticResource ViewModel}}" />
 			<TextBox x:Name="BlueBBox"
 							 Grid.Column="5"
 							 Grid.Row="1"
 							 HorizontalContentAlignment="Center"
 							 BorderThickness="1"
-							 Margin="0,0,0,5" />
+							 Margin="0,0,0,5"
+							 Text="{Binding BlueB_Number_String, Source={StaticResource ViewModel}}"
+							 ToolTip="{Binding BlueB_Tooltip, Source={StaticResource ViewModel}}" />
 			<TextBox x:Name="BlueCBox"
 							 Grid.Column="5"
 							 Grid.Row="2"
 							 HorizontalContentAlignment="Center"
-							 BorderThickness="1" />
+							 BorderThickness="1"
+							 Text="{Binding BlueC_Number_String, Source={StaticResource ViewModel}}"
+							 ToolTip="{Binding BlueC_Tooltip, Source={StaticResource ViewModel}}" />
 
 			<Button x:Name="RedABtn"
 							Grid.Column="2"
@@ -213,7 +227,21 @@
 		<DataGrid x:Name="MatchesDataGrid"
 							Grid.Row="2"
 							ColumnHeaderHeight="24"
-							ItemsSource="{Binding Matches, Mode=TwoWay, Source={StaticResource ViewModel}}">
+							ItemsSource="{Binding Matches, Mode=TwoWay, Source={StaticResource ViewModel}}"
+							IsSynchronizedWithCurrentItem="True"
+							SelectedItem="{Binding SelectedMatchModel, Source={StaticResource ViewModel}}">
+			<i:Interaction.Triggers>
+				<!--
+				<i:EventTrigger EventName="SelectionChanged">
+					<i:InvokeCommandAction Command="{Binding SelectionChangedCmd, Mode=OneWay, 
+						Source={StaticResource ViewModel}}" CommandParameter="{Binding Path=SelectedItem, 
+						RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" />
+				</i:EventTrigger>-->
+				<i:EventTrigger EventName="CellEditEnding">
+					<i:InvokeCommandAction Command="{Binding CellEditedCmd, Mode=OneWay,
+						Source={StaticResource ViewModel}}" />
+				</i:EventTrigger>
+			</i:Interaction.Triggers>
 		</DataGrid>
 	</Grid>
 </UserControl>

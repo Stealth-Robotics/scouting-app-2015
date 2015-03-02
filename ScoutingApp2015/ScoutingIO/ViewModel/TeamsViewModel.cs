@@ -153,7 +153,7 @@ namespace ScoutingIO.ViewModel
 				}
 				else
 				{
-					return "-NULL-";
+					return "";
 				}
 			}
 			set
@@ -179,7 +179,7 @@ namespace ScoutingIO.ViewModel
 				}
 				else
 				{
-					return "-NULL-";
+					return "";
 				}
 			}
 			set
@@ -205,7 +205,7 @@ namespace ScoutingIO.ViewModel
 				}
 				else
 				{
-					return "-NULL-";
+					return "";
 				}
 			}
 			set

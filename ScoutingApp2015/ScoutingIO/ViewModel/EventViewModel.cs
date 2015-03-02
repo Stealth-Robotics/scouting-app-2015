@@ -198,11 +198,8 @@ namespace ScoutingIO.ViewModel
 
 			EventPath_Color = GetPathBrush();
 			EventPath_Tooltip = GetPathTooltip();
-			
-			if (SendData != null)
-			{
-				SendData(this, new EventArgs<EventViewModel>(this));
-			}
+
+			DoSendData();
 		}
 
 		public void NewEvent()
@@ -271,6 +268,14 @@ namespace ScoutingIO.ViewModel
 			ScoutingJson.SaveEvent(Event, EventPath);
 		}
 
+		public void DoSendData()
+		{
+			if (SendData != null)
+			{
+				SendData(this, new EventArgs<EventViewModel>(this));
+			}
+		}
+
 		public void SendTeamsData(object sender, EventArgs<TeamsViewModel> e)
 		{
 			TeamsList list = e.Arg.Teams;
@@ -278,6 +283,7 @@ namespace ScoutingIO.ViewModel
 			if (list != null)
 			{
 				Event.PostJsonLoading(list);
+				DoSendData();
 			}
 		}
 	}
