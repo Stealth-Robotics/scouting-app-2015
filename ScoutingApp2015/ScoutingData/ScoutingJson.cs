@@ -157,6 +157,23 @@ namespace ScoutingData
 		{
 			return ParseTeamsList(usb ? UsbPath : LocalPath);
 		}
+		public static RecordedMatch ParseMatchRecord(string fullPathName)
+		{
+			Initialize(false);
+
+			string contents = File.ReadAllText(fullPathName);
+			RecordedMatch rec = null;
+			try
+			{
+				rec = JsonConvert.DeserializeObject<RecordedMatch>(contents);
+			}
+			catch (JsonException)
+			{
+				Util.DebugLog(LogLevel.Critical, "Could not deserialize file.");
+			}
+
+			return rec;
+		}
 
 		public static void SaveEvent(FrcEvent frc, string path)
 		{
@@ -179,6 +196,57 @@ namespace ScoutingData
 
 			string contents = JsonConvert.SerializeObject(rec, Formatting.Indented);
 			File.WriteAllText(path, contents);
+		}
+
+		public static bool HasRecordInFolder(string folderPath)
+		{
+			foreach (string filename in Directory.EnumerateFiles(folderPath))
+			{
+				if (filename.EndsWith(MatchRecordExtension))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static RecordedMatch GetFirstRecordInFolder(string folderPath)
+		{
+			if (!HasRecordInFolder(folderPath))
+			{
+				return null;
+			}
+
+			string path = (from file in Directory.EnumerateFiles(folderPath)
+						   where file.EndsWith(MatchRecordExtension)
+						   select file).FirstOrDefault();
+			return ParseMatchRecord(path);
+		}
+
+		public static bool HasEventInFolder(string folderPath)
+		{
+			foreach (string filename in Directory.EnumerateFiles(folderPath))
+			{
+				if (filename.EndsWith(EventExtension))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+		public static FrcEvent GetFirstEventInFolder(string folderPath)
+		{
+			if (!HasEventInFolder(folderPath))
+			{
+				return null;
+			}
+
+			string path = (from file in Directory.EnumerateFiles(folderPath)
+						   where file.EndsWith(EventExtension)
+						   select file).FirstOrDefault();
+			return ParseFrcEvent(path);
 		}
 	}
 }

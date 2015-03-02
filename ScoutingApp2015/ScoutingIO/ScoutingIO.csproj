@@ -101,6 +101,7 @@
     <Compile Include="ViewModel\EventViewModel.cs" />
     <Compile Include="ViewModel\MatchViewModel.cs" />
     <Compile Include="ViewModel\TeamsViewModel.cs" />
+    <Compile Include="ViewModel\UpdateViewModel.cs" />
     <Compile Include="Views\EventView.xaml.cs">
       <DependentUpon>EventView.xaml</DependentUpon>
     </Compile>
@@ -109,6 +110,9 @@
     </Compile>
     <Compile Include="Views\TeamsView.xaml.cs">
       <DependentUpon>TeamsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdateView.xaml.cs">
+      <DependentUpon>UpdateView.xaml</DependentUpon>
     </Compile>
     <Page Include="Dialogs\NewEventDialog.xaml">
       <SubType>Designer</SubType>
@@ -139,6 +143,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TeamsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UpdateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

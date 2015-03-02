@@ -1,6 +1,7 @@
 ﻿using ScoutingData.Analysis;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -215,6 +216,23 @@ namespace ScoutingData
 		}
 
 		/// <summary>
+		/// Gets the paths of all the removable drives on the machine.
+		/// </summary>
+		/// <returns>IEnumerable of paths of the devices</returns>
+		public static IEnumerable<string> GetAllUsbDrivePaths()
+		{
+			DriveInfo[] infos = DriveInfo.GetDrives();
+
+			foreach (DriveInfo di in infos)
+			{
+				if (di.DriveType == DriveType.Removable)
+				{
+					yield return di.Name;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Gets path of the first (letter) removable drive on the machine.
 		/// </summary>
 		/// <returns>Path of removable device, or null if none were found.</returns>
@@ -343,7 +361,9 @@ namespace ScoutingData
 			where TVal : IConvertible, new()
 		{
 			dict.AddIncrement(key, 1, 0);
-		}/// <summary>
+		}
+		
+		/// <summary>
 		/// Quick function for converting numbers from 0 to 1 into percentages
 		/// </summary>
 		/// <param name="n">number to convert</param>
@@ -351,6 +371,54 @@ namespace ScoutingData
 		public static string ToStringPct(this double n)
 		{
 			return (n * 100).ToString() + "%";
+		}
+
+		public static T Find<T>(this IEnumerable<T> list, Predicate<T> predicate)
+		{
+			foreach (T t in list)
+			{
+				if (predicate(t))
+				{
+					return t;
+				}
+			}
+
+			return default(T);
+		}
+
+		public static bool Exists<T>(this IEnumerable<T> list, Predicate<T> predicate)
+		{
+			foreach (T t in list)
+			{
+				if (predicate(t))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static bool Remove<T>(this ObservableCollection<T> obs, Predicate<T> predicate)
+		{
+			T rem = default(T);
+			bool found = false;
+			foreach (T t in obs)
+			{
+				if (predicate(t))
+				{
+					rem = t;
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+			{
+				return false;
+			}
+
+			return obs.Remove(rem);
 		}
 	}
 }

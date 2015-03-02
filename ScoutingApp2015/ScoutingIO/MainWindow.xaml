@@ -44,5 +44,8 @@
 				<view:TeamsView SendData="TeamsView_SendData" />
 			</TabItem>
 		</TabControl>
+		
+		<view:UpdateView x:Name="UpdateView"
+										 Grid.Column="1" />
 	</Grid>
 </e:Window>
