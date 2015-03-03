@@ -47,6 +47,14 @@ namespace ScoutingIO
 			}
 		}
 
+		public UpdateView UpdateV
+		{
+			get
+			{
+				return UpdateViewHolder.Children[0] as UpdateView;
+			}
+		}
+
 		public MainWindow()
 		{
 			ScoutingData.ScoutingJson.Initialize(false);
@@ -68,6 +76,7 @@ namespace ScoutingIO
 		private void EventView_SendMatchesData(object sender, EventArgs<EventViewModel> e)
 		{
 			MatchV.SendData(sender, e);
+			UpdateV.SendData(sender, e);
 			TeamsV.SendInitData();
 		}
 

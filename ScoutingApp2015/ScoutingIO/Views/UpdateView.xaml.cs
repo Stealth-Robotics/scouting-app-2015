@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScoutingIO.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,22 @@ namespace ScoutingIO.Views
 	/// </summary>
 	public partial class UpdateView : UserControl
 	{
+		public UpdateViewModel ViewModel
+		{
+			get
+			{
+				return Resources["ViewModel"] as UpdateViewModel;
+			}
+		}
+
 		public UpdateView()
 		{
 			InitializeComponent();
+		}
+
+		public void SendData(object sender, EventArgs<EventViewModel> e)
+		{
+			ViewModel.SendData(sender, e);
 		}
 	}
 }

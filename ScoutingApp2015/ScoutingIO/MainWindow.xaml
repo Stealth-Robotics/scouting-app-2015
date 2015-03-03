@@ -45,7 +45,9 @@
 			</TabItem>
 		</TabControl>
 		
-		<view:UpdateView x:Name="UpdateView"
-										 Grid.Column="1" />
+		<Grid x:Name="UpdateViewHolder"
+					Grid.Column="1" >
+			<view:UpdateView x:Name="UpdateView"/>
+		</Grid>
 	</Grid>
 </e:Window>

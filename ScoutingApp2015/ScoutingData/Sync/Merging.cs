@@ -93,6 +93,14 @@ namespace ScoutingData.Sync
 
 			Match result = new Match(matchID, red, blue);
 			result.Pregame = false;
+
+			double dRedLitter = redData.ToList().ConvertAll<int>((rec) => rec.ScoredGoals.Count(
+				(g) => g.Type == GoalType.UnprocessedLitter)).Mean();
+			int nRedLitter = (int)dRedLitter;
+
+			double dBlueLitter = blueData.ToList().ConvertAll<int>((rec) => rec.ScoredGoals.Count(
+				(g) => g.Type == GoalType.UnprocessedLitter)).Mean();
+			int nBlueLitter = (int)dBlueLitter;
 			
 			// GOALS LIST
 			List<Goal> goals = new List<Goal>();
@@ -103,6 +111,7 @@ namespace ScoutingData.Sync
 					#region add by goal type
 					switch (addedGoal.Type)
 					{
+					#region RobotSet
 					case GoalType.RobotSet:
 						bool alreadyHasRobotSet = goals.Exists((g) => 
 						{
@@ -115,6 +124,8 @@ namespace ScoutingData.Sync
 							goals.Add(addedGoal);
 						}
 						break;
+					#endregion
+					#region YellowToteSet
 					case GoalType.YellowToteSet:
 						bool alreadyHasYTS = goals.Exists((g) => 
 						{
@@ -127,6 +138,8 @@ namespace ScoutingData.Sync
 							goals.Add(addedGoal);
 						}
 						break;
+					#endregion
+					#region ContainerSet
 					case GoalType.ContainerSet:
 						bool alreadyHasContainerSet = goals.Exists((g) =>
 						{
@@ -139,6 +152,8 @@ namespace ScoutingData.Sync
 							goals.Add(addedGoal);
 						}
 						break;
+					#endregion
+					#region Coopertition
 					case GoalType.Coopertition:
 						bool alreadyHasCoopertition = goals.Exists((g) =>
 						{
@@ -150,6 +165,7 @@ namespace ScoutingData.Sync
 							goals.Add(addedGoal);
 						}
 						break;
+					#endregion
 					case GoalType.GrayTote:
 						goals.Add(addedGoal);
 						break;
@@ -162,15 +178,23 @@ namespace ScoutingData.Sync
 					case GoalType.LandfillLitter:
 						goals.Add(addedGoal);
 						break;
-					case GoalType.UnprocessedLitter:
-						goals.Add(addedGoal);
-						break;
 					default:
 						break;
 					}
 					#endregion
 				}
 			}
+
+			for (int i = 0; i < nRedLitter; i++)
+			{
+				goals.Add(Goal.MakeUnprocessedLitter(AllianceColor.Red));
+			}
+
+			for (int i = 0; i < nBlueLitter; i++)
+			{
+				goals.Add(Goal.MakeUnprocessedLitter(AllianceColor.Blue));
+			}
+
 			result.Goals = goals;
 
 			// PENALTIES
