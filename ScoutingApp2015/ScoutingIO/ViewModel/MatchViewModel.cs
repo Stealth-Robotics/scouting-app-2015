@@ -9,6 +9,8 @@ using ScoutingData.Data;
 using System.Windows.Input;
 using System.Windows.Data;
 using System.Windows.Media;
+using ScoutingIO.Dialogs;
+using System.Windows;
 
 namespace ScoutingIO.ViewModel
 {
@@ -520,6 +522,10 @@ namespace ScoutingIO.ViewModel
 
 			BreakCmd = new DoStuffCommand(Break, obj => true);
 
+			NewMatchCmd = new DoStuffCommand(MakeNewMatch, obj => true);
+
+			DeleteMatchCmd = new DoStuffCommand(DeleteMatch, obj => true);
+
 			CellEditedCmd = new DoStuffCommand(OnCellEdited, obj => true);
 		}
 
@@ -617,6 +623,36 @@ namespace ScoutingIO.ViewModel
 		public void SaveAll()
 		{
 			EventVM.SaveAll();
+		}
+
+		public void MakeNewMatch()
+		{
+			NewMatchDialog nmd = new NewMatchDialog(EventVM.Event);
+			bool? result = nmd.ShowDialog();
+
+			if (result == true) // Nullable<bool>
+			{
+				Match m = nmd.MakeMatch();
+				EventVM.Event.Matches.Add(m);
+				SelectedMatch = m;
+				RefreshDatagrid();
+				SaveAll();
+			}
+		}
+
+		public void DeleteMatch()
+		{
+			MessageBoxResult mbr = MessageBox.Show("Are you sure you want " +
+				"to delete this Match?", "Confirm Delete",
+				MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+			if (mbr == MessageBoxResult.Yes)
+			{
+				Match m = SelectedMatch;
+				EventVM.Event.Matches.Remove(m);
+				RefreshDatagrid();
+				SaveAll();
+			}
 		}
 
 		public static bool IsPropertyTeamNumber(string p)

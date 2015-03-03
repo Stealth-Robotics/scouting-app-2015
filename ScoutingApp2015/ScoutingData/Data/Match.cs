@@ -174,6 +174,7 @@ namespace ScoutingData.Data
 			Number = num;
 			RedAlliance = red;
 			BlueAlliance = blue;
+			Pregame = true;
 		}
 
 		/// <summary>
