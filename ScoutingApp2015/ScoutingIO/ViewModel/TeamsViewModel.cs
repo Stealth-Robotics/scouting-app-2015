@@ -28,6 +28,8 @@ namespace ScoutingIO.ViewModel
 				SaveFile();
 				_filePath = value;
 				OnPropertyChanged("FilePath");
+				OnPropertyChanged("PathBrush");
+				OnPropertyChanged("PathTooltip");
 			}
 		}
 		string _filePath;

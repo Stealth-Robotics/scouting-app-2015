@@ -177,6 +177,12 @@ namespace ScoutingData.Data
 		}
 
 		/// <summary>
+		/// A more DataGrid-friendly constructor
+		/// </summary>
+		public Match() : this(0, new Alliance(), new Alliance())
+		{ }
+
+		/// <summary>
 		/// Additional loading once deserialization is complete
 		/// </summary>
 		/// <param name="e">Event to load data from</param>

@@ -45,7 +45,9 @@
 							 BorderThickness="1"
 							 FontSize="14"
 							 Margin="0,0,5,0"
-							 Text="{Binding FilePath, Source={StaticResource ViewModel}}" />
+							 Text="{Binding FilePath, Source={StaticResource ViewModel}}"
+							 Foreground="{Binding PathBrush, Source={StaticResource ViewModel}}"
+							 ToolTip="{Binding PathTooltip, Source={StaticResource ViewModel}}" />
 			<Button x:Name="PathBtn"
 							Content="..."
 							Grid.Column="2"

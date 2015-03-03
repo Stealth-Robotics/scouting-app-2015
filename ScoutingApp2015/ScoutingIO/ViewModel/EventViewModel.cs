@@ -21,6 +21,8 @@ namespace ScoutingIO.ViewModel
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
+		TeamsList teamsList;
+
 		public FrcEvent Event
 		{
 			get
@@ -226,6 +228,11 @@ namespace ScoutingIO.ViewModel
 				Event = frc;
 				ScoutingJson.SaveEvent(Event, ned.Path);
 				EventPath = ned.Path;
+
+				if (teamsList != null)
+				{
+					Event.PostJsonLoading(teamsList);
+				}
 			}
 		}
 
@@ -280,8 +287,9 @@ namespace ScoutingIO.ViewModel
 		{
 			TeamsList list = e.Arg.Teams;
 
-			if (list != null)
+			if (list != null && Event != null)
 			{
+				teamsList = list;
 				Event.PostJsonLoading(list);
 				DoSendData();
 			}

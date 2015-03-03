@@ -229,7 +229,10 @@
 							ColumnHeaderHeight="24"
 							ItemsSource="{Binding Matches, Mode=TwoWay, Source={StaticResource ViewModel}}"
 							IsSynchronizedWithCurrentItem="True"
-							SelectedItem="{Binding SelectedMatchModel, Source={StaticResource ViewModel}}">
+							CanUserAddRows="True"
+							MinRowHeight="12"
+							SelectedItem="{Binding SelectedMatchModel, Source={StaticResource ViewModel}}"
+							SelectionMode="Single">
 			<i:Interaction.Triggers>
 				<!--
 				<i:EventTrigger EventName="SelectionChanged">

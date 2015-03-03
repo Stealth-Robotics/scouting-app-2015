@@ -75,13 +75,30 @@ namespace ScoutingIO
 		// Sort of a cheaty pipeline here
 		private void EventView_SendMatchesData(object sender, EventArgs<EventViewModel> e)
 		{
+			UpdateMatchTabEnabled();
+
 			MatchV.SendData(sender, e);
 			UpdateV.SendData(sender, e);
 			TeamsV.SendInitData();
 		}
 
+		private void UpdateMatchTabEnabled()
+		{
+			if (EventV.ViewModel.Event == null ||
+				TeamsV.ViewModel.Teams == null)
+			{
+				MatchTab.IsEnabled = false;
+			}
+			else
+			{
+				MatchTab.IsEnabled = true;
+			}
+		}
+
 		private void TeamsView_SendData(object sender, EventArgs<TeamsViewModel> e)
 		{
+			UpdateMatchTabEnabled();
+
 			EventV.SendTeamsData(sender, e);
 		}
 
@@ -89,6 +106,8 @@ namespace ScoutingIO
 		{
 			TeamsV.SendInitData();
 			EventV.SendInitData();
+
+			UpdateMatchTabEnabled();
 		}
 	}
 }

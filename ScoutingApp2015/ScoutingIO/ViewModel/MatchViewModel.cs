@@ -14,8 +14,6 @@ namespace ScoutingIO.ViewModel
 {
 	public class MatchViewModel : INotifyPropertyChanged
 	{
-		bool isRefreshingAboveStuff = false;
-
 		public EventViewModel EventVM
 		{
 			get
@@ -109,7 +107,7 @@ namespace ScoutingIO.ViewModel
 			{
 				if (SelectedMatch != null)
 				{
-					return SelectedMatch.RedAlliance.A.Number.ToString();
+					return SelectedMatch.RedAlliance.TeamA_ID.ToString();
 				}
 				else
 				{
@@ -169,7 +167,7 @@ namespace ScoutingIO.ViewModel
 			{
 				if (SelectedMatch != null)
 				{
-					return SelectedMatch.RedAlliance.B.Number.ToString();
+					return SelectedMatch.RedAlliance.TeamB_ID.ToString();
 				}
 				else
 				{
@@ -229,7 +227,7 @@ namespace ScoutingIO.ViewModel
 			{
 				if (SelectedMatch != null)
 				{
-					return SelectedMatch.RedAlliance.C.Number.ToString();
+					return SelectedMatch.RedAlliance.TeamC_ID.ToString();
 				}
 				else
 				{
@@ -289,7 +287,7 @@ namespace ScoutingIO.ViewModel
 			{
 				if (SelectedMatch != null)
 				{
-					return SelectedMatch.BlueAlliance.A.Number.ToString();
+					return SelectedMatch.BlueAlliance.TeamA_ID.ToString();
 				}
 				else
 				{
@@ -349,7 +347,7 @@ namespace ScoutingIO.ViewModel
 			{
 				if (SelectedMatch != null)
 				{
-					return SelectedMatch.BlueAlliance.B.Number.ToString();
+					return SelectedMatch.BlueAlliance.TeamB_ID.ToString();
 				}
 				else
 				{
@@ -409,7 +407,7 @@ namespace ScoutingIO.ViewModel
 			{
 				if (SelectedMatch != null)
 				{
-					return SelectedMatch.BlueAlliance.C.Number.ToString();
+					return SelectedMatch.BlueAlliance.TeamC_ID.ToString();
 				}
 				else
 				{
@@ -447,8 +445,6 @@ namespace ScoutingIO.ViewModel
 				}
 			}
 		}
-		string _blueC_Number_String;
-		int _blueC_Number;
 		public string BlueC_Tooltip
 		{
 			get
@@ -517,7 +513,7 @@ namespace ScoutingIO.ViewModel
 		// CTOR
 		public MatchViewModel()
 		{
-			//
+			MatchModel.ViewModel = this;
 
 			TeamPickCmd = new DoStuffWithStuffCommand((stuffWith) => 
 				{ OnTeamPick(stuffWith as string); }, obj => true);
@@ -574,11 +570,23 @@ namespace ScoutingIO.ViewModel
 
 		public void OnSelectedMatchModelChanged()
 		{
+			if (SelectedMatchModel == null)
+			{
+				SelectedMatch = null;
+				return;
+			}
+
 			SelectedMatch = SelectedMatchModel.GetMatch();
+			SaveAll();
 		}
 
 		public void DoInit()
 		{
+			if (EventVM.Event == null)
+			{
+				return;
+			}
+
 			SelectedMatch = EventVM.Event.Matches.FirstOrDefault();
 			OnPropertyChanged("Match_Number_String");
 			RefreshDatagrid();
@@ -589,7 +597,7 @@ namespace ScoutingIO.ViewModel
 			List<MatchModel> lmm = new List<MatchModel>();
 			foreach (Match m in EventVM.Event.Matches)
 			{
-				lmm.Add(new MatchModel(this, m));
+				lmm.Add(new MatchModel(m));
 			}
 
 			Matches = CollectionViewSource.GetDefaultView(lmm);
@@ -649,7 +657,9 @@ namespace ScoutingIO.ViewModel
 
 		public class MatchModel : INotifyPropertyChanged
 		{
-			MatchViewModel vm;
+			public static MatchViewModel ViewModel
+			{ get; set; }
+
 			Match match;
 
 			public int Number
@@ -664,7 +674,7 @@ namespace ScoutingIO.ViewModel
 					match.Number = value;
 
 					// it also switches to it too
-					vm.Match_Number_String = value.ToString();
+					ViewModel.Match_Number_String = value.ToString();
 					OnPropertyChanged("Number");
 				}
 			}
@@ -673,7 +683,7 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return match.RedAlliance.A.Number;
+					return match.RedAlliance.TeamA_ID;
 				}
 				set
 				{
@@ -685,7 +695,7 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return match.RedAlliance.B.Number;
+					return match.RedAlliance.TeamB_ID;
 				}
 				set
 				{
@@ -697,7 +707,7 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return match.RedAlliance.C.Number;
+					return match.RedAlliance.TeamC_ID;
 				}
 				set
 				{
@@ -709,7 +719,7 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return match.BlueAlliance.A.Number;
+					return match.BlueAlliance.TeamA_ID;
 				}
 				set
 				{
@@ -721,7 +731,7 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return match.BlueAlliance.B.Number;
+					return match.BlueAlliance.TeamB_ID;
 				}
 				set
 				{
@@ -733,7 +743,7 @@ namespace ScoutingIO.ViewModel
 			{
 				get
 				{
-					return match.BlueAlliance.C.Number;
+					return match.BlueAlliance.TeamC_ID;
 				}
 				set
 				{
@@ -744,15 +754,27 @@ namespace ScoutingIO.ViewModel
 
 			public event PropertyChangedEventHandler PropertyChanged;
 
-			public MatchModel(MatchViewModel arg_vm, Match arg_match)
+			public MatchModel(Match arg_match)
 			{
-				vm = arg_vm;
 				match = arg_match;
+
+				if (ViewModel.EventVM.Event == null)
+				{
+					return;
+				}
+
+				if (!ViewModel.EventVM.Event.Matches.Exists((m) => m.Number == match.Number))
+				{
+					ViewModel.EventVM.Event.Matches.Add(match);
+				}
 			}
+
+			public MatchModel() : this(new Match())
+			{ }
 
 			public Team LoadTeam(int id)
 			{
-				return vm.EventVM.Event.LoadTeam(id);
+				return ViewModel.EventVM.Event.LoadTeam(id);
 			}
 
 			public void OnPropertyChanged(string propName)

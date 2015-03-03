@@ -200,7 +200,18 @@ namespace ScoutingData
 
 		public static bool HasRecordInFolder(string folderPath)
 		{
-			foreach (string filename in Directory.EnumerateFiles(folderPath))
+			IEnumerable<string> allFiles = new List<string>();
+
+			try
+			{
+				allFiles = Directory.EnumerateFiles(folderPath);
+			}
+			catch (IOException e)
+			{
+				Util.DebugLog(LogLevel.Warning, "Error enumerating files: " + e.Message);
+			}
+
+			foreach (string filename in allFiles)
 			{
 				if (filename.EndsWith(MatchRecordExtension))
 				{

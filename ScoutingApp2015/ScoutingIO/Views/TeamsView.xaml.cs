@@ -23,7 +23,7 @@ namespace ScoutingIO.Views
 	{
 		bool isSending = false;
 
-		TeamsViewModel ViewModel
+		public TeamsViewModel ViewModel
 		{
 			get
 			{
