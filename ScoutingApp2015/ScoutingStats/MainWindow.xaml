@@ -1,0 +1,17 @@
+﻿<e:Window x:Class="ScoutingStats.MainWindow"
+					xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:e="http://schemas.codeplex.com/elysium"
+					xmlns:par="http://schemas.codeplex.com/elysium/params"
+					par:Design.AccentBrush="{x:Static e:AccentBrushes.Red}"
+					par:Manager.AccentBrush="{x:Static e:AccentBrushes.Red}"
+					par:Design.ContrastBrush="Black"
+					par:Manager.ContrastBrush="Black"
+					par:Design.Theme="Light"
+					par:Manager.Theme="Light"
+					Title="Scouting Stats" Height="350" Width="525"
+					Background="#FFF1F1F1">
+  <Grid>
+    
+  </Grid>
+</e:Window>
