@@ -73,7 +73,8 @@
 							Content="BREAK"
 							Width="96"
 							Margin="5,0,0,0"
-							Click="BreakBtn_Click" />
+							Click="BreakBtn_Click"
+							Visibility="Collapsed" />
 		</StackPanel>
 	</Grid>
 </e:Window>

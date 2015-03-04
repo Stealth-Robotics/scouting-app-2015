@@ -124,7 +124,8 @@
 							Width="195"
 							Grid.ColumnSpan="2"
 							Height="55"
-							Command="{Binding BreakCmd, Mode=OneWay, Source={StaticResource ViewModel}}" />
+							Command="{Binding BreakCmd, Mode=OneWay, Source={StaticResource ViewModel}}"
+							Visibility="Collapsed" />
 		</Grid>
 	</Grid>
 </UserControl>

@@ -221,7 +221,8 @@
 							HorizontalAlignment="Center"
 							Grid.Column="3"
 							Grid.Row="1"
-							Command="{Binding BreakCmd, Mode=OneWay, Source={StaticResource ViewModel}}" />
+							Command="{Binding BreakCmd, Mode=OneWay, Source={StaticResource ViewModel}}"
+							Visibility="Collapsed" />
 		</Grid>
 
 		<DataGrid x:Name="MatchesDataGrid"
