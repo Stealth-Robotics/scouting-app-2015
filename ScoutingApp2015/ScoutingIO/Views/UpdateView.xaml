@@ -15,6 +15,7 @@
 						 d:DesignHeight="400"
 						 d:DesignWidth="200">
 	<UserControl.Resources>
+		<BooleanToVisibilityConverter x:Key="BoolToVis" />
 		<vm:UpdateViewModel x:Key="ViewModel">
 			<vm:UpdateViewModel.CheckedPaths>
 				<vm:UpdateModel Path="H:\"
@@ -22,12 +23,14 @@
 				<vm:UpdateModel Path="E:\"
 												IsSelected="False" />
 			</vm:UpdateViewModel.CheckedPaths>
-			
+
 		</vm:UpdateViewModel>
 	</UserControl.Resources>
 
-	<Grid Margin="5">
+	<Grid Margin="5,5,10,5">
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -36,16 +39,43 @@
 
 		<TextBlock Text="Update"
 							 FontSize="16"
-							 FontWeight="SemiBold" />
+							 FontWeight="Bold" />
+		<Grid Grid.Row="1"
+					Margin="0,5">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<TextBlock Text="Match #:"
+								 FontWeight="SemiBold"
+								 VerticalAlignment="Center"
+								 Margin="0,0,5,0" />
+			<TextBox x:Name="MatchNumberBox"
+							 Grid.Column="1"
+							 BorderThickness="1"
+							 HorizontalContentAlignment="Center"
+							 Text="{Binding SelectedMatchID_String, Source={StaticResource ViewModel}}"
+							 FontSize="14" />
+		</Grid>
+		
+		<e:ProgressBar Grid.Row="2"
+									 Margin="0"
+									 Background="{x:Null}"
+									 Height="6"
+									 MinHeight="0"
+									 Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}, 
+										 Mode=OneWay, Source={StaticResource ViewModel}}"
+									 State="Indeterminate" />
 		<ListBox x:Name="PathsList"
-						 Grid.Row="1"
+						 Grid.Row="3"
 						 SelectedIndex="-1"
 						 IsSynchronizedWithCurrentItem="True"
-						 ItemsSource="{Binding CheckedPaths, 
-			Source={StaticResource ViewModel}}"
-						 Margin="0,5"
+						 ItemsSource="{Binding CheckedPaths, Source={StaticResource ViewModel}}"
+						 Margin="0,0,0,5"
 						 BorderThickness="1"
-						 Focusable="False">
+						 Focusable="False"
+						 SelectedItem="{Binding SelectedPathModel, Source={StaticResource ViewModel}}">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<CheckBox Content="{Binding Path}"
@@ -54,8 +84,8 @@
 			</ListBox.ItemTemplate>
 		</ListBox>
 
-		<Grid x:Name="IndicatorGrid" 
-					Grid.Row="2"
+		<Grid x:Name="IndicatorGrid"
+					Grid.Row="4"
 					Margin="0,0,0,5">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
@@ -73,7 +103,8 @@
 								 FontWeight="{Binding RedA.Bold, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 Foreground="{Binding RedA.Foreground, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 FontFamily="Segoe UI Mono"
-								 HorizontalAlignment="Center" />
+								 HorizontalAlignment="Center"
+								 ToolTip="These will turn on when Match Records are loaded." />
 			<TextBlock Text="{Binding RedB.TeamNumber_String, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 Grid.Column="0"
 								 Grid.Row="1"
@@ -81,21 +112,24 @@
 								 Foreground="{Binding RedB.Foreground, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 FontFamily="Segoe UI Mono"
 								 HorizontalAlignment="Center"
-								 Margin="0,3" />
+								 Margin="0,3"
+								 ToolTip="These will turn on when Match Records are loaded." />
 			<TextBlock Text="{Binding RedC.TeamNumber_String, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 Grid.Column="0"
 								 Grid.Row="2"
 								 FontWeight="{Binding RedC.Bold, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 Foreground="{Binding RedC.Foreground, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 FontFamily="Segoe UI Mono"
-								 HorizontalAlignment="Center" />
+								 HorizontalAlignment="Center"
+								 ToolTip="These will turn on when Match Records are loaded." />
 			<TextBlock Text="{Binding BlueA.TeamNumber_String, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 Grid.Column="1"
 								 Grid.Row="0"
 								 FontWeight="{Binding BlueA.Bold, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 Foreground="{Binding BlueB.Foreground, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 FontFamily="Segoe UI Mono"
-								 HorizontalAlignment="Center" />
+								 HorizontalAlignment="Center"
+								 ToolTip="These will turn on when Match Records are loaded." />
 			<TextBlock Text="{Binding BlueB.TeamNumber_String, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 Grid.Column="1"
 								 Grid.Row="1"
@@ -103,32 +137,42 @@
 								 Foreground="{Binding BlueB.Foreground, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 FontFamily="Segoe UI Mono"
 								 HorizontalAlignment="Center"
-								 Margin="0,3" />
+								 Margin="0,3"
+								 ToolTip="These will turn on when Match Records are loaded." />
 			<TextBlock Text="{Binding BlueC.TeamNumber_String, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 Grid.Column="1"
 								 Grid.Row="2"
 								 FontWeight="{Binding BlueC.Bold, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 Foreground="{Binding BlueC.Foreground, Mode=OneWay, Source={StaticResource ViewModel}}"
 								 FontFamily="Segoe UI Mono"
-								 HorizontalAlignment="Center" />
+								 HorizontalAlignment="Center"
+								 ToolTip="These will turn on when Match Records are loaded." />
 		</Grid>
 
-		<StackPanel Grid.Row="3">
+		<StackPanel Grid.Row="5">
 			<CheckBox x:Name="CheckAllAutomatically"
 								Grid.Row="2"
 								Content="Check for New Drives"
 								Margin="5,0,5,5"
 								IsChecked="{Binding CheckForNewFolders, 
-				Source={StaticResource ViewModel}}" />
+				Source={StaticResource ViewModel}}"
+								ToolTip="Automatically check for new drives with records every 2 sec." />
 			<CheckBox x:Name="ProcessAllAutomatically"
 								Grid.Row="3"
 								Content="Process All"
 								IsChecked="{Binding ProcessAllNewFolders, 
 				Source={StaticResource ViewModel}}"
-								Margin="5,0" />
+								Margin="5,0"
+								ToolTip="Automatically process any drives with record files." />
 			<Button x:Name="ProcessSelected"
 							Content="Process Selected Drive"
-							Margin="0,5,0,0" />
+							Margin="0,5,0,0"
+							Command="{Binding ProcessSelectedCmd, Mode=OneWay, Source={StaticResource ViewModel}}" />
+			<Button x:Name="MergeMatchesBtn"
+							Content="Merge Match Records"
+							Margin="0,5,0,0"
+							Command="{Binding MergeMatchCmd, Mode=OneWay, Source={StaticResource ViewModel}}"
+							IsEnabled="{Binding CanMerge, Mode=OneWay, Source={StaticResource ViewModel}}" />
 		</StackPanel>
 	</Grid>
 </UserControl>

@@ -354,12 +354,12 @@ namespace ScoutingData.Data
 
 		public override string ToString()
 		{
-			return RedAlliance.A.Number.ToString() + "-" +
-				RedAlliance.B.Number.ToString() + "-" +
-				RedAlliance.C.Number.ToString() + " vs " +
-				BlueAlliance.A.Number.ToString() + "-" +
-				BlueAlliance.B.Number.ToString() + "-" +
-				BlueAlliance.C.Number.ToString();
+			return RedAlliance.TeamA_ID.ToString() + "-" +
+				RedAlliance.TeamB_ID.ToString() + "-" +
+				RedAlliance.TeamC_ID.ToString() + " vs " +
+				BlueAlliance.TeamA_ID.ToString() + "-" +
+				BlueAlliance.TeamB_ID.ToString() + "-" +
+				BlueAlliance.TeamC_ID.ToString();
 		}
 	}
 }

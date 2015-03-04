@@ -152,7 +152,8 @@
 
 					<TabItem Header="Teleop"
 									 par:Design.AccentBrush="{x:Static e:AccentBrushes.Green}"
-									 par:Manager.AccentBrush="{x:Static e:AccentBrushes.Sky}">
+									 par:Manager.AccentBrush="{x:Static e:AccentBrushes.Sky}"
+									 PreviewKeyDown="TabItem_PreviewKeyDown">
 						<!--Main Teleop Grid-->
 						<Grid Margin="5,0,5,5">
 							<Grid.ColumnDefinitions>
@@ -411,7 +412,7 @@
 
 			<e:ProgressBar x:Name="TimeBar"
 										 Height="Auto"
-										 Maximum="135"
+										 Maximum="150"
 										 Value="0"
 										 Style="{DynamicResource ProgressBarWide}"
 										 Foreground="SteelBlue"

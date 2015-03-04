@@ -61,6 +61,7 @@ namespace ScoutingApp
 		{
 			Record = record;
 			GlobalPosition = globalPos;
+			Record.Winner = AllianceColor.Red;
 
 			InitializeComponent();
 		}

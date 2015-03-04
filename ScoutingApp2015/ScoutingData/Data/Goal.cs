@@ -113,9 +113,12 @@ namespace ScoutingData.Data
 			get
 			{
 				string res = string.Format(@"[{0:m\:ss}]", TimeScored);
-				res += string.Format(@"[{0:D2}]", PointValue()) + ": ";
+				res += string.Format(@" [{0:D2}]", PointValue()) + ": ";
 				res += Type.GetDescription();	// Alternative to ToString(). See
-				return res;						// extension method for details.
+												// extension method for details.
+				res += " (" + (ScoringAlliance ?? 
+					AllianceColor.Indeterminate).GetDescription() + ")";
+				return res;						
 			}
 		}
 
@@ -192,7 +195,7 @@ namespace ScoutingData.Data
 		/// <param name="alliance">True if scored by the entire alliance</param>
 		/// <param name="global">True if scored by all participating teams (coopertition)</param>
 		internal Goal(GoalType type, int timeScored, Team scorer, AllianceColor? scorerAl, 
-			bool auto, bool? stack, int? level, bool alliance, bool global)
+			bool auto, bool? stack, int? level, bool alliance, bool global, int dummy)
 		{
 			Type = type;
 			TimeScoredInt = timeScored;
@@ -207,6 +210,25 @@ namespace ScoutingData.Data
 			FullAlliance = alliance;
 			Global = global;
 			Level = level;
+		}
+
+		/// <summary>
+		/// Because Json.NET needs its own constructor.
+		/// </summary>
+		[JsonConstructor]
+		internal Goal(GoalType Type, int TimeScoredInt, int? ScoringTeamID, 
+			AllianceColor? ScoringAlliance, bool Autonomous, bool? Stack,
+			int? Level, bool FullAlliance, bool Global)
+		{
+			this.Type = Type;
+			this.TimeScoredInt = TimeScoredInt;
+			this.ScoringTeamID = ScoringTeamID;
+			this.ScoringAlliance = ScoringAlliance;
+			this.Autonomous = Autonomous;
+			this.Stack = Stack;
+			this.Level = Level;
+			this.FullAlliance = FullAlliance;
+			this.Global = Global;
 		}
 
 		public override string ToString()
@@ -237,17 +259,12 @@ namespace ScoutingData.Data
 		/// <returns>Color for whom the goal's points went to</returns>
 		public AllianceColor GetScoringAlliance(Match match)
 		{
-			if (Global)
+			if (Global || ScoringAlliance == null)
 			{
 				return AllianceColor.Indeterminate;
 			}
 
-			if (FullAlliance)
-			{
-				return ScoringAlliance.Value;
-			}
-
-			return match.GetTeamColor(ScoringTeam);
+			return ScoringAlliance.Value;
 		}
 
 		/// <summary>
@@ -297,8 +314,8 @@ namespace ScoutingData.Data
 		/// <returns>New Goal of the type Robot Set</returns>
 		public static Goal MakeRobotSet(AllianceColor alliance)
 		{
-			return new Goal(GoalType.RobotSet, Util.TELEOP.CountedSeconds(), null, alliance, 
-				true, null, null, true, false);
+			return new Goal(GoalType.RobotSet, Util.TELEOP.CountedSeconds(), null, alliance,
+				true, null, null, true, false, 0);
 		}
 		/// <summary>
 		/// Instantiates a (Yellow) Tote Set goal (TOTE SET). Can be stacked. [AUTO]
@@ -308,8 +325,8 @@ namespace ScoutingData.Data
 		/// <returns>New Goal of type Yellow Tote Set</returns>
 		public static Goal MakeYellowToteSet(bool stacked, AllianceColor alliance)
 		{
-			return new Goal(GoalType.YellowToteSet, Util.TELEOP.CountedSeconds(), null, alliance, 
-				true, stacked, null, true, false);
+			return new Goal(GoalType.YellowToteSet, Util.TELEOP.CountedSeconds(), null, alliance,
+				true, stacked, null, true, false, 0);
 		}
 		/// <summary>
 		/// Instantiates a Container Set goal (CONTAINER SET). [AUTO]
@@ -318,8 +335,8 @@ namespace ScoutingData.Data
 		/// <returns>New Goal of type Container Set</returns>
 		public static Goal MakeContainerSet(AllianceColor alliance)
 		{
-			return new Goal(GoalType.ContainerSet, Util.TELEOP.CountedSeconds(), null, alliance, 
-				true, null, null, true, false);
+			return new Goal(GoalType.ContainerSet, Util.TELEOP.CountedSeconds(), null, alliance,
+				true, null, null, true, false, 0);
 		}
 		/// <summary>
 		/// Instantiates a Coopertition goal (COOPERTITION).
@@ -329,8 +346,8 @@ namespace ScoutingData.Data
 		/// <returns>New Goal of type Coopertition</returns>
 		public static Goal MakeCoopertition(bool stacked, int time)
 		{
-			return new Goal(GoalType.Coopertition, time, null, null, time > Util.TELEOP.CountedSeconds(), 
-				stacked, null, false, true);
+			return new Goal(GoalType.Coopertition, time, null, null, time > Util.TELEOP.CountedSeconds(),
+				stacked, null, false, true, 0);
 		}
 		/// <summary>
 		/// Instantiates a Tote goal (TOTE).
@@ -338,9 +355,9 @@ namespace ScoutingData.Data
 		/// <param name="team">Team who placed the tote</param>
 		/// <param name="time">Time at which the tote was placed</param>
 		/// <returns>New Goal of type Gray Tote</returns>
-		public static Goal MakeGrayTote(Team team, int time)
+		public static Goal MakeGrayTote(Team team, int time, AllianceColor col)
 		{
-			return new Goal(GoalType.GrayTote, time, team, null, false, null, null, false, false);
+			return new Goal(GoalType.GrayTote, time, team, col, false, null, null, false, false, 0);
 		}
 		/// <summary>
 		/// Instantiates a Contanier goal (CONTAINER).
@@ -349,9 +366,9 @@ namespace ScoutingData.Data
 		/// <param name="team">Team who placed the container</param>
 		/// <param name="time">Time at which the container was placed</param>
 		/// <returns>New Goal of type Container</returns>
-		public static Goal MakeContainerTeleop(int level, Team team, int time)
+		public static Goal MakeContainerTeleop(int level, Team team, int time, AllianceColor col)
 		{
-			return new Goal(GoalType.ContainerTeleop, time, team, null, false, null, level, false, false);
+			return new Goal(GoalType.ContainerTeleop, time, team, col, false, null, level, false, false, 0);
 		}
 		/// <summary>
 		/// Instantiates a Recycled Litter goal (RECYCLED LITTER).
@@ -359,9 +376,9 @@ namespace ScoutingData.Data
 		/// <param name="team">Team who recycled the litter</param>
 		/// <param name="time">Time at which the litter was recycled</param>
 		/// <returns>New Goal of type Recycled Litter</returns>
-		public static Goal MakeRecycledLitter(Team team, int time)
+		public static Goal MakeRecycledLitter(Team team, int time, AllianceColor col)
 		{
-			return new Goal(GoalType.RecycledLitter, time, team, null, false, null, null, false, false);
+			return new Goal(GoalType.RecycledLitter, time, team, col, false, null, null, false, false, 0);
 		}
 		/// <summary>
 		/// Instantiates a Landfill Litter goal (LANDFILL LITTER).
@@ -370,8 +387,8 @@ namespace ScoutingData.Data
 		/// <returns>New Goal of type Landfill Litter</returns>
 		public static Goal MakeLandfillLitter(AllianceColor alliance)
 		{
-			return new Goal(GoalType.LandfillLitter, Util.MATCH_LENGTH.CountedSeconds(), null, alliance, 
-				false, null, null, true, false);
+			return new Goal(GoalType.LandfillLitter, Util.MATCH_LENGTH.CountedSeconds(), null, alliance,
+				false, null, null, true, false, 0);
 		}
 		/// <summary>
 		/// Instantiates an Unprocessed Litter goal (UNPROCESSED LITTER).
@@ -384,7 +401,7 @@ namespace ScoutingData.Data
 		public static Goal MakeUnprocessedLitter(AllianceColor alliance)
 		{
 			return new Goal(GoalType.UnprocessedLitter, Util.MATCH_LENGTH.CountedSeconds(), null, alliance, 
-				false, null, null, true, false);
+				false, null, null, true, false, 0);
 		}
 		#endregion
 	}

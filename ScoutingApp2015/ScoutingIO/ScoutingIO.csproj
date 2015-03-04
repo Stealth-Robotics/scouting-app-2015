@@ -98,6 +98,9 @@
     <Compile Include="Dialogs\NewTeamDialog.xaml.cs">
       <DependentUpon>NewTeamDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\TeamSelectionDialog.xaml.cs">
+      <DependentUpon>TeamSelectionDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GenericEventArgs.cs" />
     <Compile Include="ViewModel\DoStuffCommand.cs" />
     <Compile Include="ViewModel\DoStuffWithStuffCommand.cs" />
@@ -126,6 +129,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\NewTeamDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\TeamSelectionDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

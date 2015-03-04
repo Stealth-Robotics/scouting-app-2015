@@ -138,6 +138,8 @@ namespace ScoutingApp
 
 		public void EndGame()
 		{
+			AddAllUnprocessedLitter();
+
 			GameInProgress = false;
 			PenaltyBtn.IsEnabled = false;
 
@@ -148,6 +150,7 @@ namespace ScoutingApp
 			TimeBtn.Content = "Start";
 			TimeBtn.IsEnabled = false;
 			TimeBar.Value = 0;
+			StopBtn.IsEnabled = false;
 		}
 
 		public void SetEnabledAuto(bool en)
@@ -246,6 +249,23 @@ namespace ScoutingApp
 			GoalsList.Items.Add(item);
 		}
 
+		public void AddAllUnprocessedLitter()
+		{
+			int count = 0;
+			bool worked = int.TryParse(UnprocessedLitterCount.Text, out count);
+
+			if (!worked)
+			{
+				Util.DebugLog(LogLevel.Error, "Unprocessed litter count cannot be parsed.");
+				return;
+			}
+
+			for (int i = 0; i < count; i++)
+			{
+				AddGoal(Goal.MakeUnprocessedLitter(Color));
+			}
+		}
+
 		public void PauseTimer()
 		{
 			DispTimer.Stop();
@@ -259,6 +279,21 @@ namespace ScoutingApp
 			Watch.Start();
 
 			StopBtn.IsEnabled = false;
+		}
+
+		public void PregameReset()
+		{
+			GoalsList.Items.Clear();
+			TimeBtn.IsEnabled = true;
+			RobotSetToggle.IsChecked = false;
+			ToteSetToggle.IsChecked = false;
+			ContainerSetToggle.IsChecked = false;
+			Time = TimeSpan.Zero;
+			Watch.Reset();
+			TimeBar.Value = 0;
+			UnprocessedLitterCount.Text = "0";
+			SaveBtn.IsEnabled = false;
+			TimeBar.Foreground = new SolidColorBrush(AUTO_COLOR);
 		}
 
 		#region Event Handlers
@@ -353,12 +388,12 @@ namespace ScoutingApp
 
 		private void GrayToteBtn_Click(object sender, RoutedEventArgs e)
 		{
-			AddGoal(Goal.MakeGrayTote(SelectedTeam, Time.CountedSeconds()));
+			AddGoal(Goal.MakeGrayTote(SelectedTeam, Time.CountedSeconds(), Color));
 		}
 
 		private void RecycledLitterBtn_Click(object sender, RoutedEventArgs e)
 		{
-			AddGoal(Goal.MakeRecycledLitter(SelectedTeam, Time.CountedSeconds()));
+			AddGoal(Goal.MakeRecycledLitter(SelectedTeam, Time.CountedSeconds(), Color));
 		}
 
 		private void CoopertitionStackedBtn_Click(object sender, RoutedEventArgs e)
@@ -390,7 +425,7 @@ namespace ScoutingApp
 		private void RecyclingBtn_Click(object sender, RoutedEventArgs e)
 		{
 			AddGoal(Goal.MakeContainerTeleop((int)RecyclingLevelSlider.Value, SelectedTeam,
-				Time.CountedSeconds()));
+				Time.CountedSeconds(), Color));
 		}
 
 		#endregion
@@ -448,7 +483,6 @@ namespace ScoutingApp
 			int index = TeamsDropDown.SelectedIndex;
 
 			SelectedTeam = PregameMatch.GetTeamByInclusiveIndex(index);
-
 			Color = PregameMatch.GetTeamColor(SelectedTeam);
 
 			Record = new RecordedMatch(Record.MatchNumber, SelectedTeam, Color);
@@ -461,6 +495,8 @@ namespace ScoutingApp
 			{
 				TeamInfoBtn.Background = new SolidColorBrush(BLUE_ALLIANCE);
 			}
+
+			PregameReset();
 
 			UpdateInfoTooltip();
 		}
@@ -532,6 +568,12 @@ namespace ScoutingApp
 			SaveOverlay saveOverlay = new SaveOverlay(Record, TeamsDropDown.SelectedIndex);
 			saveOverlay.Owner = System.Windows.Window.GetWindow(this);
 			bool? result = saveOverlay.ShowDialog();
+
+			if (result == true) // Nullable<bool>
+			{
+				GoalsList.Items.Clear();
+				PregameReset();
+			}
 		}
 
 		private void StopBtn_Click(object sender, RoutedEventArgs e)
@@ -585,13 +627,28 @@ namespace ScoutingApp
 			UpdateInfoTooltip();
 		}
 
-		#endregion
-
 		private void ConfigBtn_Click(object sender, RoutedEventArgs e)
 		{
 			ConfigOverlay cfg = new ConfigOverlay();
 			cfg.ShowDialog();
 		}
+
+		private void TabItem_PreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Up)
+			{
+				RecyclingLevelSlider.Value = Math.Min(RecyclingLevelSlider.Value + 1, 
+					RecyclingLevelSlider.Maximum);
+				e.Handled = true;
+			}
+			if (e.Key == Key.Down)
+			{
+				RecyclingLevelSlider.Value = Math.Max(RecyclingLevelSlider.Value - 1, 
+					RecyclingLevelSlider.Minimum);
+			}
+		}
+
+		#endregion
 	}
 
 	public class TeamDataContext

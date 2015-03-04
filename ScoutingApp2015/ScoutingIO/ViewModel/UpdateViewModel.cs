@@ -25,6 +25,53 @@ namespace ScoutingIO.ViewModel
 		public FrcEvent Event
 		{ get; private set; }
 
+		public string SelectedMatchID_String
+		{
+			get
+			{
+				return _selectedMatchID.ToString();
+			}
+			set
+			{
+				int i = _selectedMatchID;
+				bool worked = int.TryParse(value, out i);
+				if (worked)
+				{
+					bool changed = (i != _selectedMatchID); 
+
+					_selectedMatchID = i;
+					OnPropertyChanged("SelectedMatchID_String");
+					if (Event != null)
+					{
+						UpdateIndicators(Event.LoadMatch(i));
+					}
+				}
+			}
+		}
+		int _selectedMatchID;
+
+		public bool CanMerge
+		{
+			get
+			{
+				return Records.Count((rec) => rec != null) >= Merging.MATCH_NOT_ENOUGH_DATA_THRESHOLD;
+			}
+		}
+
+		public bool IsLoading
+		{
+			get
+			{
+				return _isLoading;
+			}
+			private set
+			{
+				_isLoading = value;
+				OnPropertyChanged("IsLoading");
+			}
+		}
+		bool _isLoading;
+
 		public DispatcherTimer SuperTimer
 		{ get; private set; }
 
@@ -90,7 +137,24 @@ namespace ScoutingIO.ViewModel
 		}
 		ObservableCollection<UpdateModel> _checkedPaths;
 
+		public UpdateModel SelectedPathModel
+		{
+			get
+			{
+				return _selectedPathModel;
+			}
+			set
+			{
+				_selectedPathModel = value;
+				OnPropertyChanged("SelectedPathModel");
+			}
+		}
+		UpdateModel _selectedPathModel;
+
 		public ICommand ProcessSelectedCmd
+		{ get; private set; }
+
+		public ICommand MergeMatchCmd
 		{ get; private set; }
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -99,6 +163,10 @@ namespace ScoutingIO.ViewModel
 		{
 			_checkedPaths = new ObservableCollection<UpdateModel>();
 
+			ProcessSelectedCmd = new DoStuffCommand(() => 
+				ProcessPath(SelectedPathModel), obj => true);
+			MergeMatchCmd = new DoStuffCommand(MergeMatchRecords, obj => true);
+
 			SuperTimer = new DispatcherTimer();
 			SuperTimer.Interval = TimeSpan.FromSeconds(2);
 			SuperTimer.Tick += SuperTimer_Tick;
@@ -106,14 +174,14 @@ namespace ScoutingIO.ViewModel
 
 			Records = new RecordedMatch[6];
 
-			bool prettifySetup = true;
+			bool prettifySetup = false;
 
-			RedA = new TeamIndicator(false, 1111);
-			RedB = new TeamIndicator(false, 2222);
-			RedC = new TeamIndicator(false, 3333);
-			BlueA = new TeamIndicator(true, 4444);
-			BlueB = new TeamIndicator(true, 5555);
-			BlueC = new TeamIndicator(true, 6666);
+			RedA = new TeamIndicator(false, -1);
+			RedB = new TeamIndicator(false, -1);
+			RedC = new TeamIndicator(false, -1);
+			BlueA = new TeamIndicator(true, -1);
+			BlueB = new TeamIndicator(true, -1);
+			BlueC = new TeamIndicator(true, -1);
 			
 			if (prettifySetup)
 			{
@@ -129,18 +197,23 @@ namespace ScoutingIO.ViewModel
 		// Check for files if Process All is on
 		public void SuperTimer_Tick(object sender, EventArgs e)
 		{
-			
+			IsLoading = true;
 			CheckForRecordData();
 
 			if (!ProcessAllNewFolders)
 			{
+				IsLoading = false;
 				return;
 			}
 
 			foreach (UpdateModel m in CheckedPaths)
 			{
-				// process them
+				if (m.IsSelected)
+				{
+					ProcessPath(m);
+				}
 			}
+			IsLoading = false;
 		}
 
 		public void CheckForRecordData()
@@ -154,6 +227,8 @@ namespace ScoutingIO.ViewModel
 				CheckedPaths.Add(added);
 			}
 			OnPropertyChanged("CheckedPaths");
+
+			SelectedPathModel = CheckedPaths.FirstOrDefault((um) => um.IsSelected);
 		}
 
 		public void OnPropertyChanged(string prop)
@@ -164,14 +239,15 @@ namespace ScoutingIO.ViewModel
 			}
 		}
 
-		public void ProcessPath(object selectedPathObj)
+		public void ProcessPath(UpdateModel model)
 		{
-			UpdateModel upm = selectedPathObj as UpdateModel;
-
-			if (upm == null)
+			if (model == null)
 			{
 				return;
 			}
+
+			LoadAndTransferRecords(model.Path);
+			UpdateTeamsAndEvent(model.Path);
 		}
 
 		public void LoadAndTransferRecords(string path)
@@ -191,9 +267,38 @@ namespace ScoutingIO.ViewModel
 				int position = GetPositionFromFilename(fn);
 
 				RecordedMatch rec = ScoutingJson.ParseMatchRecord(f);
+				rec.PostJsonLoading(Event);
 				Records[position] = rec;
+				OnPropertyChanged("CanMerge");
+
+				MarkReady(position);
 
 				bool result = MoveFileToEventPath(f);
+			}
+		}
+
+		public void MarkReady(int position)
+		{
+			switch (position)
+			{
+			case 0:
+				RedA.IsReady = true;
+				break;
+			case 1:
+				RedB.IsReady = true;
+				break;
+			case 2:
+				RedC.IsReady = true;
+				break;
+			case 3:
+				BlueA.IsReady = true;
+				break;
+			case 4:
+				BlueB.IsReady = true;
+				break;
+			case 5:
+				BlueC.IsReady = true;
+				break;
 			}
 		}
 
@@ -222,9 +327,33 @@ namespace ScoutingIO.ViewModel
 		{
 			if (Event.AllTeams != null)
 			{
-				ScoutingJson.SaveTeamsList(Event.AllTeams, path);
+				ScoutingJson.SaveTeamsList(Event.AllTeams, path + 
+					"Teams" + ScoutingJson.TeamsListExtension);
 			}
-			ScoutingJson.SaveEvent(Event, path);
+			ScoutingJson.SaveEvent(Event, path +
+				Event.EventName + ScoutingJson.EventExtension);
+		}
+
+		public void UpdateIndicators(Match match)
+		{
+			if (match == null)
+			{
+				RedA.SetNumber(-1);
+				RedB.SetNumber(-1);
+				RedC.SetNumber(-1);
+				BlueA.SetNumber(-1);
+				BlueB.SetNumber(-1);
+				BlueC.SetNumber(-1);
+
+				return;
+			}
+
+			RedA.SetNumber(match.RedAlliance.TeamA_ID);
+			RedB.SetNumber(match.RedAlliance.TeamB_ID);
+			RedC.SetNumber(match.RedAlliance.TeamC_ID);
+			BlueA.SetNumber(match.BlueAlliance.TeamA_ID);
+			BlueB.SetNumber(match.BlueAlliance.TeamB_ID);
+			BlueC.SetNumber(match.BlueAlliance.TeamC_ID);
 		}
 
 		public void MergeMatchRecords()
@@ -250,6 +379,38 @@ namespace ScoutingIO.ViewModel
 
 			ScoutingJson.SaveEvent(Event, SavePath + Event.EventName + 
 				ScoutingJson.EventExtension);
+
+			ArchiveRecords(merged.Number);
+			Records = new RecordedMatch[6];
+			OnPropertyChanged("CanMerge");
+		}
+
+		public void ArchiveRecords(int matchNum)
+		{
+			string subPath = SavePath + (SavePath.EndsWith("\\") ? "" : "\\") + 
+				matchNum.ToString() + "\\";
+			Directory.CreateDirectory(subPath);
+
+			List<string> files = Directory.EnumerateFiles(SavePath,
+				"*" + ScoutingJson.MatchRecordExtension,
+				SearchOption.TopDirectoryOnly).ToList();
+			
+			foreach (string file in files)
+			{
+				try
+				{
+					File.Move(file, subPath + Util.GetFileName(file, true));
+				}
+				catch (Exception e)
+				{
+					string msg = "Could not move file " + Util.GetFileName(file, true);
+					Util.DebugLog(LogLevel.Error, msg);
+					MessageBox.Show(msg + "\n\n" + e.Message, "Error",
+						MessageBoxButton.OK, MessageBoxImage.Error);
+					ProcessAllNewFolders = false;
+					return;
+				}
+			}
 		}
 
 		private static int GetPositionFromFilename(string filename)
@@ -277,6 +438,7 @@ namespace ScoutingIO.ViewModel
 		{
 			Event = e.Arg.Event;
 			SavePath = Util.GetFolderPath(e.Arg.EventPath);
+			CheckForRecordData();
 		}
 	}
 
@@ -396,7 +558,14 @@ namespace ScoutingIO.ViewModel
 		{
 			get
 			{
-				return _teamNumber_String;
+				if (_teamNumber_String == "-1")
+				{
+					return "----";
+				}
+				else
+				{
+					return _teamNumber_String;
+				}
 			}
 			private set
 			{
@@ -420,6 +589,11 @@ namespace ScoutingIO.ViewModel
 			{
 				PropertyChanged(this, new PropertyChangedEventArgs(property));
 			}
+		}
+
+		public void SetNumber(int num)
+		{
+			TeamNumber_String = num.ToString();
 		}
 	}
 }

@@ -272,6 +272,11 @@ namespace ScoutingIO.ViewModel
 
 		public void SaveAll()
 		{
+			if (Event == null)
+			{
+				return;
+			}
+
 			ScoutingJson.SaveEvent(Event, EventPath);
 		}
 

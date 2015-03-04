@@ -94,6 +94,10 @@ namespace ScoutingData.Data
 			Reasoning = reason;
 			PenalizedAlliance = penalizedAlliance;
 			BlamedTeam = team;
+			if (BlamedTeam != null)
+			{
+				BlamedTeamID = team.Number;
+			}
 		}
 
 		/// <summary>

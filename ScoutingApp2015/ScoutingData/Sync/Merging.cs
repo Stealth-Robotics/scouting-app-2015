@@ -94,16 +94,25 @@ namespace ScoutingData.Sync
 			Match result = new Match(matchID, red, blue);
 			result.Pregame = false;
 
-			double dRedLitter = redData.ToList().ConvertAll<int>((rec) => rec.ScoredGoals.Count(
+			// This section is because Unprocessed and Landfill Litter type goals are shared, but
+			// come more than one per match.
+			double dRedLfLitter = redData.ToList().ConvertAll<int>((rec) => rec.ScoredGoals.Count(
+				(g) => g.Type == GoalType.LandfillLitter)).Mean();
+			int nRedLfLitter = (int)dRedLfLitter;
+			double dRedUnpLitter = redData.ToList().ConvertAll<int>((rec) => rec.ScoredGoals.Count(
 				(g) => g.Type == GoalType.UnprocessedLitter)).Mean();
-			int nRedLitter = (int)dRedLitter;
-
-			double dBlueLitter = blueData.ToList().ConvertAll<int>((rec) => rec.ScoredGoals.Count(
-				(g) => g.Type == GoalType.UnprocessedLitter)).Mean();
-			int nBlueLitter = (int)dBlueLitter;
+			int nRedUnpLitter = (int)dRedUnpLitter;
 			
+			double dBlueLfLitter = blueData.ToList().ConvertAll<int>((rec) => rec.ScoredGoals.Count(
+				(g) => g.Type == GoalType.UnprocessedLitter)).Mean();
+			int nBlueLfLitter = (int)dBlueLfLitter;
+			double dBlueUnpLitter = blueData.ToList().ConvertAll<int>((rec) => rec.ScoredGoals.Count(
+				(g) => g.Type == GoalType.UnprocessedLitter)).Mean();
+			int nBlueUnpLitter = (int)dBlueUnpLitter;
+
 			// GOALS LIST
 			List<Goal> goals = new List<Goal>();
+			goals.Sort((g1, g2) => g1.TimeScoredInt - g2.TimeScoredInt);
 			foreach (RecordedMatch rec in allData)
 			{
 				foreach (Goal addedGoal in rec.ScoredGoals)
@@ -175,9 +184,6 @@ namespace ScoutingData.Sync
 					case GoalType.RecycledLitter:
 						goals.Add(addedGoal);
 						break;
-					case GoalType.LandfillLitter:
-						goals.Add(addedGoal);
-						break;
 					default:
 						break;
 					}
@@ -185,12 +191,20 @@ namespace ScoutingData.Sync
 				}
 			}
 
-			for (int i = 0; i < nRedLitter; i++)
+			for (int i = 0; i < nRedLfLitter; i++)
+			{
+				goals.Add(Goal.MakeLandfillLitter(AllianceColor.Red));
+			}
+			for (int i = 0; i < nRedUnpLitter; i++)
 			{
 				goals.Add(Goal.MakeUnprocessedLitter(AllianceColor.Red));
 			}
 
-			for (int i = 0; i < nBlueLitter; i++)
+			for (int i = 0; i < nBlueLfLitter; i++)
+			{
+				goals.Add(Goal.MakeLandfillLitter(AllianceColor.Blue));
+			}
+			for (int i = 0; i < nBlueUnpLitter; i++)
 			{
 				goals.Add(Goal.MakeUnprocessedLitter(AllianceColor.Blue));
 			}
@@ -216,9 +230,11 @@ namespace ScoutingData.Sync
 			}
 			result.Penalties = penalties;
 
-			int redGoalScore = result.RedGoals.Aggregate(0, (total, g) => total + g.PointValue());
+			List<Goal> redGoals = result.RedGoals;
+			int redGoalScore = redGoals.Aggregate(0, (total, g) => total + g.PointValue());
 			redGoalScore = result.RedPenalties.Aggregate(redGoalScore, (total, p) => total + p.ScoreChange());
-			int blueGoalScore = result.BlueGoals.Aggregate(0, (total, g) => total + g.PointValue());
+			List<Goal> blueGoals = result.BlueGoals;
+			int blueGoalScore = blueGoals.Aggregate(0, (total, g) => total + g.PointValue());
 			blueGoalScore = result.BluePenalties.Aggregate(blueGoalScore, (total, p) => total + p.ScoreChange());
 			
 			// WINNER
@@ -228,17 +244,21 @@ namespace ScoutingData.Sync
 			result.Winner = winner;
 
 			// WORKING
+			result.RedWorking = new AllianceGroup<bool>();
 			result.RedWorking.A = redData.A != null ? redData.A.Working : true;
 			result.RedWorking.B = redData.B != null ? redData.B.Working : true;
 			result.RedWorking.C = redData.C != null ? redData.C.Working : true;
+			result.BlueWorking = new AllianceGroup<bool>();
 			result.BlueWorking.A = blueData.A != null ? blueData.A.Working : true;
 			result.BlueWorking.B = blueData.B != null ? blueData.B.Working : true;
 			result.BlueWorking.C = blueData.C != null ? blueData.C.Working : true;
 
 			// DEFENSE
+			result.RedDefense = new AllianceGroup<int>();
 			result.RedDefense.A = redData.A != null ? redData.A.Defense : 5;
 			result.RedDefense.B = redData.B != null ? redData.B.Defense : 5;
 			result.RedDefense.C = redData.C != null ? redData.C.Defense : 5;
+			result.BlueDefense = new AllianceGroup<int>();
 			result.BlueDefense.A = blueData.A != null ? blueData.A.Defense : 5;
 			result.BlueDefense.B = blueData.B != null ? blueData.B.Defense : 5;
 			result.BlueDefense.C = blueData.C != null ? blueData.C.Defense : 5;

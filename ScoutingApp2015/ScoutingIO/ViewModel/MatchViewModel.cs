@@ -517,15 +517,12 @@ namespace ScoutingIO.ViewModel
 		{
 			MatchModel.ViewModel = this;
 
-			TeamPickCmd = new DoStuffWithStuffCommand((stuffWith) => 
-				{ OnTeamPick(stuffWith as string); }, obj => true);
-
 			BreakCmd = new DoStuffCommand(Break, obj => true);
 
+			TeamPickCmd = new DoStuffWithStuffCommand((stuffWith) => 
+				{ OnTeamPick(stuffWith as string); }, obj => true);
 			NewMatchCmd = new DoStuffCommand(MakeNewMatch, obj => true);
-
 			DeleteMatchCmd = new DoStuffCommand(DeleteMatch, obj => true);
-
 			CellEditedCmd = new DoStuffCommand(OnCellEdited, obj => true);
 		}
 
@@ -598,7 +595,7 @@ namespace ScoutingIO.ViewModel
 			RefreshDatagrid();
 		}
 
-		private void RefreshDatagrid()
+		public void RefreshDatagrid()
 		{
 			List<MatchModel> lmm = new List<MatchModel>();
 			foreach (Match m in EventVM.Event.Matches)
@@ -606,7 +603,9 @@ namespace ScoutingIO.ViewModel
 				lmm.Add(new MatchModel(m));
 			}
 
+			Match sel = SelectedMatch;
 			Matches = CollectionViewSource.GetDefaultView(lmm);
+			SelectedMatch = sel;
 		}
 		
 		public void SendData(object sender, EventArgs<EventViewModel> e)
@@ -672,22 +671,50 @@ namespace ScoutingIO.ViewModel
 				return;
 			}
 
-			switch (teamPosition)
+			TeamSelectionDialog tsd = new TeamSelectionDialog(EventVM.Event.AllTeams);
+			bool? result = tsd.ShowDialog();
+
+			if (result == true) // Nullable<bool>
 			{
-			case "RedA":
-				break;
-			case "RedB":
-				break;
-			case "RedC":
-				break;
-			case "BlueA":
-				break;
-			case "BlueB":
-				break;
-			case "BlueC":
-				break;
-			default:
-				break;
+				Team t = tsd.SelectedTeam;
+
+				if (SelectedMatch == null)
+				{
+					return;
+				}
+
+				switch (teamPosition)
+				{
+				case "RedA":
+					SelectedMatch.RedAlliance.A = t;
+					OnPropertyChanged("RedA_Number_String");
+					break;
+				case "RedB":
+					SelectedMatch.RedAlliance.B = t;
+					OnPropertyChanged("RedB_Number_String");
+					break;
+				case "RedC":
+					SelectedMatch.RedAlliance.C = t;
+					OnPropertyChanged("RedC_Number_String");
+					break;
+				case "BlueA":
+					SelectedMatch.BlueAlliance.A = t;
+					OnPropertyChanged("BlueA_Number_String");
+					break;
+				case "BlueB":
+					SelectedMatch.BlueAlliance.B = t;
+					OnPropertyChanged("BlueB_Number_String");
+					break;
+				case "BlueC":
+					SelectedMatch.BlueAlliance.C = t;
+					OnPropertyChanged("BlueC_Number_String");
+					break;
+				default:
+					return;
+				}
+
+				RefreshDatagrid();
+				SaveAll();
 			}
 		}
 

@@ -116,9 +116,20 @@ namespace ScoutingData.Sync
 			ScoredGoals = new List<Goal>();
 			AlliancePenalties = new List<Penalty>();
 			Working = true; // default
-			Defense = 10; // default
+			Defense = -1; // default
 			Winner = AllianceColor.Indeterminate; // indeterminate
-			AllianceFinalScore = 0; // starting value
+			AllianceFinalScore = -1; // starting value
+		}
+
+		[JsonConstructor]
+		public RecordedMatch()
+		{
+			MatchNumber = -1;
+			TrackedTeamID = -1;
+			Alliance = AllianceColor.Indeterminate;
+			Working = true;
+			Defense = -1;
+			AllianceFinalScore = -1;
 		}
 
 		/// <summary>
@@ -146,6 +157,15 @@ namespace ScoutingData.Sync
 		public void PostJsonLoading(FrcEvent e)
 		{
 			TrackedTeam = e.LoadTeam(TrackedTeamID);
+
+			if (TeamDescription == null || TeamDescription == "")
+			{
+				TeamDescription = TrackedTeam.Description;
+			}
+			if (TeamExpectations == null || TeamExpectations == "")
+			{
+				TeamExpectations = TrackedTeam.Expectations;
+			}
 		}
 
 		/// <summary>
@@ -155,6 +175,12 @@ namespace ScoutingData.Sync
 		public string ToJson()
 		{
 			return JsonConvert.SerializeObject(this, Formatting.Indented);
+		}
+
+		public override string ToString()
+		{
+			return "Match " + MatchNumber.ToString() + ": Team " +
+				TrackedTeamID.ToString() + " (" + Alliance.GetDescription() + ")";
 		}
 	}
 }

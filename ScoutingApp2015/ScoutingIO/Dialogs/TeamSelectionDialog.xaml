@@ -1,0 +1,79 @@
+﻿<e:Window x:Class="ScoutingIO.Dialogs.TeamSelectionDialog"
+					xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:e="http://schemas.codeplex.com/elysium"
+					xmlns:par="http://schemas.codeplex.com/elysium/params"
+					xmlns:data="clr-namespace:ScoutingData.Data;assembly=ScoutingData"
+					xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+					Style="{DynamicResource DialogWindow}"
+					Title="Select a Team"
+					Height="400"
+					Width="400"
+					MinHeight="200"
+					MinWidth="300"
+					WindowStartupLocation="CenterOwner"
+					ShowInTaskbar="False"
+					Topmost="True"
+					Loaded="Window_Loaded"
+					SizeToContent="Manual"
+					ResizeMode="CanResize">
+	<Window.Resources>
+		<CollectionViewSource x:Key="Sortification"
+													Source="{Binding Path=AllTeams}">
+			<CollectionViewSource.SortDescriptions>
+				<scm:SortDescription PropertyName="Number"
+														 Direction="Ascending" />
+			</CollectionViewSource.SortDescriptions>
+		</CollectionViewSource>
+	</Window.Resources>
+	
+	<Grid Margin="10,5,10,15">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		
+		<ListBox x:Name="TeamsListBox"
+						 Margin="0,0,0,5"
+						 BorderThickness="1"
+						 SelectionChanged="TeamsList_SelectionChanged">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock FontWeight="SemiBold"
+											 FontFamily="Segoe UI Mono"
+											 VerticalAlignment="Center">
+							<Run Text="{Binding Number}" />
+							<Run Text=":" />
+						</TextBlock>
+						<TextBlock Text="{Binding Name}"
+											 Margin="15,0,20,0"
+											 VerticalAlignment="Center" />
+						<TextBlock Text="{Binding Description}" 
+											 Foreground="#FF535353"
+											 VerticalAlignment="Center" />
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+		
+		<StackPanel Orientation="Horizontal"
+								HorizontalAlignment="Right"
+								Grid.Row="1">
+			<Button x:Name="OKBtn"
+							Content="OK"
+							Width="96"
+							Click="OKBtn_Click" />
+			<Button x:Name="CancelBtn"
+							Content="Cancel"
+							Width="96"
+							Margin="5,0,0,0"
+							Click="CancelBtn_Click" />
+			<Button x:Name="BreakBtn"
+							Content="BREAK"
+							Width="96"
+							Margin="5,0,0,0"
+							Click="BreakBtn_Click" />
+		</StackPanel>
+	</Grid>
+</e:Window>

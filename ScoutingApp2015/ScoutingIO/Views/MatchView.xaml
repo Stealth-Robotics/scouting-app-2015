@@ -232,7 +232,8 @@
 							CanUserAddRows="True"
 							MinRowHeight="12"
 							SelectedItem="{Binding SelectedMatchModel, Source={StaticResource ViewModel}}"
-							SelectionMode="Single">
+							SelectionMode="Single"
+							PreviewKeyDown="MatchesDataGrid_PreviewKeyDown">
 			<i:Interaction.Triggers>
 				<!--
 				<i:EventTrigger EventName="SelectionChanged">

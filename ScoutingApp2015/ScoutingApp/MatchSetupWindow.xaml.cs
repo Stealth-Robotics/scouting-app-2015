@@ -309,6 +309,8 @@ namespace ScoutingApp
 			{
 				MatchID = val;
 			}
+
+			UpdateTeamPreviews();
 		}
 
 		private void OKBtn_Click(object sender, RoutedEventArgs e)
