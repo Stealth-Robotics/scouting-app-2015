@@ -10,7 +10,8 @@
 					par:Design.Theme="Light"
 					par:Manager.Theme="Light"
 					Title="Scouting Stats" Height="350" Width="525"
-					Background="#FFF1F1F1">
+					Background="#FFF1F1F1"
+					Loaded="Window_Loaded">
   <Grid>
     
   </Grid>

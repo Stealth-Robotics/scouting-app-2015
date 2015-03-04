@@ -140,7 +140,7 @@ namespace ScoutingData.Analysis
 			Event = frc;
 			Match = m;
 			TeamAnalyses = analyses;
-			Pregame = true;
+			Pregame = m.Pregame;
 			CalculatePregame();
 		}
 

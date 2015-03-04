@@ -173,7 +173,7 @@ namespace ScoutingData
 		/// <param name="message">Message logged</param>
 		public static void DebugLog(LogLevel level, string message)
 		{
-			string output = "[" + level.ToString().ToUpper() + "] " + message + "\n";
+			string output = ">> [" + level.ToString().ToUpper() + "] " + message + "\n";
 			System.Diagnostics.Debugger.Log((int)level, "SCOUTING", output);
 
 			if (OnPrint != null)

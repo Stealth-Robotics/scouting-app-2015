@@ -4,10 +4,10 @@
 					xmlns:e="http://schemas.codeplex.com/elysium"
 					Title="Select Event and Teams List"
 					Style="{DynamicResource DialogStyle}"
-					Height="200"
+					Height="170"
 					Width="400"
 					MinWidth="300"
-					MinHeight="150">
+					MinHeight="170">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -34,11 +34,12 @@
 							 FontSize="14"
 							 BorderThickness="1"
 							 Margin="5,0"
-							 TextChanged="EventPathBox_TextChanged" />
+							 TextChanged="AnyPathBox_TextChanged" />
 			<Button x:Name="EventPathBtn"
 							Content="..."
 							Grid.Column="2"
-							MinWidth="36" />
+							MinWidth="36"
+							Click="EventPathBtn_Click" />
 			
 			<TextBlock Text="Teams File:"
 								 Grid.Row="1"
@@ -51,27 +52,31 @@
 							 Grid.Row="1"
 							 FontSize="14"
 							 BorderThickness="1"
-							 Margin="5,5,5,0" />
+							 Margin="5,5,5,0"
+							 TextChanged="AnyPathBox_TextChanged" />
 			<Button x:Name="TeamsPathBtn"
 							Content="..."
 							Grid.Column="2"
 							Grid.Row="1"
 							MinWidth="36"
-							Margin="0,5,0,0" />
+							Margin="0,5,0,0"
+							Click="TeamsPathBtn_Click" />
 		</Grid>
 		
 		<StackPanel Orientation="Horizontal"
 								Grid.Row="1"
 								VerticalAlignment="Bottom"
 								HorizontalAlignment="Right"
-								Margin="0,0,5,10">
+								Margin="0,0,10,10">
 			<Button x:Name="OKBtn"
 							Content="OK"
 							Width="96"
-							Margin="0,0,5,0" />
+							Margin="0,0,5,0"
+							Click="OKBtn_Click" />
 			<Button x:Name="CancelBtn"
 							Content="Cancel"
-							Width="96" />
+							Width="96"
+							Click="CancelBtn_Click" />
 		</StackPanel>
 	</Grid>
 </e:Window>

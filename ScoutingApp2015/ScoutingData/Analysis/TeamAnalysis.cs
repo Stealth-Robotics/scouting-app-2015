@@ -13,7 +13,7 @@ namespace ScoutingData.Analysis
 	/// Base analysis object for team.
 	/// </summary>
 	[JsonObject(MemberSerialization.OptIn)]
-	public class TeamAnalysis
+	public class TeamAnalysis : IPostJson
 	{
 		/// <summary>
 		/// Reference to hosting event
@@ -139,7 +139,6 @@ namespace ScoutingData.Analysis
 		/// </summary>
 		public void Calculate()
 		{
-
 			// List of matches the team is in
 			List<Match> matches = Event.Matches.FindAll((m) =>
 			{

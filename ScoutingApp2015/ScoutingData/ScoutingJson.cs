@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using ScoutingData.Data;
 using System.IO;
 using ScoutingData.Sync;
+using ScoutingData.Analysis;
 
 namespace ScoutingData
 {
@@ -33,6 +34,12 @@ namespace ScoutingData
 		/// File extension used when saving match records
 		/// </summary>
 		public static string MatchRecordExtension
+		{ get; set; }
+
+		/// <summary>
+		/// File extension used when saving analysis caches
+		/// </summary>
+		public static string AnalysisExtension
 		{ get; set; }
 
 		/// <summary>
@@ -92,6 +99,7 @@ namespace ScoutingData
 			EventExtension = ".frc";
 			TeamsListExtension = ".teams";
 			MatchRecordExtension = ".match";
+			AnalysisExtension = ".stats";
 
 			InitFiles(false);
 
@@ -174,6 +182,23 @@ namespace ScoutingData
 
 			return rec;
 		}
+		public static EventAnalysis ParseAnalysis(string fullPathName)
+		{
+			Initialize(false);
+
+			string contents = File.ReadAllText(fullPathName);
+			EventAnalysis stats = null;
+			try
+			{
+				stats = JsonConvert.DeserializeObject<EventAnalysis>(contents);
+			}
+			catch (JsonException)
+			{
+				Util.DebugLog(LogLevel.Critical, "Could not deserialize file.");
+			}
+
+			return stats;
+		}
 
 		public static void SaveEvent(FrcEvent frc, string path)
 		{
@@ -195,6 +220,13 @@ namespace ScoutingData
 			Initialize(false);
 
 			string contents = JsonConvert.SerializeObject(rec, Formatting.Indented);
+			File.WriteAllText(path, contents);
+		}
+		public static void SaveAnalysis(EventAnalysis stats, string path)
+		{
+			Initialize(false);
+
+			string contents = JsonConvert.SerializeObject(stats, Formatting.Indented);
 			File.WriteAllText(path, contents);
 		}
 
