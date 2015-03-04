@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using ScoutingData.Data;
 
 namespace ScoutingData.Analysis
 {
@@ -20,6 +21,13 @@ namespace ScoutingData.Analysis
 		/// </summary>
 		[JsonProperty]
 		public string EventName
+		{ get; set; }
+
+		/// <summary>
+		/// Link to FRC Event.
+		/// </summary>
+		[JsonIgnore]
+		public FrcEvent Event
 		{ get; set; }
 
 		/// <summary>

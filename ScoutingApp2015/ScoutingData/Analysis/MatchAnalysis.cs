@@ -14,6 +14,7 @@ namespace ScoutingData.Analysis
 	/// Analytical object for matches. Can be instanced even if match 
 	/// is not completed yet.
 	/// </summary>
+	[JsonObject(MemberSerialization.OptIn)]
 	public class MatchAnalysis : IPostJson
 	{
 		/// <summary>
@@ -127,13 +128,6 @@ namespace ScoutingData.Analysis
 		{ get; private set; }
 
 		#endregion
-
-		/// <summary>
-		/// Do not use. Probably won't be any use to you. May be deleted in the future.
-		/// </summary>
-		/// <param name="frc">Event hosting the match</param>
-		public MatchAnalysis(FrcEvent frc) : this(frc, null, null)
-		{ }
 
 		/// <summary>
 		/// Instantiates a match analysis object with pregame analysis done.
