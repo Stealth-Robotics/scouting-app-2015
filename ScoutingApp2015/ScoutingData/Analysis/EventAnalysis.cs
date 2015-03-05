@@ -34,14 +34,14 @@ namespace ScoutingData.Analysis
 		/// List of analyses of the teams
 		/// </summary>
 		[JsonProperty]
-		public List<TeamAnalysis> TeamAnalyses
+		public List<TeamAnalysis> TeamData
 		{ get; private set; }
 
 		/// <summary>
 		/// List of analyses of the matches
 		/// </summary>
 		[JsonProperty]
-		public List<MatchAnalysis> MatchAnalyses
+		public List<MatchAnalysis> MatchData
 		{ get; private set; }
 
 		public EventAnalysis(FrcEvent frc) : this()
@@ -51,20 +51,20 @@ namespace ScoutingData.Analysis
 
 			foreach (Team t in frc.AllTeams)
 			{
-				TeamAnalyses.Add(new TeamAnalysis(Event, t));
+				TeamData.Add(new TeamAnalysis(Event, t));
 			}
 
 			foreach (Match m in frc.Matches)
 			{
-				MatchAnalyses.Add(new MatchAnalysis(Event, m, TeamAnalyses));
+				MatchData.Add(new MatchAnalysis(Event, m, TeamData));
 			}
 		}
 
 		[JsonConstructor]
 		public EventAnalysis()
 		{
-			TeamAnalyses = new List<TeamAnalysis>();
-			MatchAnalyses = new List<MatchAnalysis>();
+			TeamData = new List<TeamAnalysis>();
+			MatchData = new List<MatchAnalysis>();
 			EventName = "";
 		}
 
@@ -77,12 +77,12 @@ namespace ScoutingData.Analysis
 		{
 			Event = e;
 
-			foreach (TeamAnalysis ta in TeamAnalyses)
+			foreach (TeamAnalysis ta in TeamData)
 			{
 				ta.PostJsonLoading(e);
 			}
 
-			foreach (MatchAnalysis ma in MatchAnalyses)
+			foreach (MatchAnalysis ma in MatchData)
 			{
 				ma.PostJsonLoading(e);
 			}
@@ -90,12 +90,12 @@ namespace ScoutingData.Analysis
 
 		public void Calculate()
 		{
-			foreach (TeamAnalysis ta in TeamAnalyses)
+			foreach (TeamAnalysis ta in TeamData)
 			{
 				ta.CalculateSafe();
 			}
 
-			foreach (MatchAnalysis ma in MatchAnalyses)
+			foreach (MatchAnalysis ma in MatchData)
 			{
 				bool worked = ma.CalculateSafe();
 
@@ -104,6 +104,11 @@ namespace ScoutingData.Analysis
 					Util.DebugLog(LogLevel.Error, "Match analysis for match " +
 						ma.MatchID + "calculation failed.");
 				}
+			}
+
+			foreach (TeamAnalysis ta in TeamData)
+			{
+				ta.CalculateZScores(TeamData);
 			}
 		}
 	}

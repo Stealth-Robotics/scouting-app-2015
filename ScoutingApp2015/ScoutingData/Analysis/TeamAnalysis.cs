@@ -44,6 +44,13 @@ namespace ScoutingData.Analysis
 		{ get; private set; }
 
 		/// <summary>
+		/// Z-score of winrate compared to other teams
+		/// </summary>
+		[JsonProperty]
+		public double WinRateZ
+		{ get; private set; }
+
+		/// <summary>
 		/// Distribution of Scored Points over matches so far. [= Matches.Points.Distribution]
 		/// </summary>
 		[JsonProperty]
@@ -76,6 +83,13 @@ namespace ScoutingData.Analysis
 		/// </summary>
 		[JsonProperty]
 		public double ResponsivenessRate
+		{ get; private set; }
+
+		/// <summary>
+		/// Z-score of responsiveness rate compared to other teams
+		/// </summary>
+		[JsonProperty]
+		public double ResponsivenessRateZ
 		{ get; private set; }
 
 		/// <summary>
@@ -208,6 +222,36 @@ namespace ScoutingData.Analysis
 			// Defense
 			List<int> defense = matches.ConvertAll<int>((m) => m.GetDefense(Team));
 			Defense = defense.MakeDistribution();
+		}
+
+		/// <summary>
+		/// Calculates z-scores for certain analytics compared to the rest of the data.
+		/// </summary>
+		/// <param name="all">Other team analyses to compare to</param>
+		public void CalculateZScores(IEnumerable<TeamAnalysis> all)
+		{
+			IEnumerable<double> winrates = from ta in all
+										   select ta.WinRate;
+			Distribution distWins = winrates.ToList().MakeDistribution();
+			WinRateZ = distWins.Model.ZScore(WinRate);
+
+			IEnumerable<double> respRates = from ta in all
+										   select ta.ResponsivenessRate;
+			Distribution distResp = winrates.ToList().MakeDistribution();
+			ResponsivenessRateZ = distResp.Model.ZScore(ResponsivenessRate);
+
+			IEnumerable<Distribution> bigData = from ta in all
+												select ta.ScoredPoints;
+			ScoredPoints.CalculateZ(bigData);
+
+			bigData = from ta in all select ta.FinalScore;
+			FinalScore.CalculateZ(bigData);
+
+			bigData = from ta in all select ta.Penalties;
+			Penalties.CalculateZ(bigData);
+
+			bigData = from ta in all select ta.Defense;
+			Defense.CalculateZ(bigData);
 		}
 	}
 }

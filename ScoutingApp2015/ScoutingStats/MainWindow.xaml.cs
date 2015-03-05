@@ -24,6 +24,10 @@ namespace ScoutingStats
 	/// </summary>
 	public partial class MainWindow : Elysium.Controls.Window
 	{
+		public static readonly Color LIGHT_RED = Util.MakeColor("FFFF4444");
+		public static readonly Color LIGHT_BLUE = Util.MakeColor("FF4444FF");
+		public static readonly Color TITLE_GRAY = Util.MakeColor("FF3E3E3E");
+
 		public FrcEvent Event
 		{ get; private set; }
 

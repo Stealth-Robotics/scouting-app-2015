@@ -41,6 +41,13 @@ namespace ScoutingData.Analysis
 		{ get; set; }
 
 		/// <summary>
+		/// Z-score of model's mean compared to other distributions
+		/// </summary>
+		[JsonProperty]
+		public double MeanZ
+		{ get; set; }
+
+		/// <summary>
 		/// Five-Number Summary of this distribution
 		/// </summary>
 		[JsonIgnore]
@@ -58,6 +65,15 @@ namespace ScoutingData.Analysis
 			Summary = fiveNum;
 		}
 
+		public void CalculateZ(IEnumerable<Distribution> all)
+		{
+			IEnumerable<double> means = from d in all
+										select d.Model.Mean;
+
+			Distribution bigBoy = means.ToList().MakeDistribution();
+			MeanZ = bigBoy.Model.ZScore(Model.Mean);
+		}
+
 		/// <summary>
 		/// Summarizes the distribution in the form of a string
 		/// </summary>
@@ -67,7 +83,7 @@ namespace ScoutingData.Analysis
 			switch (DisplayMode)
 			{
 			case DistributionDisplayMode.MeanSD:
-				return Model.ToString();
+				return Model.ToString() + " [z = " + MeanZ.ToString() + "]";
 			case DistributionDisplayMode.FiveNumSummary:
 				return Summary.ToString();
 			default:

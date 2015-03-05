@@ -81,6 +81,7 @@ namespace ScoutingData.Analysis
 		public int? BlueGoalCount
 		{ get; private set; }
 
+		#region pregame
 		/// <summary>
 		/// Mean of red's team winrates [pregame]
 		/// </summary>
@@ -100,6 +101,7 @@ namespace ScoutingData.Analysis
 		[JsonProperty]
 		public AllianceColor ExpectedWinner
 		{ get; private set; }
+
 		/// <summary>
 		/// Expected closeness of the game [pregame]
 		/// </summary>
@@ -126,6 +128,7 @@ namespace ScoutingData.Analysis
 		[JsonProperty]
 		public double GameProfileValue
 		{ get; private set; }
+		#endregion
 
 		#endregion
 
@@ -143,6 +146,13 @@ namespace ScoutingData.Analysis
 			Pregame = m.Pregame;
 			CalculatePregame();
 		}
+
+		/// <summary>
+		/// A more json-friendly constructor. Doesn't do anything.
+		/// </summary>
+		[JsonConstructor]
+		internal MatchAnalysis()
+		{ }
 
 		/// <summary>
 		/// Calculates all analysis if required references are ready.
