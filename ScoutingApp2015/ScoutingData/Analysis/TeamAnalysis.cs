@@ -197,6 +197,11 @@ namespace ScoutingData.Analysis
 			// Penalties
 			List<int> penalties = matches.ConvertAll<int>((m) =>
 			{
+				if (m.Pregame)
+				{
+					return -1;
+				}
+
 				if (m.BlueAlliance.Contains(Team))
 				{
 					return m.BluePenalties.Count((p) => p.BlamedTeam == Team);
@@ -213,14 +218,34 @@ namespace ScoutingData.Analysis
 			Penalties = penalties.MakeDistribution();
 
 			// Working Currently
-			WorkingCurrently = matches.Last().GetWorking(Team);
+			int maxID = -1;
+			Match last = null;
+			foreach (Match m in matches)
+			{
+				if (m.Number > maxID)
+				{
+					maxID = m.Number;
+					last = m;
+				}
+			}
+			if (last != null && !last.Pregame)
+			{
+				WorkingCurrently = last.GetWorking(Team);
+			}
+			else if (last != null)
+			{
+				WorkingCurrently = true;
+			}
 			
 			// Responsiveness Rate
-			int responding = matches.Count((m) => m.GetWorking(Team));
+			List<Match> notPregame = (from m in matches
+									  where !m.Pregame
+									  select m).ToList();
+			int responding = notPregame.Count((m) => m.GetWorking(Team));
 			ResponsivenessRate = (double)responding / (double)matches.Count;
 
 			// Defense
-			List<int> defense = matches.ConvertAll<int>((m) => m.GetDefense(Team));
+			List<int> defense = notPregame.ConvertAll<int>((m) => m.GetDefense(Team));
 			Defense = defense.MakeDistribution();
 		}
 

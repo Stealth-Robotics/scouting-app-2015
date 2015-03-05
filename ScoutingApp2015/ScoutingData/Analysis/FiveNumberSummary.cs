@@ -12,6 +12,7 @@ namespace ScoutingData.Analysis
 	/// Five-number summary of a dataset
 	/// </summary>
 	[JsonObject(MemberSerialization.OptIn)]
+	[Obsolete]
 	public struct FiveNumberSummary
 	{
 		/// <summary>

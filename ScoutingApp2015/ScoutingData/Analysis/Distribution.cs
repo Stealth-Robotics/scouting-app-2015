@@ -12,26 +12,48 @@ namespace ScoutingData.Analysis
 	/// <summary>
 	/// Display Mode for Distributions.
 	/// </summary>
+	[Obsolete]
 	public enum DistributionDisplayMode
 	{
 		[Description("Mean & SD")]
 		MeanSD,
-		[Description("Five-number Summary")]
-		FiveNumSummary
+		//[Description("Five-number Summary")]
+		//FiveNumSummary
 	}
 
 	/// <summary>
-	/// Overall Distribution for data. Consists of a Normal Model and a 
-	/// Five-Number Sumary.
+	/// Wrapper class for Normal Model
 	/// </summary>
 	[JsonObject(MemberSerialization.OptIn)]
 	public class Distribution
 	{
+		//// <summary>
+		//// Preferred display mode as set by the dev. Defaults to Mean & SD
+		//// </summary>
+		//[JsonIgnore]
+		//public static DistributionDisplayMode DisplayMode = DistributionDisplayMode.MeanSD;
+
 		/// <summary>
-		/// Preferred display mode as set by the dev. Defaults to Mean & SD
+		/// Shortcut to the model's mean.
 		/// </summary>
-		[JsonIgnore]
-		public static DistributionDisplayMode DisplayMode = DistributionDisplayMode.MeanSD;
+		public double Mean
+		{
+			get
+			{
+				return Model.Mean;
+			}
+		}
+		
+		/// <summary>
+		/// Shortcut to the model's SD.
+		/// </summary>
+		public double SD
+		{
+			get
+			{
+				return Model.SD;
+			}
+		}
 
 		/// <summary>
 		/// Normal Model of this distribution
@@ -44,14 +66,7 @@ namespace ScoutingData.Analysis
 		/// Z-score of model's mean compared to other distributions
 		/// </summary>
 		[JsonProperty]
-		public double MeanZ
-		{ get; set; }
-
-		/// <summary>
-		/// Five-Number Summary of this distribution
-		/// </summary>
-		[JsonIgnore]
-		public FiveNumberSummary Summary
+		public double CenterZScore
 		{ get; set; }
 
 		/// <summary>
@@ -59,19 +74,22 @@ namespace ScoutingData.Analysis
 		/// </summary>
 		/// <param name="norm">Normal Model</param>
 		/// <param name="fiveNum">Five-Number Summary</param>
-		public Distribution(NormalModel norm, FiveNumberSummary fiveNum)
+		public Distribution(NormalModel norm)
 		{
 			Model = norm;
-			Summary = fiveNum;
 		}
 
+		/// <summary>
+		/// Calculates Z-score of center based on other data
+		/// </summary>
+		/// <param name="all">Other data to compare to</param>
 		public void CalculateZ(IEnumerable<Distribution> all)
 		{
 			IEnumerable<double> means = from d in all
 										select d.Model.Mean;
 
 			Distribution bigBoy = means.ToList().MakeDistribution();
-			MeanZ = bigBoy.Model.ZScore(Model.Mean);
+			CenterZScore = bigBoy.Model.ZScore(Model.Mean);
 		}
 
 		/// <summary>
@@ -80,15 +98,7 @@ namespace ScoutingData.Analysis
 		/// <returns>String based on the preferred display mode for distributions</returns>
 		public override string ToString()
 		{
-			switch (DisplayMode)
-			{
-			case DistributionDisplayMode.MeanSD:
-				return Model.ToString() + " [z = " + MeanZ.ToString() + "]";
-			case DistributionDisplayMode.FiveNumSummary:
-				return Summary.ToString();
-			default:
-				return base.ToString();
-			}
+			return Model.ToString() + " [z = " + CenterZScore.ToString() + "]";
 		}
 	}
 }

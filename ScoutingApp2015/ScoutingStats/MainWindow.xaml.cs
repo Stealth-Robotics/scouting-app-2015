@@ -37,6 +37,21 @@ namespace ScoutingStats
 		public EventAnalysis Analysis
 		{ get; private set; }
 
+		public Match SelectedMatch
+		{
+			get
+			{
+				return MatchSelectionList.SelectedItem as Match;
+			}
+		}
+		public Team SelectedTeam
+		{
+			get
+			{
+				return TeamSelectionList.SelectedItem as Team;
+			}
+		}
+
 		public string EventPath
 		{ get; private set; }
 
@@ -73,6 +88,16 @@ namespace ScoutingStats
 			SaveAnalysis();
 		}
 
+		public void UpdateMatchesTab()
+		{
+
+		}
+
+		public void UpdateTeamsTab()
+		{
+
+		}
+
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
 			var spsd = new StartupPathSelectionDialog();
@@ -94,6 +119,12 @@ namespace ScoutingStats
 			}
 
 			LoadCreateAnalysis();
+			MatchSelectionList.ItemsSource = Event.Matches;
+		}
+
+		private void MatchSelectionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+
 		}
 	}
 }

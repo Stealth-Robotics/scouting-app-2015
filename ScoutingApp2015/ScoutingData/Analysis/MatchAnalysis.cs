@@ -204,14 +204,21 @@ namespace ScoutingData.Analysis
 			Advantage = (rawAdv < 0) ? -rawAdv : rawAdv;
 
 			// Expected Final Scores
+			var redAnalyses = from ta in TeamAnalyses
+							  where Match.RedAlliance.Contains(ta.Team)
+							  select ta;
+			RedExpectedFinalScore = redAnalyses.Sum((ta) => ta.FinalScore.Mean);
+
 			RedExpectedFinalScore = Match.RedAlliance.ToList().ConvertAll<double>((t) =>
 			{
-				return TeamAnalyses.Find((a) => a.Team == t).FinalScore.Model.Mean;
+				TeamAnalysis ta = TeamAnalyses.Find((a) => a.Team == t);
+				ta.CalculateSafe();
+				return ta.FinalScore.Model.Mean;
 			}).Sum();
 
 			BlueExpectedFinalScore = Match.BlueAlliance.ToList().ConvertAll<double>((t) =>
 			{
-				return TeamAnalyses.Find((a) => a.Team == t).FinalScore.Model.Mean;
+				return TeamAnalyses.Find((a) => a.Team.Number == t.Number).FinalScore.Model.Mean;
 			}).Sum();
 
 			// Game Profile Value

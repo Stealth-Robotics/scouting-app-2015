@@ -51,12 +51,16 @@ namespace ScoutingData.Analysis
 
 			foreach (Team t in frc.AllTeams)
 			{
-				TeamData.Add(new TeamAnalysis(Event, t));
+				TeamAnalysis ta = new TeamAnalysis(Event, t);
+				ta.CalculateSafe();
+				TeamData.Add(ta);
 			}
 
 			foreach (Match m in frc.Matches)
 			{
-				MatchData.Add(new MatchAnalysis(Event, m, TeamData));
+				MatchAnalysis ma = new MatchAnalysis(Event, m, TeamData);
+				ma.CalculatePregame();
+				MatchData.Add(ma);
 			}
 		}
 
@@ -110,6 +114,38 @@ namespace ScoutingData.Analysis
 			{
 				ta.CalculateZScores(TeamData);
 			}
+		}
+
+		public MatchAnalysis LoadMatch(int matchNum)
+		{
+			foreach (MatchAnalysis ma in MatchData)
+			{
+				if (ma.MatchID == matchNum)
+				{
+					return ma;
+				}
+			}
+			return null;
+		}
+		public MatchAnalysis LoadMatch(Match match)
+		{
+			return LoadMatch(match.Number);
+		}
+
+		public TeamAnalysis LoadTeam(int teamNum)
+		{
+			foreach (TeamAnalysis ta in TeamData)
+			{
+				if (ta.TeamID == teamNum)
+				{
+					return ta;
+				}
+			}
+			return null;
+		}
+		public TeamAnalysis LoadTeam(Team team)
+		{
+			return LoadTeam(team.Number);
 		}
 	}
 }

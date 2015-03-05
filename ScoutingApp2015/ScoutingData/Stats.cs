@@ -90,28 +90,11 @@ namespace ScoutingData
 		/// </summary>
 		/// <param name="list">list the data is taken from</param>
 		/// <returns>struct containing the values from the 5-number summary</returns>
+		[Obsolete]
 		public static FiveNumberSummary Get5NS<T>(this IList<T> list)
 			where T : IConvertible
 		{
-			T[] sortedArr = list.OrderBy(t => t).ToArray();
-			double med = sortedArr.Median();
-
-			int half = sortedArr.Length / 2;
-			T[] lower = new T[half];
-			for (int i = 0; i < half; i++)
-			{
-				lower[i] = sortedArr[i];
-			}
-			T[] upper = new T[half];
-			sortedArr.CopyTo(upper, half);
-
-			double q1 = lower.Median();
-			double q3 = upper.Median();
-
-			double min = sortedArr[0].ToDouble(Util.DEF_FORMAT);
-			double max = sortedArr[sortedArr.Length - 1].ToDouble(Util.DEF_FORMAT);
-
-			return new FiveNumberSummary(min, q1, med, q3, max);
+			return new FiveNumberSummary(0, 0, 0, 0, 0);
 		}
 
 		/// <summary>
@@ -119,6 +102,7 @@ namespace ScoutingData
 		/// </summary>
 		/// <param name="arr">array the data is taken from</param>
 		/// <returns>median value in the array</returns>
+		[Obsolete]
 		public static double Median<T>(this T[] arr)
 			where T : IConvertible
 		{
@@ -126,8 +110,8 @@ namespace ScoutingData
 			bool evenLen = count % 2 == 0;
 			int lowerId = count / 2;
 			int upperId = evenLen ? lowerId + 1 : lowerId;
-			double lowMed = arr[lowerId].ToDouble(Util.DEF_FORMAT);
-			double upMed = arr[upperId].ToDouble(Util.DEF_FORMAT);
+			double lowMed = arr[Math.Max(lowerId, 0)].ToDouble(Util.DEF_FORMAT);
+			double upMed = arr[Math.Min(upperId, arr.Length - 1)].ToDouble(Util.DEF_FORMAT);
 			double meanMed = (lowMed + upMed) / 2.0;
 			return meanMed;
 		}
@@ -136,6 +120,7 @@ namespace ScoutingData
 		/// </summary>
 		/// <param name="arr">list the data is taken from</param>
 		/// <returns>median value in the array</returns>
+		[Obsolete]
 		public static double Median<T>(this IList<T> list)
 			where T : IConvertible
 		{
@@ -152,9 +137,9 @@ namespace ScoutingData
 		{
 			double mean = list.Mean();
 			NormalModel norm = new NormalModel(mean, list.StandardDeviation(mean));
-			FiveNumberSummary sum = list.Get5NS();
+			//FiveNumberSummary sum = list.Get5NS();
 
-			return new Distribution(norm, sum);
+			return new Distribution(norm);
 		}
 
 		public static Dictionary<T, int> Frequencies<T>(this IList<T> list)

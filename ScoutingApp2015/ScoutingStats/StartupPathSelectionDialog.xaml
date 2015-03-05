@@ -7,7 +7,8 @@
 					Height="170"
 					Width="400"
 					MinWidth="300"
-					MinHeight="170">
+					MinHeight="170"
+					Loaded="Window_Loaded">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -34,7 +35,8 @@
 							 FontSize="14"
 							 BorderThickness="1"
 							 Margin="5,0"
-							 TextChanged="AnyPathBox_TextChanged" />
+							 TextChanged="AnyPathBox_TextChanged"
+							 Text="C:\Users\einsteinsci\ScoutingApp2015\DEFAULT.frc" />
 			<Button x:Name="EventPathBtn"
 							Content="..."
 							Grid.Column="2"
@@ -53,7 +55,8 @@
 							 FontSize="14"
 							 BorderThickness="1"
 							 Margin="5,5,5,0"
-							 TextChanged="AnyPathBox_TextChanged" />
+							 TextChanged="AnyPathBox_TextChanged"
+							 Text="C:\Users\einsteinsci\ScoutingApp2015\Teams.teams" />
 			<Button x:Name="TeamsPathBtn"
 							Content="..."
 							Grid.Column="2"

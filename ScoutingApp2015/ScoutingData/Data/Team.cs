@@ -103,6 +103,10 @@ namespace ScoutingData.Data
 			{
 				return true;
 			}
+			else if (object.Equals(a, null))
+			{
+				return false;
+			}
 
 			return a.Equals(b);
 		}

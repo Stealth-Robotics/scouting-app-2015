@@ -21,6 +21,8 @@ namespace ScoutingStats
 	/// </summary>
 	public partial class StartupPathSelectionDialog : Elysium.Controls.Window
 	{
+		bool hasLoaded = false;
+
 		public string EventPath
 		{
 			get
@@ -40,6 +42,7 @@ namespace ScoutingStats
 		public StartupPathSelectionDialog()
 		{
 			InitializeComponent();
+			ScoutingJson.Initialize(false);
 		}
 
 		public void AnyPathBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -49,6 +52,11 @@ namespace ScoutingStats
 
 		public void ValidatePaths()
 		{
+			if (!hasLoaded)
+			{
+				return;
+			}
+
 			bool ok = true;
 			if (File.Exists(EventPathBox.Text))
 			{
@@ -110,11 +118,10 @@ namespace ScoutingStats
 		private void EventPathBtn_Click(object sender, RoutedEventArgs e)
 		{
 			var ofd = new Microsoft.Win32.OpenFileDialog();
-
-			ofd.DefaultExt = ScoutingJson.AnalysisExtension;
+			ofd.CheckPathExists = true;
+			ofd.DefaultExt = ScoutingJson.EventExtension;
+			ofd.Title = "Open Event File";
 			ofd.InitialDirectory = ScoutingJson.LocalPath;
-			ofd.Title = "Select an Event File";
-			ofd.Multiselect = false;
 			ofd.Filter = "FRC Event Files (*.frc)|*.frc";
 
 			bool? result = ofd.ShowDialog();
@@ -123,6 +130,11 @@ namespace ScoutingStats
 			{
 				EventPathBox.Text = ofd.FileName;
 			}
+		}
+
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			hasLoaded = true;
 		}
 	}
 }

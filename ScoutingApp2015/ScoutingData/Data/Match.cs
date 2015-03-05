@@ -55,6 +55,11 @@ namespace ScoutingData.Data
 		{
 			get
 			{
+				if (Goals == null)
+				{
+					return null;
+				}
+
 				return Goals.FindAll((g) => g.GetScoringAlliance(this) == AllianceColor.Blue || 
 					g.GetScoringAlliance(this) == AllianceColor.Indeterminate);
 			}
@@ -67,6 +72,11 @@ namespace ScoutingData.Data
 		{
 			get
 			{
+				if (Goals == null)
+				{
+					return null;
+				}
+
 				return Goals.FindAll((g) => g.GetScoringAlliance(this) == AllianceColor.Red ||
 					g.GetScoringAlliance(this) == AllianceColor.Indeterminate);
 			}
@@ -86,6 +96,11 @@ namespace ScoutingData.Data
 		{
 			get
 			{
+				if (Penalties == null)
+				{
+					return null;
+				}
+
 				return Penalties.FindAll((p) => p.PenalizedAlliance == AllianceColor.Blue);
 			}
 		}
@@ -97,6 +112,11 @@ namespace ScoutingData.Data
 		{
 			get
 			{
+				if (Penalties == null)
+				{
+					return null;
+				}
+
 				return Penalties.FindAll((p) => p.PenalizedAlliance == AllianceColor.Red);
 			}
 		}
@@ -256,6 +276,11 @@ namespace ScoutingData.Data
 		public List<Goal> GetGoalsByTeam(Team team)
 		{
 			AllianceColor color = GetTeamColor(team);
+
+			if (Goals == null)
+			{
+				return new List<Goal>();
+			}
 
 			return Goals.FindAll((g) =>
 			{
