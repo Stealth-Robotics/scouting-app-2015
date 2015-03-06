@@ -20,6 +20,10 @@
 										 Color="#FFFF4444" />
 		<SolidColorBrush x:Key="TitleGray"
 										 Color="#FF575757" />
+		<SolidColorBrush x:Key="WorkingBrush"
+										 Color="Green" />
+		<SolidColorBrush x:Key="MalfunctioningBrush"
+										 Color="#FFB20000" />
 	</e:Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
@@ -57,7 +61,8 @@
 							Content="Recalculate All"
 							Grid.Column="3"
 							Visibility="Collapsed"
-							Margin="0,0,5,0" />
+							Margin="0,0,5,0"
+							Click="RecalculateBtn_Click" />
 			<e:ProgressBar x:Name="RecalculateProgress"
 										 Grid.Column="3"
 										 Visibility="Visible"
@@ -81,7 +86,8 @@
 					<ListBox x:Name="TeamSelectionList"
 									 Margin="0,0,0,5"
 									 BorderThickness="1"
-									 SelectedIndex="0">
+									 SelectedIndex="0"
+									 SelectionChanged="TeamSelectionList_SelectionChanged">
 						<data:Team Number="4089"
 											 Name="Stealth Robotics"
 											 School="Cedarcrest High School"
@@ -98,7 +104,7 @@
 											Margin="10,0,0,0">
 
 						<!--Intro Section-->
-						<TextBlock x:Name="TeamNumberTxt"
+						<TextBlock x:Name="TeamHeaderTxt"
 											 Text="Team 4089: Stealth Robotics"
 											 FontSize="18"
 											 FontWeight="SemiBold" />
@@ -122,12 +128,12 @@
 							<TextBlock x:Name="TeamWorkingTxt"
 												 Text="WORKING"
 												 Grid.Column="1"
-												 Foreground="Green"
 												 FontSize="12"
 												 FontWeight="SemiBold"
 												 VerticalAlignment="Center"
 												 HorizontalAlignment="Center"
-												 ToolTip="Latest robot status" />
+												 ToolTip="Latest robot status"
+												 Foreground="{DynamicResource WorkingBrush}" />
 						</Grid>
 
 						<!--That really big grid with all the data-->
@@ -135,7 +141,7 @@
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="Auto"
-																	MinWidth="72" />
+																	MinWidth="96" />
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
 							<Grid.RowDefinitions>
@@ -346,7 +352,8 @@
 												 Margin="0,0,0,5"
 												 HorizontalAlignment="Center" />
 
-							<TextBlock Text="Final Score:"
+							<TextBlock x:Name="MatchFinalScoreLabelTxt"
+												 Text="Final Score:"
 												 Grid.Row="1"
 												 FontSize="13"
 												 Foreground="{DynamicResource TitleGray}"
@@ -358,8 +365,10 @@
 												 Grid.Row="1"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightRed}"
-												 VerticalAlignment="Center" />
-							<TextBlock Text="to"
+												 VerticalAlignment="Center"
+												 ToolTip="Calculated from record data. May not be entirely accurate." />
+							<TextBlock x:Name="MatchFinalScoreToTxt"
+												 Text="to"
 												 Grid.Column="2"
 												 Grid.Row="1"
 												 HorizontalAlignment="Center"
@@ -370,14 +379,14 @@
 												 Grid.Row="1"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightBlue}"
-												 VerticalAlignment="Center" />
+												 VerticalAlignment="Center"
+												 ToolTip="Calculated from record data. May not be entirely accurate." />
 						</Grid>
 
 						<Line X2="100"
-									Stroke="Gray"
+									Stroke="#FFAAAAAA"
 									Stretch="Fill"
-									Margin="0,5,5,5"
-									StrokeThickness="1.5" />
+									Margin="0,5,5,2" />
 						<TextBlock Text="Pregame"
 											 FontSize="16"
 											 FontWeight="SemiBold" />
@@ -496,14 +505,13 @@
 						</Grid>
 
 						<Line X2="100"
-									Stroke="Gray"
+									Stroke="#FFAAAAAA"
 									Stretch="Fill"
-									Margin="0,5,5,5"
-									StrokeThickness="1.5" />
+									Margin="0,5,5,2" />
 						<TextBlock Text="Postgame"
 											 FontSize="16"
 											 FontWeight="SemiBold" />
-						
+
 						<Grid x:Name="MatchesBigFatGridPart2">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="96" />

@@ -159,6 +159,21 @@ namespace ScoutingData.Analysis
 				return (int)m.GetTeamColor(Team) != -1;
 			});
 
+			// Empty
+			if (matches.Count == 0)
+			{
+				WinRate = -1;
+				WinRateZ = -99;
+				ScoredPoints = new Distribution(true);
+				FinalScore = new Distribution(true);
+				Penalties = new Distribution(true);
+				WorkingCurrently = true;
+				ResponsivenessRate = 1;
+				ResponsivenessRateZ = 99;
+				Defense = new Distribution(true);
+				return;
+			}
+
 			// ================================================================== //
 
 			// Winrate

@@ -165,6 +165,20 @@ namespace ScoutingData
 
 			return MakeColor(a, r, g, b);
 		}
+		public static Color MakeColor(uint argb)
+		{
+			if (argb < (uint)0x01000000)
+			{
+				argb += 0xFF000000;
+			}
+
+			uint a = (argb & 0xFF000000) >> 24;
+			uint r = (argb & 0x00FF0000) >> 16;
+			uint g = (argb & 0x0000FF00) >> 8;
+			uint b = argb & 0x000000FF;
+
+			return MakeColor((byte)a, (byte)r, (byte)g, (byte)b);
+		}
 
 		/// <summary>
 		/// Shortcut for Debug Logging

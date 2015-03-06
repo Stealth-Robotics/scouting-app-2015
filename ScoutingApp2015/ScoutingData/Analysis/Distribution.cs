@@ -33,6 +33,9 @@ namespace ScoutingData.Analysis
 		//[JsonIgnore]
 		//public static DistributionDisplayMode DisplayMode = DistributionDisplayMode.MeanSD;
 
+		public bool FakeNull
+		{ get; private set; }
+
 		/// <summary>
 		/// Shortcut to the model's mean.
 		/// </summary>
@@ -40,7 +43,7 @@ namespace ScoutingData.Analysis
 		{
 			get
 			{
-				return Model.Mean;
+				return FakeNull ? -1 : Model.Mean;
 			}
 		}
 		
@@ -51,7 +54,7 @@ namespace ScoutingData.Analysis
 		{
 			get
 			{
-				return Model.SD;
+				return FakeNull ? -1 : Model.SD;
 			}
 		}
 
@@ -78,6 +81,16 @@ namespace ScoutingData.Analysis
 		{
 			Model = norm;
 		}
+		public Distribution(double mean, double sd) : 
+			this(new NormalModel(mean, sd))
+		{ }
+		public Distribution(bool makeNull)
+		{
+			FakeNull = makeNull;
+
+			Model = new NormalModel(-1, 0.01);
+			CenterZScore = -99;
+		}
 
 		/// <summary>
 		/// Calculates Z-score of center based on other data
@@ -98,6 +111,11 @@ namespace ScoutingData.Analysis
 		/// <returns>String based on the preferred display mode for distributions</returns>
 		public override string ToString()
 		{
+			if (FakeNull)
+			{
+				return "NULL";
+			}
+
 			return Model.ToString() + " [z = " + CenterZScore.ToString() + "]";
 		}
 	}

@@ -380,12 +380,8 @@ namespace ScoutingData.Data
 		public override string ToString()
 		{
 			return "Match " + Number.ToString() + ": " +
-				RedAlliance.TeamA_ID.ToString() + "-" +
-				RedAlliance.TeamB_ID.ToString() + "-" +
-				RedAlliance.TeamC_ID.ToString() + " vs. " +
-				BlueAlliance.TeamA_ID.ToString() + "-" +
-				BlueAlliance.TeamB_ID.ToString() + "-" +
-				BlueAlliance.TeamC_ID.ToString();
+				RedAlliance.ToString() + " vs. " +
+				BlueAlliance.ToString();
 		}
 	}
 }

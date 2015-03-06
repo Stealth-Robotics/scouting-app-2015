@@ -118,5 +118,13 @@ namespace ScoutingData.Data
 			B = e.LoadTeam(TeamB_ID);
 			C = e.LoadTeam(TeamC_ID);
 		}
+
+
+		public override string ToString()
+		{
+			return TeamA_ID.ToString() + "-" +
+				TeamB_ID.ToString() + "-" +
+				TeamC_ID.ToString();
+		}
 	}
 }
