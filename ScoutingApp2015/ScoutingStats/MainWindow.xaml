@@ -12,7 +12,8 @@
 					Title="Scouting Stats"
 					Height="463"
 					Width="701"
-					Loaded="Window_Loaded">
+					Loaded="Window_Loaded"
+					Icon="pulse.png">
 	<e:Window.Resources>
 		<SolidColorBrush x:Key="LightBlue"
 										 Color="#FF4444FF" />
@@ -60,12 +61,12 @@
 			<Button x:Name="RecalculateBtn"
 							Content="Recalculate All"
 							Grid.Column="3"
-							Visibility="Collapsed"
+							Visibility="Visible"
 							Margin="0,0,5,0"
 							Click="RecalculateBtn_Click" />
 			<e:ProgressBar x:Name="RecalculateProgress"
 										 Grid.Column="3"
-										 Visibility="Visible"
+										 Visibility="Collapsed"
 										 VerticalAlignment="Center"
 										 ToolTip="Calculating..."
 										 State="Busy"

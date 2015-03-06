@@ -93,6 +93,12 @@ namespace ScoutingData.Analysis
 		}
 
 		/// <summary>
+		/// Json-friendly constructor
+		/// </summary>
+		public Distribution() : this(true)
+		{ }
+
+		/// <summary>
 		/// Calculates Z-score of center based on other data
 		/// </summary>
 		/// <param name="all">Other data to compare to</param>

@@ -30,6 +30,8 @@ namespace ScoutingStats
 		public static readonly Color WORKING_GREEN = Colors.Green;
 		public static readonly Color MALFUNCTIONING_RED = Util.MakeColor("FFB20000");
 
+		private bool hasLoaded;
+
 		public FrcEvent Event
 		{ get; private set; }
 
@@ -91,6 +93,7 @@ namespace ScoutingStats
 			{
 				Event = ScoutingJson.ParseFrcEvent(EventPath + "\\" +
 						Event.EventName + ScoutingJson.EventExtension);
+				FrcAnalysis.Event = Event;
 			}
 			catch (Exception e)
 			{
@@ -325,6 +328,7 @@ namespace ScoutingStats
 			{
 				Event.PostJsonLoading(Teams);
 			}
+			hasLoaded = true;
 
 			LoadCreateAnalysis();
 			MatchSelectionList.ItemsSource = Event.Matches;
@@ -332,11 +336,21 @@ namespace ScoutingStats
 
 		private void MatchSelectionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			if (!hasLoaded)
+			{
+				return;
+			}
+
 			UpdateMatchesTab();
 		}
 
 		private void TeamSelectionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			if (!hasLoaded)
+			{
+				return;
+			}
+
 			UpdateTeamsTab();
 		}
 

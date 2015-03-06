@@ -102,6 +102,12 @@ namespace ScoutingData.Analysis
 		#endregion
 
 		/// <summary>
+		/// A bit more json-friendly
+		/// </summary>
+		internal TeamAnalysis() : this(null, null)
+		{ }
+
+		/// <summary>
 		/// Do not use. May be deleted in the future.
 		/// </summary>
 		/// <param name="e">Analysis for teams</param>

@@ -17,7 +17,8 @@
 					MinWidth="600"
 					MinHeight="400"
 					Background="#FFF7F7F7"
-					Loaded="window_Loaded">	
+					Loaded="window_Loaded"
+					Icon="io.png">	
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="7*" />

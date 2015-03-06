@@ -11,7 +11,8 @@
 					MinHeight="400"
 					WindowStartupLocation="CenterScreen"
 					Title="Stealth Scouting"
-					Loaded="ScoutingMainWindow_Loaded">
+					Loaded="ScoutingMainWindow_Loaded"
+					Icon="assets/db.png">
 	<!--Top-level Grid (including time bar)-->
 	<Grid>
 		<Grid.RowDefinitions>

@@ -64,6 +64,18 @@ namespace ScoutingIO.Dialogs
 			}
 		}
 
+		public string Description
+		{
+			get
+			{
+				return DescriptionBox.Text;
+			}
+			set
+			{
+				DescriptionBox.Text = value;
+			}
+		}
+
 		public string Expectations
 		{
 			get
@@ -88,6 +100,7 @@ namespace ScoutingIO.Dialogs
 			res.Number = TeamNumber;
 			res.Name = TeamName;
 			res.School = Location;
+			res.Description = Description;
 			res.Expectations = Expectations;
 
 			return res;

@@ -94,6 +94,11 @@ namespace ScoutingApp
 		{
 			get
 			{
+				if (RedA == null)
+				{
+					return null;
+				}
+
 				return RedA.GetDescriptionWPF();
 			}
 		}
@@ -109,6 +114,11 @@ namespace ScoutingApp
 		{
 			get
 			{
+				if (RedB == null)
+				{
+					return null;
+				}
+
 				return RedB.GetDescriptionWPF();
 			}
 		}
@@ -124,6 +134,11 @@ namespace ScoutingApp
 		{
 			get
 			{
+				if (RedC == null)
+				{
+					return null;
+				}
+
 				return RedC.GetDescriptionWPF();
 			}
 		}
@@ -138,7 +153,12 @@ namespace ScoutingApp
 		StackPanel InfoBlueA
 		{
 			get
-			{ 
+			{
+				if (BlueA == null)
+				{
+					return null;
+				}
+
 				return BlueA.GetDescriptionWPF();
 			}
 		}
@@ -154,6 +174,11 @@ namespace ScoutingApp
 		{
 			get
 			{
+				if (BlueB == null)
+				{
+					return null;
+				}
+
 				return BlueB.GetDescriptionWPF();
 			}
 		}
@@ -169,6 +194,11 @@ namespace ScoutingApp
 		{
 			get
 			{
+				if (BlueC == null)
+				{
+					return null;
+				}
+
 				return BlueC.GetDescriptionWPF();
 			}
 		}
@@ -202,13 +232,13 @@ namespace ScoutingApp
 				return;
 			}
 
-			RedATxt.Text = RedA.ToString();
-			RedBTxt.Text = RedB.ToString();
-			RedCTxt.Text = RedC.ToString();
+			RedATxt.Text = Settings.GetMatch().RedAlliance.TeamA_ID.ToString();
+			RedBTxt.Text = Settings.GetMatch().RedAlliance.TeamB_ID.ToString();
+			RedCTxt.Text = Settings.GetMatch().RedAlliance.TeamC_ID.ToString();
 
-			BlueATxt.Text = BlueA.ToString();
-			BlueBTxt.Text = BlueB.ToString();
-			BlueCTxt.Text = BlueC.ToString();
+			BlueATxt.Text = Settings.GetMatch().BlueAlliance.TeamA_ID.ToString();
+			BlueBTxt.Text = Settings.GetMatch().BlueAlliance.TeamB_ID.ToString();
+			BlueCTxt.Text = Settings.GetMatch().BlueAlliance.TeamC_ID.ToString();
 
 			RedATxt.ToolTip = InfoRedA;
 			RedBTxt.ToolTip = InfoRedB;
