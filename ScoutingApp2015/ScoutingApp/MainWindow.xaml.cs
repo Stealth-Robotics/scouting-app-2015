@@ -487,13 +487,13 @@ namespace ScoutingApp
 
 			Record = new RecordedMatch(Record.MatchNumber, SelectedTeam, Color);
 
-			if (PregameMatch.GetTeamColor(SelectedTeam) == AllianceColor.Red)
-			{
-				TeamInfoBtn.Background = new SolidColorBrush(RED_ALLIANCE);
-			}
-			else // blue (or indeterminate, but that'll never happen)
+			if (PregameMatch.GetTeamColor(SelectedTeam) == AllianceColor.Blue)
 			{
 				TeamInfoBtn.Background = new SolidColorBrush(BLUE_ALLIANCE);
+			}
+			else // red (or indeterminate, but that'll never happen)
+			{
+				TeamInfoBtn.Background = new SolidColorBrush(RED_ALLIANCE);
 			}
 
 			PregameReset();
@@ -664,10 +664,10 @@ namespace ScoutingApp
 				{
 				case AllianceColor.Indeterminate:
 					return new SolidColorBrush(Colors.White);
-				case AllianceColor.Red:
-					return new SolidColorBrush(Colors.Red);
 				case AllianceColor.Blue:
 					return new SolidColorBrush(Colors.Blue);
+				case AllianceColor.Red:
+					return new SolidColorBrush(Colors.Red);
 				default:
 					return null;
 				}
@@ -704,13 +704,13 @@ namespace ScoutingApp
 		{
 			List<TeamDataContext> res = new List<TeamDataContext>();
 
-			res.Add(new TeamDataContext(m.RedAlliance.A, AllianceColor.Red));
-			res.Add(new TeamDataContext(m.RedAlliance.B, AllianceColor.Red));
-			res.Add(new TeamDataContext(m.RedAlliance.C, AllianceColor.Red));
-
 			res.Add(new TeamDataContext(m.BlueAlliance.A, AllianceColor.Blue));
 			res.Add(new TeamDataContext(m.BlueAlliance.B, AllianceColor.Blue));
 			res.Add(new TeamDataContext(m.BlueAlliance.C, AllianceColor.Blue));
+
+			res.Add(new TeamDataContext(m.RedAlliance.A, AllianceColor.Red));
+			res.Add(new TeamDataContext(m.RedAlliance.B, AllianceColor.Red));
+			res.Add(new TeamDataContext(m.RedAlliance.C, AllianceColor.Red));
 
 			return res;
 		}

@@ -91,7 +91,7 @@ namespace ScoutingData.Sync
 				}
 			});
 
-			Match result = new Match(matchID, red, blue);
+			Match result = new Match(matchID, blue, red);
 			result.Pregame = false;
 
 			// This section is because Unprocessed and Landfill Litter type goals are shared, but

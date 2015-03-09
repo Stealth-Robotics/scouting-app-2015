@@ -28,17 +28,17 @@ namespace ScoutingData.Data
 		{ get; set; }
 
 		/// <summary>
-		/// Red Alliance [pregame]
-		/// </summary>
-		[JsonProperty]
-		public Alliance RedAlliance
-		{ get; set; }
-
-		/// <summary>
 		/// Blue Alliance [pregame]
 		/// </summary>
 		[JsonProperty]
 		public Alliance BlueAlliance
+		{ get; set; }
+
+		/// <summary>
+		/// Red Alliance [pregame]
+		/// </summary>
+		[JsonProperty]
+		public Alliance RedAlliance
 		{ get; set; }
 
 		/// <summary>
@@ -122,22 +122,15 @@ namespace ScoutingData.Data
 		}
 
 		/// <summary>
-		/// Calculated as the mean of recorded match final scores for red.
-		/// </summary>
-		public int RedFinalScore
-		{ get; set; }
-
-		/// <summary>
 		/// Calculated as the mean of recorded match final scores for blue.
 		/// </summary>
 		public int BlueFinalScore
 		{ get; set; }
 
 		/// <summary>
-		/// Discrepancy points for when scouting data is inaccurate or missing.
+		/// Calculated as the mean of recorded match final scores for red.
 		/// </summary>
-		[JsonProperty]
-		public int RedDiscrepancyPoints
+		public int RedFinalScore
 		{ get; set; }
 
 		/// <summary>
@@ -145,6 +138,13 @@ namespace ScoutingData.Data
 		/// </summary>
 		[JsonProperty]
 		public int BlueDiscrepancyPoints
+		{ get; set; }
+
+		/// <summary>
+		/// Discrepancy points for when scouting data is inaccurate or missing.
+		/// </summary>
+		[JsonProperty]
+		public int RedDiscrepancyPoints
 		{ get; set; }
 
 		/// <summary>
@@ -156,13 +156,6 @@ namespace ScoutingData.Data
 		{ get; set; }
 
 		/// <summary>
-		/// Used to determine which bots are working (red)
-		/// </summary>
-		[JsonProperty]
-		public AllianceGroup<bool> RedWorking
-		{ get; set; }
-
-		/// <summary>
 		/// Used to determine which bots are working (blue)
 		/// </summary>
 		[JsonProperty]
@@ -170,10 +163,10 @@ namespace ScoutingData.Data
 		{ get; set; }
 
 		/// <summary>
-		/// Defense ratings for red, from 0-10
+		/// Used to determine which bots are working (red)
 		/// </summary>
 		[JsonProperty]
-		public AllianceGroup<int> RedDefense
+		public AllianceGroup<bool> RedWorking
 		{ get; set; }
 
 		/// <summary>
@@ -184,12 +177,19 @@ namespace ScoutingData.Data
 		{ get; set; }
 
 		/// <summary>
+		/// Defense ratings for red, from 0-10
+		/// </summary>
+		[JsonProperty]
+		public AllianceGroup<int> RedDefense
+		{ get; set; }
+
+		/// <summary>
 		/// Creates a (pregame) match setup. All postgame data is put in later.
 		/// </summary>
 		/// <param name="num">Match number</param>
-		/// <param name="red">Red alliance</param>
 		/// <param name="blue">Blue alliance</param>
-		public Match(int num, Alliance red, Alliance blue)
+		/// <param name="red">Red alliance</param>
+		public Match(int num, Alliance blue, Alliance red)
 		{
 			Number = num;
 			RedAlliance = red;
@@ -200,7 +200,8 @@ namespace ScoutingData.Data
 		/// <summary>
 		/// A more DataGrid-friendly constructor
 		/// </summary>
-		public Match() : this(0, new Alliance(), new Alliance())
+		public Match()
+			: this(0, new Alliance(), new Alliance())
 		{ }
 
 		/// <summary>
@@ -209,8 +210,8 @@ namespace ScoutingData.Data
 		/// <param name="e">Event to load data from</param>
 		public void PostJsonLoading(FrcEvent e)
 		{
-			RedAlliance.PostJsonLoading(e);
 			BlueAlliance.PostJsonLoading(e);
+			RedAlliance.PostJsonLoading(e);
 
 			if (!Pregame)
 			{
@@ -230,10 +231,10 @@ namespace ScoutingData.Data
 		{
 			switch (color)
 			{
-			case AllianceColor.Red:
-				return RedAlliance;
 			case AllianceColor.Blue:
 				return BlueAlliance;
+			case AllianceColor.Red:
+				return RedAlliance;
 			default:
 				return null;
 			}
@@ -311,15 +312,15 @@ namespace ScoutingData.Data
 		public bool GetWorking(Team team)
 		{
 			AllianceColor color = GetTeamColor(team);
-			if (color == AllianceColor.Red)
-			{
-				AlliancePosition pos = RedAlliance.GetPositionOf(team);
-				return RedWorking[pos];
-			}
-			else if (color == AllianceColor.Blue)
+			if (color == AllianceColor.Blue)
 			{
 				AlliancePosition pos = BlueAlliance.GetPositionOf(team);
 				return BlueWorking[pos];
+			}
+			else if (color == AllianceColor.Red)
+			{
+				AlliancePosition pos = RedAlliance.GetPositionOf(team);
+				return RedWorking[pos];
 			}
 			else
 			{
@@ -338,17 +339,17 @@ namespace ScoutingData.Data
 		public int GetDefense(Team team)
 		{
 			AllianceColor color = GetTeamColor(team);
-			if (color == AllianceColor.Red)
-			{
-				AlliancePosition pos = RedAlliance.GetPositionOf(team);
-				return RedDefense[pos];
-			}
-			else if (color == AllianceColor.Blue)
+			if (color == AllianceColor.Blue)
 			{
 				AlliancePosition pos = BlueAlliance.GetPositionOf(team);
 				return BlueDefense[pos];
 			}
-			else
+			else if (color == AllianceColor.Red)
+			{
+				AlliancePosition pos = RedAlliance.GetPositionOf(team);
+				return RedDefense[pos];
+			}
+			else 
 			{
 				Util.DebugLog(LogLevel.Error, "Invalid alliance color: " +
 					color.ToString());
@@ -361,17 +362,17 @@ namespace ScoutingData.Data
 			switch (index)
 			{
 			case 0:
-				return RedAlliance.A;
-			case 1:
-				return RedAlliance.B;
-			case 2:
-				return RedAlliance.C;
-			case 3:
 				return BlueAlliance.A;
-			case 4:
+			case 1:
 				return BlueAlliance.B;
-			case 5:
+			case 2:
 				return BlueAlliance.C;
+			case 3:
+				return RedAlliance.A;
+			case 4:
+				return RedAlliance.B;
+			case 5:
+				return RedAlliance.C;
 			default:
 				return null;
 			}

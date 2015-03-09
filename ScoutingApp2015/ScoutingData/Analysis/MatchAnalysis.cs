@@ -181,29 +181,41 @@ namespace ScoutingData.Analysis
 		public void CalculatePregame()
 		{
 			// Means of Winrates
+			BlueWinRateMean = Match.BlueAlliance.ToList().ConvertAll<double>((t) =>
+			{
+				return TeamAnalyses.Find((a) => a.Team == t).WinRate;
+			}).Mean();
+			
 			RedWinRateMean = Match.RedAlliance.ToList().ConvertAll<double>((t) =>
 			{
 				return TeamAnalyses.Find((a) => a.Team == t).WinRate;
 			}).Mean();
 
-			BlueWinRateMean = Match.BlueAlliance.ToList().ConvertAll<double>((t) =>
-			{
-				return TeamAnalyses.Find((a) => a.Team == t).WinRate;
-			}).Mean();
-
 			// Expected Winner and Advantage
-			double rawAdv = RedWinRateMean - BlueWinRateMean;
+			double rawAdv = BlueWinRateMean - RedWinRateMean;
 			if (rawAdv ==  0)
 			{
 				ExpectedWinner = AllianceColor.Indeterminate;
 			}
 			else
 			{
-				ExpectedWinner = (rawAdv > 0) ? AllianceColor.Red : AllianceColor.Blue;
+				ExpectedWinner = (rawAdv > 0) ? AllianceColor.Blue : AllianceColor.Red;
 			}
 			Advantage = (rawAdv < 0) ? -rawAdv : rawAdv;
 
 			// Expected Final Scores
+			var blueAnalyses = from ta in TeamAnalyses
+							  where Match.BlueAlliance.Contains(ta.Team)
+							  select ta;
+			BlueExpectedFinalScore = blueAnalyses.Sum((ta) => ta.FinalScore.Mean);
+
+			BlueExpectedFinalScore = Match.BlueAlliance.ToList().ConvertAll<double>((t) =>
+			{
+				TeamAnalysis ta = TeamAnalyses.Find((a) => a.Team == t);
+				ta.CalculateSafe();
+				return ta.FinalScore.Model.Mean;
+			}).Sum();
+
 			var redAnalyses = from ta in TeamAnalyses
 							  where Match.RedAlliance.Contains(ta.Team)
 							  select ta;
@@ -214,11 +226,6 @@ namespace ScoutingData.Analysis
 				TeamAnalysis ta = TeamAnalyses.Find((a) => a.Team == t);
 				ta.CalculateSafe();
 				return ta.FinalScore.Model.Mean;
-			}).Sum();
-
-			BlueExpectedFinalScore = Match.BlueAlliance.ToList().ConvertAll<double>((t) =>
-			{
-				return TeamAnalyses.Find((a) => a.Team.Number == t.Number).FinalScore.Model.Mean;
 			}).Sum();
 
 			// Game Profile Value

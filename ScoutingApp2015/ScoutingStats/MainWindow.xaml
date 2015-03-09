@@ -331,7 +331,7 @@
 												 FontWeight="SemiBold" />
 							<TextBlock x:Name="MatchRedTeamsTxt"
 												 Text="1111-2222-3333"
-												 Grid.Column="1"
+												 Grid.Column="3"
 												 FontSize="10"
 												 Foreground="{DynamicResource LightRed}"
 												 VerticalAlignment="Bottom"
@@ -346,7 +346,7 @@
 												 HorizontalAlignment="Center" />
 							<TextBlock x:Name="MatchBlueTeamsTxt"
 												 Text="4444-5555-6666"
-												 Grid.Column="3"
+												 Grid.Column="1"
 												 FontSize="10"
 												 Foreground="{DynamicResource LightBlue}"
 												 VerticalAlignment="Bottom"
@@ -362,7 +362,7 @@
 												 FontWeight="SemiBold" />
 							<TextBlock x:Name="MatchFinalScoreRedTxt"
 												 Text="##"
-												 Grid.Column="1"
+												 Grid.Column="3"
 												 Grid.Row="1"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightRed}"
@@ -376,7 +376,7 @@
 												 Foreground="{DynamicResource TitleGray}" />
 							<TextBlock x:Name="MatchFinalScoreBlueTxt"
 												 Text="##"
-												 Grid.Column="3"
+												 Grid.Column="1"
 												 Grid.Row="1"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightBlue}"
@@ -436,7 +436,7 @@
 
 							<TextBlock x:Name="MatchWinrateRedTxt"
 												 Text=".###"
-												 Grid.Column="1"
+												 Grid.Column="3"
 												 Grid.Row="0"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightRed}"
@@ -450,7 +450,7 @@
 												 VerticalAlignment="Center" />
 							<TextBlock x:Name="MatchExpectedFinalScoreRedTxt"
 												 Text="##"
-												 Grid.Column="1"
+												 Grid.Column="3"
 												 Grid.Row="2"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightRed}"
@@ -484,7 +484,7 @@
 
 							<TextBlock x:Name="MatchWinrateBlueTxt"
 												 Text=".###"
-												 Grid.Column="3"
+												 Grid.Column="1"
 												 Grid.Row="0"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightBlue}"
@@ -498,7 +498,7 @@
 												 VerticalAlignment="Center" />
 							<TextBlock x:Name="MatchExpectedFinalScoreBlueTxt"
 												 Text="##"
-												 Grid.Column="3"
+												 Grid.Column="1"
 												 Grid.Row="2"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightBlue}"
@@ -543,14 +543,14 @@
 
 							<TextBlock x:Name="MatchDefenseRedTxt"
 												 Text="#.#"
-												 Grid.Column="1"
+												 Grid.Column="3"
 												 Grid.Row="0"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightRed}"
 												 VerticalAlignment="Center" />
 							<TextBlock x:Name="MatchGoalCountRedTxt"
 												 Text="##"
-												 Grid.Column="1"
+												 Grid.Column="3"
 												 Grid.Row="1"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightRed}"
@@ -571,14 +571,14 @@
 
 							<TextBlock x:Name="MatchDefenseBlueTxt"
 												 Text="#.#"
-												 Grid.Column="3"
+												 Grid.Column="1"
 												 Grid.Row="0"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightBlue}"
 												 VerticalAlignment="Center" />
 							<TextBlock x:Name="MatchGoalCountBlueTxt"
 												 Text="##"
-												 Grid.Column="3"
+												 Grid.Column="1"
 												 Grid.Row="1"
 												 HorizontalAlignment="Center"
 												 Foreground="{DynamicResource LightBlue}"

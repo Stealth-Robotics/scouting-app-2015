@@ -15,8 +15,8 @@ namespace ScoutingData.Data
 	public enum AllianceColor
 	{
 		Indeterminate = -1,
-		Red = 1,
-		Blue
+		Blue = 1,
+		Red,
 	}
 
 	/// <summary>

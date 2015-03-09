@@ -163,7 +163,7 @@ namespace ScoutingIO.Dialogs
 				frc.LoadTeam(RedB), frc.LoadTeam(RedC));
 			Alliance blue = new Alliance(frc.LoadTeam(BlueA),
 				frc.LoadTeam(BlueB), frc.LoadTeam(BlueC));
-			return new Match(MatchID, red, blue);
+			return new Match(MatchID, blue, red);
 		}
 	}
 }

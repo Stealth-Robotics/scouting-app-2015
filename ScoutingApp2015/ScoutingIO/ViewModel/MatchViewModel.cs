@@ -741,43 +741,7 @@ namespace ScoutingIO.ViewModel
 					OnPropertyChanged("Number");
 				}
 			}
-
-			public int RedA
-			{
-				get
-				{
-					return match.RedAlliance.TeamA_ID;
-				}
-				set
-				{
-					match.RedAlliance.A = LoadTeam(value);
-					OnPropertyChanged("RedA");
-				}
-			}
-			public int RedB
-			{
-				get
-				{
-					return match.RedAlliance.TeamB_ID;
-				}
-				set
-				{
-					match.RedAlliance.B = LoadTeam(value);
-					OnPropertyChanged("RedB");
-				}
-			}
-			public int RedC
-			{
-				get
-				{
-					return match.RedAlliance.TeamC_ID;
-				}
-				set
-				{
-					match.RedAlliance.C = LoadTeam(value);
-					OnPropertyChanged("RedC");
-				}
-			}
+			
 			public int BlueA
 			{
 				get
@@ -812,6 +776,42 @@ namespace ScoutingIO.ViewModel
 				{
 					match.BlueAlliance.C = LoadTeam(value);
 					OnPropertyChanged("BlueC");
+				}
+			}
+			public int RedA
+			{
+				get
+				{
+					return match.RedAlliance.TeamA_ID;
+				}
+				set
+				{
+					match.RedAlliance.A = LoadTeam(value);
+					OnPropertyChanged("RedA");
+				}
+			}
+			public int RedB
+			{
+				get
+				{
+					return match.RedAlliance.TeamB_ID;
+				}
+				set
+				{
+					match.RedAlliance.B = LoadTeam(value);
+					OnPropertyChanged("RedB");
+				}
+			}
+			public int RedC
+			{
+				get
+				{
+					return match.RedAlliance.TeamC_ID;
+				}
+				set
+				{
+					match.RedAlliance.C = LoadTeam(value);
+					OnPropertyChanged("RedC");
 				}
 			}
 
@@ -856,12 +856,12 @@ namespace ScoutingIO.ViewModel
 
 			public override string ToString()
 			{
-				return RedA.ToString() + "-" +
-					RedB.ToString() + "-" +
-					RedC.ToString() + " vs " +
-					BlueA.ToString() + "-" +
+				return BlueA.ToString() + "-" +
 					BlueB.ToString() + "-" +
-					BlueC.ToString();
+					BlueC.ToString() + " vs " +
+					RedA.ToString() + "-" +
+					RedB.ToString() + "-" +
+					RedC.ToString();
 			}
 		}
 	}

@@ -12,14 +12,14 @@ namespace ScoutingData.Lite
 	[JsonObject(MemberSerialization.OptIn)]
 	public class RecordLite : IPostJson
 	{
-		public Team LinkedTeam
+		public Team Team
 		{ get; private set; }
 
 		[JsonProperty]
 		public int TeamID
 		{ get; private set; }
 
-		public Match LinkedMatch
+		public Match Match
 		{ get; private set; }
 
 		[JsonProperty]
@@ -40,7 +40,8 @@ namespace ScoutingData.Lite
 
 		public void PostJsonLoading(FrcEvent e)
 		{
-			throw new NotImplementedException();
+			Team = e.LoadTeam(TeamID);
+			Match = e.LoadMatch(MatchID);
 		}
 	}
 }
