@@ -76,6 +76,9 @@
     <Compile Include="Data\Team.cs" />
     <Compile Include="Data\TeamsList.cs" />
     <Compile Include="IDescribable.cs" />
+    <Compile Include="Lite\RatingSet.cs" />
+    <Compile Include="Lite\RecordLite.cs" />
+    <Compile Include="Lite\TeamStatsLite.cs" />
     <Compile Include="ScoutingJson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stats.cs" />
