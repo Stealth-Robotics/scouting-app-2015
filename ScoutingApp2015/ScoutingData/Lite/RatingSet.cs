@@ -28,7 +28,8 @@ namespace ScoutingData.Lite
 		/// Rating of robot's coopertition capabilities
 		/// </summary>
 		[JsonProperty]
-		public double Coopertition // Still not a word
+		// Still not a word
+		public double Coopertition
 		{ get; set; }
 
 		/// <summary>
