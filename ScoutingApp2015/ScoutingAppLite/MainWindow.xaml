@@ -18,7 +18,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
-		
+
 		<Grid x:Name="_TopBar"
 					Margin="5">
 			<Grid.ColumnDefinitions>
@@ -30,7 +30,7 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
-			
+
 			<TextBlock Text="Event:"
 								 FontSize="14"
 								 FontWeight="SemiBold"
@@ -67,70 +67,21 @@
 							MinWidth="36"
 							Margin="5,0,0,0" />
 		</Grid>
-		
+
 		<ScrollViewer Grid.Row="1">
 			<Grid x:Name="_MainGrid">
 				<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+
 				
-				<Expander x:Name="RedA_Exp"
-									IsExpanded="True">
-					<Expander.Header>
-						<CheckBox x:Name="RedA_Enabled"
-											Content="1111: Ones"
-											IsChecked="{Binding IsExpanded, ElementName=RedA_Exp}"
-											FontSize="14"
-											Foreground="#FF81B4FF" />
-					</Expander.Header>
-					<Grid Margin="20,5,0,0">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="*" />
-						</Grid.ColumnDefinitions>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-						</Grid.RowDefinitions>
-						
-						<TextBlock Text="Autonomous: 5"
-											 Foreground="White"
-											 Margin="0,0,5,0" />
-						<Slider Grid.Column="1"
-										Minimum="0"
-										Maximum="10"
-										Value="5"
-										SmallChange="1"
-										IsSnapToTickEnabled="True"
-										IsMoveToPointEnabled="True" />
-						<TextBlock Text="Stacking: 5"
-											 Grid.Row="1"
-											 Foreground="White"
-											 Margin="0,0,5,0" />
-						<Slider Grid.Column="1"
-										Grid.Row="1"
-										Minimum="0"
-										Maximum="10"
-										Value="5"
-										SmallChange="1"
-										IsSnapToTickEnabled="True"
-										IsMoveToPointEnabled="True" />
-					</Grid>
-				</Expander>
 			</Grid>
 		</ScrollViewer>
 	</Grid>
