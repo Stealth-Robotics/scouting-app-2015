@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScoutingAppLite.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,14 @@ namespace ScoutingAppLite.View
 	/// </summary>
 	public partial class RatingView : UserControl
 	{
+		public RatingViewModel ViewModel
+		{
+			get
+			{
+				return Resources["ViewModel"] as RatingViewModel;
+			}
+		}
+
 		public RatingView()
 		{
 			InitializeComponent();

@@ -3,6 +3,7 @@
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:e="http://schemas.codeplex.com/elysium"
 					xmlns:par="http://schemas.codeplex.com/elysium/params"
+					xmlns:v="clr-namespace:ScoutingAppLite.View"
 					par:Design.Theme="Dark"
 					par:Manager.Theme="Dark"
 					par:Design.AccentBrush="{x:Static e:AccentBrushes.Green}"
@@ -81,7 +82,7 @@
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
-				
+				<v:RatingView x:Name="RedAView" />
 			</Grid>
 		</ScrollViewer>
 	</Grid>
