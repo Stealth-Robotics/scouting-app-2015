@@ -38,6 +38,23 @@ namespace ScoutingData.Lite
 		public RatingSet Ratings
 		{ get; set; }
 
+		public RecordLite() : this(null, null)
+		{ }
+		public RecordLite(Team team, Match match)
+		{
+			Team = team;
+			TeamID = team != null ? team.Number : -1;
+			Match = match;
+			MatchID = match != null ? match.Number : -1;
+
+			if (match != null)
+			{
+				Color = match.GetTeamColor(team);
+				Position = match.GetTeamPosition(team);
+				Ratings = new RatingSet();
+			}
+		}
+
 		public void PostJsonLoading(FrcEvent e)
 		{
 			Team = e.LoadTeam(TeamID);

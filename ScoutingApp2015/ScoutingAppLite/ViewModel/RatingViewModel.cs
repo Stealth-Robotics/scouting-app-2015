@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace ScoutingAppLite.ViewModel
 {
@@ -157,14 +158,65 @@ namespace ScoutingAppLite.ViewModel
 				_ratedTeam = value;
 				OnPropertyChanged("RatedTeam");
 				OnPropertyChanged("RatedTeamName");
+				OnPropertyChanged("Color");
 			}
 		}
 		Team _ratedTeam;
+
+		public Match IndicatedMatch
+		{
+			get
+			{
+				return _indicatedMatch;
+			}
+			set
+			{
+				_indicatedMatch = value;
+				OnPropertyChanged("IsTracked");
+				OnPropertyChanged("Color");
+				OnPropertyChanged("Color_Wpf");
+			}
+		}
+		Match _indicatedMatch;
+
+		public AllianceColor Color
+		{ 
+			get
+			{
+				if (IndicatedMatch == null)
+				{
+					return AllianceColor.Indeterminate;
+				}
+
+				return IndicatedMatch.GetTeamColor(RatedTeam);
+			}
+		}
+
+		public Brush Color_Brush
+		{
+			get
+			{
+				switch (Color)
+				{
+				case AllianceColor.Blue:
+					return new SolidColorBrush(Colors.CornflowerBlue);
+				case AllianceColor.Red:
+					return new SolidColorBrush(Colors.Salmon);
+				default:
+					return new SolidColorBrush(Colors.Gray);
+				}
+			}
+		}
 
 		public string RatedTeamName
 		{
 			get
 			{
+				if (RatedTeam == null)
+				{
+					return "NULL";
+				}
+
 				return RatedTeam.ToString();
 			}
 		}
@@ -193,6 +245,18 @@ namespace ScoutingAppLite.ViewModel
 			}
 
 			PropertyChanged(this, new PropertyChangedEventArgs(name));
+		}
+
+		public RecordLite MakeRecord()
+		{
+			if (IndicatedMatch == null)
+			{
+				return null;
+			}
+
+			RecordLite rec = new RecordLite(RatedTeam, IndicatedMatch);
+			rec.Ratings = Ratings;
+			return rec;
 		}
 	}
 }

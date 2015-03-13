@@ -263,8 +263,32 @@ namespace ScoutingData.Data
 			}
 			else
 			{
-				Util.DebugLog(LogLevel.Error, "Neither alliance contains team " + team.Number.ToString());
+				Util.DebugLog(LogLevel.Error, "Neither alliance contains team " + 
+					team.Number.ToString());
 				return AllianceColor.Indeterminate;
+			}
+		}
+		public AlliancePosition GetTeamPosition(Team team)
+		{
+			if (team == null)
+			{
+				Util.DebugLog(LogLevel.Critical, "Team is null.");
+				return AlliancePosition.A;
+			}
+
+			AllianceColor color = GetTeamColor(team);
+			if (color == AllianceColor.Blue)
+			{
+				return BlueAlliance.GetIndexOf(team);
+			}
+			else if (color == AllianceColor.Red)
+			{
+				return RedAlliance.GetIndexOf(team);
+			}
+			else
+			{
+				Util.DebugLog(LogLevel.Error, "Neither alliance contains team.");
+				return AlliancePosition.A;
 			}
 		}
 

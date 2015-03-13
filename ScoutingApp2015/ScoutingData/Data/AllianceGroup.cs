@@ -187,5 +187,30 @@ namespace ScoutingData.Data
 		}
 
 		#endregion
+
+		public AlliancePosition GetIndexOf(T t)
+		{
+			if (t == null)
+			{
+				Util.DebugLog(LogLevel.Critical, "T is null.");
+				return AlliancePosition.A;
+			}
+
+			if (t.Equals(A))
+			{
+				return AlliancePosition.A;
+			}
+			if (t.Equals(B))
+			{
+				return AlliancePosition.B;
+			}
+			if (t.Equals(C))
+			{
+				return AlliancePosition.C;
+			}
+
+			Util.DebugLog(LogLevel.Critical, "T not found.");
+			return AlliancePosition.A;
+		}
 	}
 }
