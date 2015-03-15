@@ -1,0 +1,18 @@
+﻿<e:Window x:Class="ScoutingManagerLite.MainWindow"
+					xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:e="http://schemas.codeplex.com/elysium"
+					xmlns:par="http://schemas.codeplex.com/elysium/params"
+					par:Design.Theme="Light"
+					par:Manager.Theme="Light"
+					par:Design.AccentBrush="{x:Static e:AccentBrushes.Sky}"
+					par:Manager.AccentBrush="{x:Static e:AccentBrushes.Sky}"
+					Title="Scouting Manager Lite" 
+					Height="500" 
+					Width="800">
+  <Grid>
+		<Grid.ColumnDefinitions>
+			
+		</Grid.ColumnDefinitions>
+  </Grid>
+</e:Window>

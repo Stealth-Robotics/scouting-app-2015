@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoutingStats", "ScoutingSt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoutingAppLite", "ScoutingAppLite\ScoutingAppLite.csproj", "{74701D24-2F77-4557-96F0-B1FE3EC7A444}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoutingManagerLite", "ScoutingManagerLite\ScoutingManagerLite.csproj", "{58487B18-663D-41FC-AE08-D55C7898F67E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{74701D24-2F77-4557-96F0-B1FE3EC7A444}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74701D24-2F77-4557-96F0-B1FE3EC7A444}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74701D24-2F77-4557-96F0-B1FE3EC7A444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58487B18-663D-41FC-AE08-D55C7898F67E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58487B18-663D-41FC-AE08-D55C7898F67E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58487B18-663D-41FC-AE08-D55C7898F67E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58487B18-663D-41FC-AE08-D55C7898F67E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
