@@ -89,5 +89,18 @@ namespace ScoutingData.Lite
 				return sigma / 9.0;
 			}
 		}
+
+		public RatingSet()
+		{
+			Autonomous = 0;
+			Stacking = 0;
+			Coopertition = 0;
+			Containers = 0;
+			Mobility = 0;
+			Efficiency = 0;
+			Stability = 0;
+			Grip = 0;
+			HumanPlayerSkill = 0;
+		}
 	}
 }
