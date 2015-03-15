@@ -1,4 +1,6 @@
 ﻿using ScoutingAppLite.ViewModel;
+using ScoutingData.Data;
+using ScoutingData.Lite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,8 @@ namespace ScoutingAppLite.View
 	/// </summary>
 	public partial class RatingView : UserControl
 	{
+		public event EventHandler<bool> IsRecordingChanged;
+
 		public RatingViewModel ViewModel
 		{
 			get
@@ -29,9 +33,49 @@ namespace ScoutingAppLite.View
 			}
 		}
 
+		public Brush ThemeBrush
+		{ get; set; }
+
+		public bool IsRecording
+		{
+			get
+			{
+				return TitleCheck.IsChecked == true;
+			}
+		}
+
+		public int TeamIndex
+		{ get; set; }
+
 		public RatingView()
 		{
 			InitializeComponent();
+		}
+
+		public void SetMatchContext(Match match)
+		{
+			ViewModel.IndicatedMatch = match;
+			if (match != null)
+			{
+				ViewModel.RatedTeam = match.GetTeamByInclusiveIndex(TeamIndex);
+			}
+		}
+
+		public RecordLite MakeRecord()
+		{
+			RecordLite res = new RecordLite(ViewModel.RatedTeam, 
+				ViewModel.IndicatedMatch);
+			res.Ratings = ViewModel.Ratings;
+
+			return res;
+		}
+
+		private void TitleCheck_Click(object sender, RoutedEventArgs e)
+		{
+			if (IsRecordingChanged != null)
+			{
+				IsRecordingChanged(this, TitleCheck.IsChecked ?? false);
+			}
 		}
 	}
 }

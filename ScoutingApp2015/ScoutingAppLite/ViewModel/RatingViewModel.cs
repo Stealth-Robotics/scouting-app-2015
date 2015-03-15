@@ -41,6 +41,11 @@ namespace ScoutingAppLite.ViewModel
 		{ 
 			get
 			{
+				if (Ratings == null)
+				{
+					return 0;
+				}
+
 				return Ratings.Autonomous;
 			}
 			set
@@ -53,6 +58,11 @@ namespace ScoutingAppLite.ViewModel
 		{
 			get
 			{
+				if (Ratings == null)
+				{
+					return 0;
+				}
+
 				return Ratings.Stacking;
 			}
 			set
@@ -65,6 +75,11 @@ namespace ScoutingAppLite.ViewModel
 		{
 			get
 			{
+				if (Ratings == null)
+				{
+					return 0;
+				}
+
 				return Ratings.Coopertition;
 			}
 			set
@@ -77,6 +92,11 @@ namespace ScoutingAppLite.ViewModel
 		{
 			get
 			{
+				if (Ratings == null)
+				{
+					return 0;
+				}
+
 				return Ratings.Containers;
 			}
 			set
@@ -89,6 +109,11 @@ namespace ScoutingAppLite.ViewModel
 		{
 			get
 			{
+				if (Ratings == null)
+				{
+					return 0;
+				}
+
 				return Ratings.Mobility;
 			}
 			set
@@ -101,6 +126,11 @@ namespace ScoutingAppLite.ViewModel
 		{
 			get
 			{
+				if (Ratings == null)
+				{
+					return 0;
+				}
+
 				return Ratings.Efficiency;
 			}
 			set
@@ -113,6 +143,11 @@ namespace ScoutingAppLite.ViewModel
 		{
 			get
 			{
+				if (Ratings == null)
+				{
+					return 0;
+				}
+
 				return Ratings.Stability;
 			}
 			set
@@ -125,6 +160,11 @@ namespace ScoutingAppLite.ViewModel
 		{
 			get
 			{
+				if (Ratings == null)
+				{
+					return 0;
+				}
+
 				return Ratings.Grip;
 			}
 			set
@@ -137,6 +177,11 @@ namespace ScoutingAppLite.ViewModel
 		{
 			get
 			{
+				if (Ratings == null)
+				{
+					return 0;
+				}
+
 				return Ratings.HumanPlayerSkill;
 			}
 			set
@@ -192,7 +237,7 @@ namespace ScoutingAppLite.ViewModel
 			}
 		}
 
-		public Brush Color_Brush
+		public SolidColorBrush Color_Brush
 		{
 			get
 			{
@@ -236,6 +281,11 @@ namespace ScoutingAppLite.ViewModel
 		bool _isTracked;
 
 		public event PropertyChangedEventHandler PropertyChanged;
+
+		public RatingViewModel()
+		{
+			Ratings = new RatingSet();
+		}
 
 		public void OnPropertyChanged(string name)
 		{

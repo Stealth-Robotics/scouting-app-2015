@@ -10,14 +10,18 @@
 					par:Manager.AccentBrush="{x:Static e:AccentBrushes.Green}"
 					par:Design.ContrastBrush="White"
 					par:Manager.ContrastBrush="White"
-					Title="Scouting App"
+					Title="Scouting App Lite"
 					Height="450"
-					Width="700"
-					Background="#FF1B1B1B">
+					Width="900"
+					Background="#FF1B1B1B"
+					MinHeight="300"
+					MinWidth="500"
+					Loaded="Window_Loaded">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
 		<Grid x:Name="_TopBar"
@@ -31,6 +35,10 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
 
 			<TextBlock Text="Event:"
 								 FontSize="14"
@@ -44,16 +52,20 @@
 							 FontSize="14"
 							 BorderThickness="1"
 							 Background="#FF272727"
-							 Margin="0,0,5,0" />
+							 Margin="0,0,5,0"
+							 BorderBrush="#FF555555"
+							 TextChanged="EventPathBox_TextChanged" />
 			<Button x:Name="EventPathBtn"
 							Content="..."
 							Grid.Column="2"
-							MinWidth="36" />
+							MinWidth="36"
+							Click="EventPathBtn_Click" />
 			<Button x:Name="MatchID_DownBtn"
 							Grid.Column="4"
 							Content="&lt;"
 							MinWidth="36"
-							Margin="0,0,5,0" />
+							Margin="0,0,5,0"
+							Click="MatchID_DownBtn_Click" />
 			<TextBox x:Name="MatchIDBox"
 							 Grid.Column="5"
 							 Text="1"
@@ -61,29 +73,122 @@
 							 FontSize="14"
 							 BorderThickness="1"
 							 HorizontalContentAlignment="Center"
-							 Background="#FF272727" />
+							 Background="#FF272727"
+							 BorderBrush="#FF555555"
+							 TextChanged="MatchIDBox_TextChanged" />
 			<Button x:Name="MatchID_UpBtn"
 							Grid.Column="6"
 							Content="&gt;"
 							MinWidth="36"
-							Margin="5,0,0,0" />
+							Margin="5,0,0,0"
+							Click="MatchID_UpBtn_Click" />
+
+			<TextBlock Text="Teams List:"
+								 Grid.Row="1"
+								 FontSize="14"
+								 FontWeight="SemiBold"
+								 VerticalAlignment="Center"
+								 Margin="5,5,10,0"
+								 Foreground="White" />
+			<TextBox x:Name="TeamsPathBox"
+							 Grid.Column="1"
+							 Grid.Row="1"
+							 Text="H:\Teams.teams"
+							 FontSize="14"
+							 BorderThickness="1"
+							 Background="#FF272727"
+							 Margin="0,5,5,0"
+							 BorderBrush="#FF555555"
+							 TextChanged="TeamsPathBox_TextChanged" />
+			<Button x:Name="TeamsPathBtn"
+							Grid.Row="1"
+							Content="..."
+							Grid.Column="2"
+							MinWidth="36"
+							Margin="0,5,0,0"
+							Click="TeamsPathBtn_Click" />
 		</Grid>
 
-		<ScrollViewer Grid.Row="1">
+		<ScrollViewer Grid.Row="1"
+									Background="#FF272727"
+									BorderThickness="0,1,0,0"
+									BorderBrush="#FF424242">
 			<Grid x:Name="_MainGrid">
 				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
-				<v:RatingView x:Name="RedAView" />
+				<v:RatingView x:Name="BlueAView"
+											Grid.Column="0"
+											Grid.Row="0"
+											Margin="5,5,5,0"
+											TeamIndex="0"
+											ThemeBrush="#FF0668DE"
+											VerticalAlignment="Top"
+											IsRecordingChanged="Any_IsRecordingChanged" />
+				<v:RatingView x:Name="BlueBView"
+											Grid.Column="1"
+											Grid.Row="0"
+											Margin="5,5,5,0"
+											TeamIndex="1"
+											ThemeBrush="#FF0668DE"
+											VerticalAlignment="Top"
+											IsRecordingChanged="Any_IsRecordingChanged" />
+				<v:RatingView x:Name="BlueCView"
+											Grid.Column="2"
+											Grid.Row="0"
+											Margin="5,5,5,0"
+											TeamIndex="2"
+											ThemeBrush="#FF0668DE"
+											VerticalAlignment="Top"
+											IsRecordingChanged="Any_IsRecordingChanged" />
+				<v:RatingView x:Name="RedAView"
+											Grid.Column="0"
+											Grid.Row="1"
+											ThemeBrush="#FFD81010"
+											Margin="5,5,5,0"
+											TeamIndex="3"
+											VerticalAlignment="Top"
+											IsRecordingChanged="Any_IsRecordingChanged" />
+				<v:RatingView x:Name="RedBView"
+											Grid.Column="1"
+											Grid.Row="1"
+											ThemeBrush="#FFD81010"
+											Margin="5,5,5,0"
+											TeamIndex="4"
+											VerticalAlignment="Top"
+											IsRecordingChanged="Any_IsRecordingChanged" />
+				<v:RatingView x:Name="RedCView"
+											Grid.Column="2"
+											Grid.Row="1"
+											ThemeBrush="#FFD81010"
+											Margin="5,5,5,0"
+											TeamIndex="5"
+											VerticalAlignment="Top"
+											IsRecordingChanged="Any_IsRecordingChanged" />
 			</Grid>
 		</ScrollViewer>
+		<StackPanel Orientation="Horizontal"
+								Grid.Row="2"
+								HorizontalAlignment="Right">
+			<Button x:Name="BreakBtn"
+							Content="BREAK"
+							MinWidth="96"
+							Margin="5"
+							Click="BreakBtn_Click"
+							Visibility="Collapsed" />
+			<Button x:Name="SaveBtn"
+							Content="Save..."
+							MinWidth="128"
+							Margin="5"
+							Click="SaveBtn_Click" />
+		</StackPanel>
 	</Grid>
 </e:Window>

@@ -8,7 +8,8 @@
 						 xmlns:e="http://schemas.codeplex.com/elysium"
 						 x:Class="ScoutingAppLite.View.RatingView"
 						 params:Design.Theme="Dark"
-						 params:Design.AccentBrush="{x:Static e:AccentBrushes.Green}"
+						 params:Design.AccentBrush="{Binding Path=ThemeBrush}"
+						 params:Manager.AccentBrush="{Binding Path=ThemeBrush}"
 						 params:Design.ContrastBrush="White"
 						 mc:Ignorable="d"
 						 d:DesignHeight="300"
@@ -17,18 +18,20 @@
 		<vm:RatingViewModel x:Key="ViewModel" />
 	</UserControl.Resources>
 
-	<Expander x:Name="Root">
+	<Expander x:Name="Root"
+						Background="#FF1B1B1B">
 		<Expander.Header>
 			<CheckBox x:Name="TitleCheck"
 								Content="{Binding RatedTeamName, Mode=OneWay, Source={StaticResource ViewModel}}"
 								IsChecked="{Binding IsTracked, Source={StaticResource ViewModel}}"
-								Foreground="{Binding Color_Brush, Mode=OneWay, Source={StaticResource ViewModel}}" />
+								Foreground="{Binding Color_Brush, Mode=OneWay, Source={StaticResource ViewModel}}"
+								Click="TitleCheck_Click" />
 		</Expander.Header>
 
-		<Grid Margin="0,5,0,0">
+		<Grid Margin="5">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="125" />
+				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
@@ -42,11 +45,12 @@
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
-			
+
 			<TextBlock Grid.Column="0"
 								 Grid.Row="0"
 								 Margin="0,0,0,5"
-								 VerticalAlignment="Center">
+								 VerticalAlignment="Center"
+								 Foreground="White">
 				<Run Text="Autonomous: " />
 				<Run Text="{Binding Ratings_Autonomous, Mode=OneWay, Source={StaticResource ViewModel}}" />
 			</TextBlock>
@@ -54,15 +58,20 @@
 							Grid.Column="1"
 							TickPlacement="BottomRight"
 							IsSnapToTickEnabled="True"
-							params:Slider.ThumbThickness="8"
+							params:Slider.ThumbThickness="12"
 							Margin="0,0,0,5"
-							Value="{Binding Ratings_Stacking, Source={StaticResource ViewModel}}"
-							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}" />
-			
+							Value="{Binding Ratings_Autonomous, Source={StaticResource ViewModel}}"
+							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}"
+							MinHeight="22"
+							AutoToolTipPlacement="TopLeft"
+							IsMoveToPointEnabled="True"
+							params:Manager.AccentBrush="{Binding ThemeBrush}" />
+
 			<TextBlock Grid.Column="0"
 								 Grid.Row="1"
 								 Margin="0,0,0,5"
-								 VerticalAlignment="Center">
+								 VerticalAlignment="Center"
+								 Foreground="White">
 				<Run Text="Stacking: " />
 				<Run Text="{Binding Ratings_Stacking, Mode=OneWay, Source={StaticResource ViewModel}}" />
 			</TextBlock>
@@ -70,15 +79,20 @@
 							Grid.Column="1"
 							TickPlacement="BottomRight"
 							IsSnapToTickEnabled="True"
-							params:Slider.ThumbThickness="8"
+							params:Slider.ThumbThickness="12"
 							Margin="0,0,0,5"
 							Value="{Binding Ratings_Stacking, Source={StaticResource ViewModel}}"
-							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}" />
-			
+							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}"
+							MinHeight="22"
+							AutoToolTipPlacement="TopLeft"
+							IsMoveToPointEnabled="True"
+							params:Manager.AccentBrush="{Binding ThemeBrush}" />
+
 			<TextBlock Grid.Column="0"
 								 Grid.Row="2"
 								 Margin="0,0,0,5"
-								 VerticalAlignment="Center">
+								 VerticalAlignment="Center"
+								 Foreground="White">
 				<Run Text="Coopertition: " />
 				<Run Text="{Binding Ratings_Coopertition, Mode=OneWay, Source={StaticResource ViewModel}}" />
 			</TextBlock>
@@ -86,15 +100,20 @@
 							Grid.Column="1"
 							TickPlacement="BottomRight"
 							IsSnapToTickEnabled="True"
-							params:Slider.ThumbThickness="8"
+							params:Slider.ThumbThickness="12"
 							Margin="0,0,0,5"
 							Value="{Binding Ratings_Coopertition, Source={StaticResource ViewModel}}"
-							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}" />
-			
+							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}"
+							MinHeight="22"
+							AutoToolTipPlacement="TopLeft"
+							IsMoveToPointEnabled="True"
+							params:Manager.AccentBrush="{Binding ThemeBrush}" />
+
 			<TextBlock Grid.Column="0"
 								 Grid.Row="3"
 								 Margin="0,0,0,5"
-								 VerticalAlignment="Center">
+								 VerticalAlignment="Center"
+								 Foreground="White">
 				<Run Text="Containers: " />
 				<Run Text="{Binding Ratings_Containers, Mode=OneWay, Source={StaticResource ViewModel}}" />
 			</TextBlock>
@@ -102,15 +121,20 @@
 							Grid.Column="1"
 							TickPlacement="BottomRight"
 							IsSnapToTickEnabled="True"
-							params:Slider.ThumbThickness="8"
+							params:Slider.ThumbThickness="12"
 							Margin="0,0,0,5"
 							Value="{Binding Ratings_Containers, Source={StaticResource ViewModel}}"
-							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}" />
-			
+							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}"
+							MinHeight="22"
+							AutoToolTipPlacement="TopLeft"
+							IsMoveToPointEnabled="True"
+							params:Manager.AccentBrush="{Binding ThemeBrush}" />
+
 			<TextBlock Grid.Column="0"
 								 Grid.Row="4"
 								 Margin="0,0,0,5"
-								 VerticalAlignment="Center">
+								 VerticalAlignment="Center"
+								 Foreground="White">
 				<Run Text="Mobility: " />
 				<Run Text="{Binding Ratings_Mobility, Mode=OneWay, Source={StaticResource ViewModel}}" />
 			</TextBlock>
@@ -118,15 +142,20 @@
 							Grid.Column="1"
 							TickPlacement="BottomRight"
 							IsSnapToTickEnabled="True"
-							params:Slider.ThumbThickness="8"
+							params:Slider.ThumbThickness="12"
 							Margin="0,0,0,5"
 							Value="{Binding Ratings_Mobility, Source={StaticResource ViewModel}}"
-							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}" />
-			
+							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}"
+							MinHeight="22"
+							AutoToolTipPlacement="TopLeft"
+							IsMoveToPointEnabled="True"
+							params:Manager.AccentBrush="{Binding ThemeBrush}" />
+
 			<TextBlock Grid.Column="0"
 								 Grid.Row="5"
 								 Margin="0,0,0,5"
-								 VerticalAlignment="Center">
+								 VerticalAlignment="Center"
+								 Foreground="White">
 				<Run Text="Efficiency: " />
 				<Run Text="{Binding Ratings_Efficiency, Mode=OneWay, Source={StaticResource ViewModel}}" />
 			</TextBlock>
@@ -134,15 +163,20 @@
 							Grid.Column="1"
 							TickPlacement="BottomRight"
 							IsSnapToTickEnabled="True"
-							params:Slider.ThumbThickness="8"
+							params:Slider.ThumbThickness="12"
 							Margin="0,0,0,5"
 							Value="{Binding Ratings_Efficiency, Source={StaticResource ViewModel}}"
-							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}" />
-			
+							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}"
+							MinHeight="22"
+							AutoToolTipPlacement="TopLeft"
+							IsMoveToPointEnabled="True"
+							params:Manager.AccentBrush="{Binding ThemeBrush}" />
+
 			<TextBlock Grid.Column="0"
 								 Grid.Row="6"
 								 Margin="0,0,0,5"
-								 VerticalAlignment="Center">
+								 VerticalAlignment="Center"
+								 Foreground="White">
 				<Run Text="Stability: " />
 				<Run Text="{Binding Ratings_Stability, Mode=OneWay, Source={StaticResource ViewModel}}" />
 			</TextBlock>
@@ -150,15 +184,20 @@
 							Grid.Column="1"
 							TickPlacement="BottomRight"
 							IsSnapToTickEnabled="True"
-							params:Slider.ThumbThickness="8"
+							params:Slider.ThumbThickness="12"
 							Margin="0,0,0,5"
 							Value="{Binding Ratings_Stability, Source={StaticResource ViewModel}}"
-							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}" />
-			
+							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}"
+							MinHeight="22"
+							AutoToolTipPlacement="TopLeft"
+							IsMoveToPointEnabled="True"
+							params:Manager.AccentBrush="{Binding ThemeBrush}" />
+
 			<TextBlock Grid.Column="0"
 								 Grid.Row="7"
 								 Margin="0,0,0,5"
-								 VerticalAlignment="Center">
+								 VerticalAlignment="Center"
+								 Foreground="White">
 				<Run Text="Grip: " />
 				<Run Text="{Binding Ratings_Grip, Mode=OneWay, Source={StaticResource ViewModel}}" />
 			</TextBlock>
@@ -166,15 +205,20 @@
 							Grid.Column="1"
 							TickPlacement="BottomRight"
 							IsSnapToTickEnabled="True"
-							params:Slider.ThumbThickness="8"
+							params:Slider.ThumbThickness="12"
 							Margin="0,0,0,5"
 							Value="{Binding Ratings_Grip, Source={StaticResource ViewModel}}"
-							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}" />
-			
+							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}"
+							MinHeight="22"
+							AutoToolTipPlacement="TopLeft"
+							IsMoveToPointEnabled="True"
+							params:Manager.AccentBrush="{Binding ThemeBrush}" />
+
 			<TextBlock Grid.Column="0"
 								 Grid.Row="8"
-								 Margin="0,0,0,5"
-								 VerticalAlignment="Center">
+								 Margin="0,0,5,5"
+								 VerticalAlignment="Center"
+								 Foreground="White">
 				<Run Text="Human Player Skill: " />
 				<Run Text="{Binding Ratings_HumanPlayerSkill, Mode=OneWay, Source={StaticResource ViewModel}}" />
 			</TextBlock>
@@ -182,10 +226,14 @@
 							Grid.Column="1"
 							TickPlacement="BottomRight"
 							IsSnapToTickEnabled="True"
-							params:Slider.ThumbThickness="8"
+							params:Slider.ThumbThickness="12"
 							Margin="0,0,0,5"
 							Value="{Binding Ratings_HumanPlayerSkill, Source={StaticResource ViewModel}}"
-							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}" />
+							IsEnabled="{Binding IsChecked, ElementName=TitleCheck}"
+							MinHeight="22"
+							AutoToolTipPlacement="TopLeft"
+							IsMoveToPointEnabled="True"
+							params:Manager.AccentBrush="{Binding ThemeBrush}" />
 		</Grid>
 	</Expander>
 </UserControl>

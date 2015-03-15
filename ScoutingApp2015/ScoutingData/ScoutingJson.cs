@@ -10,6 +10,7 @@ using ScoutingData.Data;
 using System.IO;
 using ScoutingData.Sync;
 using ScoutingData.Analysis;
+using ScoutingData.Lite;
 
 namespace ScoutingData
 {
@@ -40,6 +41,12 @@ namespace ScoutingData
 		/// File extension used when saving analysis caches
 		/// </summary>
 		public static string AnalysisExtension
+		{ get; set; }
+
+		/// <summary>
+		/// File extension used when saving lite records
+		/// </summary>
+		public static string LiteRecordExtension
 		{ get; set; }
 
 		/// <summary>
@@ -100,6 +107,7 @@ namespace ScoutingData
 			TeamsListExtension = ".teams";
 			MatchRecordExtension = ".match";
 			AnalysisExtension = ".stats";
+			LiteRecordExtension = ".lrec";
 
 			InitFiles(false);
 
@@ -227,6 +235,13 @@ namespace ScoutingData
 			Initialize(false);
 
 			string contents = JsonConvert.SerializeObject(stats, Formatting.Indented);
+			File.WriteAllText(path, contents);
+		}
+		public static void SaveLiteRecord(RecordLite rec, string path)
+		{
+			Initialize(false);
+
+			string contents = JsonConvert.SerializeObject(rec, Formatting.Indented);
 			File.WriteAllText(path, contents);
 		}
 
