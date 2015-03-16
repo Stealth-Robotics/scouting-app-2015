@@ -208,6 +208,24 @@ namespace ScoutingData
 			return stats;
 		}
 
+		public static RecordLite ParseLiteRecord(string path)
+		{
+			Initialize(false);
+
+			string contents = File.ReadAllText(path);
+			RecordLite lite = null;
+			try
+			{
+				lite = JsonConvert.DeserializeObject<RecordLite>(contents);
+			}
+			catch (JsonException)
+			{
+				Util.DebugLog(LogLevel.Critical, "Could not deserialize file.");
+			}
+
+			return lite;
+		}
+
 		public static void SaveEvent(FrcEvent frc, string path)
 		{
 			Initialize(false);

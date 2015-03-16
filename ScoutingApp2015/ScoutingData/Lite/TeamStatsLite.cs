@@ -46,5 +46,24 @@ namespace ScoutingData.Lite
 
 			return set;
 		}
+
+		public override string ToString()
+		{
+			return Team.ToString();
+		}
+
+		public static TeamStatsLite MakeStats(List<RecordLite> records)
+		{
+			if (records.Count <= 0)
+			{
+				return null;
+			}
+
+			TeamStatsLite res = new TeamStatsLite();
+			res.Team = records.First().Team;
+			res.AllRecords.AddRange(records);
+
+			return res;
+		}
 	}
 }
