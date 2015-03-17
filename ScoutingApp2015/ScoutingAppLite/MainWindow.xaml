@@ -16,7 +16,8 @@
 					Background="#FF1B1B1B"
 					MinHeight="300"
 					MinWidth="500"
-					Loaded="Window_Loaded">
+					Loaded="Window_Loaded"
+					Icon="pencil16x.png">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
