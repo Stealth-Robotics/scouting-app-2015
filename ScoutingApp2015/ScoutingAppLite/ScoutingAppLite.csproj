@@ -65,6 +65,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppSettings.cs" />
     <Compile Include="ViewModel\RatingViewModel.cs" />
     <Compile Include="View\ConfirmSaveDialog.xaml.cs">
       <DependentUpon>ConfirmSaveDialog.xaml</DependentUpon>

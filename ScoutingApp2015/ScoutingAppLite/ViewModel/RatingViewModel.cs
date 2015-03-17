@@ -248,7 +248,7 @@ namespace ScoutingAppLite.ViewModel
 				case AllianceColor.Red:
 					return new SolidColorBrush(Colors.Salmon);
 				default:
-					return new SolidColorBrush(Colors.Gray);
+					return new SolidColorBrush(Colors.White);
 				}
 			}
 		}

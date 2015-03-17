@@ -9,9 +9,11 @@
 					par:Design.AccentBrush="{x:Static e:AccentBrushes.Sky}"
 					par:Manager.AccentBrush="{x:Static e:AccentBrushes.Sky}"
 					Title="Scouting Manager Lite"
-					Height="500"
-					Width="800"
-					Loaded="Window_Loaded">
+					Height="600"
+					Width="900"
+					Loaded="Window_Loaded"
+					MinWidth="700"
+					MinHeight="400">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="5*" />
@@ -51,7 +53,6 @@
 								 Margin="5,0,5,5" />
 			<TextBox x:Name="EventPathBox"
 							 Grid.Column="1"
-							 Text="C:\Users\einsteinsci\ScoutingApp2015\EventName.frc"
 							 FontSize="14"
 							 BorderThickness="1"
 							 Margin="0,0,5,5"
@@ -59,7 +60,6 @@
 			<TextBox x:Name="TeamsPathBox"
 							 Grid.Column="1"
 							 Grid.Row="1"
-							 Text="C:\Users\einsteinsci\ScoutingApp2015\Teams.teams"
 							 FontSize="14"
 							 BorderThickness="1"
 							 Margin="0,0,5,5"
@@ -67,7 +67,6 @@
 			<TextBox x:Name="RecordsPathBox"
 							 Grid.Column="1"
 							 Grid.Row="2"
-							 Text="{Binding RecordsRoot}"
 							 FontSize="14"
 							 BorderThickness="1"
 							 Margin="0,0,5,5"
@@ -103,8 +102,8 @@
 								 Header="Info">
 					<Grid>
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="2*" />
-							<ColumnDefinition Width="5*" />
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition />
 						</Grid.ColumnDefinitions>
 
 						<Grid Grid.Column="0">
@@ -117,7 +116,9 @@
 											 BorderThickness="1"
 											 Margin="0,0,0,5"
 											 ItemsSource="{Binding StatsList}"
-											 SelectionChanged="InfoTeamsList_SelectionChanged" />
+											 SelectionChanged="InfoTeamsList_SelectionChanged"
+											 MaxWidth="250"
+											 MinWidth="150" />
 							<Button x:Name="CrunchNumbersBtn"
 											Grid.Row="1"
 											Content="Crunch Numbers"
@@ -125,222 +126,330 @@
 											ToolTip="&quot;Just crunch them.&quot;" />
 						</Grid>
 
-						<Grid Grid.Column="1"
-									Margin="5,0,0,0">
-							<Grid.RowDefinitions>
-								<RowDefinition Height="Auto" />
-								<RowDefinition Height="*" />
-							</Grid.RowDefinitions>
-
-							<Grid Margin="0,0,0,5">
+						<ScrollViewer Grid.Column="1"
+													Margin="5,0,0,0"
+													VerticalScrollBarVisibility="Auto">
+							<Grid Margin="5,0,0,0">
 								<Grid.RowDefinitions>
 									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
+									<RowDefinition Height="*" />
 								</Grid.RowDefinitions>
 
-								<TextBlock x:Name="TeamNameTxt"
-													 Text="Team 4089: Stealth Robotics"
-													 FontSize="24"
-													 FontWeight="SemiBold" />
-								<TextBlock x:Name="TeamLocationTxt"
-													 Grid.Row="1"
-													 Text="From Cedarcrest High School"
-													 FontSize="10" />
-								<TextBlock x:Name="TeamDescriptionTxt"
-													 Grid.Row="2"
-													 Text="The really awesome robot"
-													 FontSize="10"
-													 Foreground="DarkGray" />
+								<Grid Margin="0,0,0,5">
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+									</Grid.RowDefinitions>
+
+									<TextBlock x:Name="TeamNameTxt"
+														 Text="Team 4089: Stealth Robotics"
+														 FontSize="24"
+														 FontWeight="SemiBold" />
+									<TextBlock x:Name="TeamLocationTxt"
+														 Grid.Row="1"
+														 Text="From Cedarcrest High School"
+														 FontSize="10" />
+									<TextBlock x:Name="TeamDescriptionTxt"
+														 Grid.Row="2"
+														 Text="The really awesome robot"
+														 FontSize="10"
+														 Foreground="DarkGray" />
+								</Grid>
+
+								<Grid Grid.Row="1"
+											Margin="5,0,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" />
+										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="Auto"
+																			MinWidth="72" />
+									</Grid.ColumnDefinitions>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+									</Grid.RowDefinitions>
+
+									<TextBlock Text="Overall:"
+														 Margin="0,0,0,10"
+														 FontSize="16"
+														 FontWeight="SemiBold" />
+									<e:ProgressBar x:Name="OverallBar"
+																 Grid.Column="1"
+																 Minimum="0"
+																 Maximum="10"
+																 Value="6.7"
+																 BorderThickness="0"
+																 MaxHeight="16"
+																 Margin="5,0,5,10"
+																 Height="12" />
+									<TextBlock x:Name="OverallTxt"
+														 Grid.Column="2"
+														 Text="6.7"
+														 FontSize="14"
+														 Margin="5,0,0,0"
+														 FontWeight="SemiBold" />
+
+									<TextBlock Text="Autonomous:"
+														 Grid.Row="1"
+														 Margin="0,0,0,5" />
+									<e:ProgressBar x:Name="AutonomousBar"
+																 Grid.Row="1"
+																 Grid.Column="1"
+																 Minimum="0"
+																 Maximum="10"
+																 Value="6.7"
+																 Margin="5,5,5,10"
+																 BorderThickness="0" />
+									<TextBlock x:Name="AutonomousTxt"
+														 Text="6.7"
+														 Grid.Row="1"
+														 Grid.Column="2"
+														 Margin="5,0,0,5" />
+
+									<TextBlock Text="Stacking:"
+														 Grid.Row="2"
+														 Margin="0,0,0,5" />
+									<e:ProgressBar x:Name="StackingBar"
+																 Grid.Row="2"
+																 Grid.Column="1"
+																 Minimum="0"
+																 Maximum="10"
+																 Value="6.7"
+																 Margin="5,6,5,11"
+																 BorderThickness="0" />
+									<TextBlock x:Name="StackingTxt"
+														 Text="6.7"
+														 Grid.Row="2"
+														 Grid.Column="2"
+														 Margin="5,0,0,5" />
+
+									<TextBlock Text="Coopertition:"
+														 Grid.Row="3"
+														 Margin="0,0,0,5" />
+									<e:ProgressBar x:Name="CoopertitionBar"
+																 Grid.Row="3"
+																 Grid.Column="1"
+																 Minimum="0"
+																 Maximum="10"
+																 Value="6.7"
+																 Margin="5,6,5,11"
+																 BorderThickness="0" />
+									<TextBlock x:Name="CoopertitionTxt"
+														 Text="6.7"
+														 Grid.Row="3"
+														 Grid.Column="2"
+														 Margin="5,0,0,5" />
+
+									<TextBlock Text="Containers:"
+														 Grid.Row="4"
+														 Margin="0,0,0,5" />
+									<e:ProgressBar x:Name="ContainersBar"
+																 Grid.Row="4"
+																 Grid.Column="1"
+																 Minimum="0"
+																 Maximum="10"
+																 Value="6.7"
+																 Margin="5,6,5,11"
+																 BorderThickness="0" />
+									<TextBlock x:Name="ContainersTxt"
+														 Text="6.7"
+														 Grid.Row="4"
+														 Grid.Column="2"
+														 Margin="5,0,0,5" />
+
+									<TextBlock Text="Mobility:"
+														 Grid.Row="5"
+														 Margin="0,0,0,5" />
+									<e:ProgressBar x:Name="MobilityBar"
+																 Grid.Row="5"
+																 Grid.Column="1"
+																 Minimum="0"
+																 Maximum="10"
+																 Value="6.7"
+																 Margin="5,6,5,11"
+																 BorderThickness="0" />
+									<TextBlock x:Name="MobilityTxt"
+														 Text="6.7"
+														 Grid.Row="5"
+														 Grid.Column="2"
+														 Margin="5,0,0,5" />
+
+									<TextBlock Text="Efficiency:"
+														 Grid.Row="6"
+														 Margin="0,0,0,5" />
+									<e:ProgressBar x:Name="EfficiencyBar"
+																 Grid.Row="6"
+																 Grid.Column="1"
+																 Minimum="0"
+																 Maximum="10"
+																 Value="6.7"
+																 Margin="5,6,5,11"
+																 BorderThickness="0" />
+									<TextBlock x:Name="EfficiencyTxt"
+														 Text="6.7"
+														 Grid.Row="6"
+														 Grid.Column="2"
+														 Margin="5,0,0,5" />
+
+									<TextBlock Text="Stability:"
+														 Grid.Row="7"
+														 Margin="0,0,0,5" />
+									<e:ProgressBar x:Name="StabilityBar"
+																 Grid.Row="7"
+																 Grid.Column="1"
+																 Minimum="0"
+																 Maximum="10"
+																 Value="6.7"
+																 Margin="5,6,5,11"
+																 BorderThickness="0" />
+									<TextBlock x:Name="StabilityTxt"
+														 Text="6.7"
+														 Grid.Row="7"
+														 Grid.Column="2"
+														 Margin="5,0,0,5" />
+
+									<TextBlock Text="Grip:"
+														 Grid.Row="8"
+														 Margin="0,0,0,5" />
+									<e:ProgressBar x:Name="GripBar"
+																 Grid.Row="8"
+																 Grid.Column="1"
+																 Minimum="0"
+																 Maximum="10"
+																 Value="6.7"
+																 Margin="5,6,5,11"
+																 BorderThickness="0" />
+									<TextBlock x:Name="GripTxt"
+														 Text="6.7"
+														 Grid.Row="8"
+														 Grid.Column="2"
+														 Margin="5,0,0,5" />
+
+									<TextBlock Text="Human Skill:"
+														 Grid.Row="9"
+														 Margin="0,0,0,5" />
+									<e:ProgressBar x:Name="HumanSkillBar"
+																 Grid.Row="9"
+																 Grid.Column="1"
+																 Minimum="0"
+																 Maximum="10"
+																 Value="6.7"
+																 Margin="5,6,5,11"
+																 BorderThickness="0" />
+									<TextBlock x:Name="HumanSkillTxt"
+														 Text="6.7"
+														 Grid.Row="9"
+														 Grid.Column="2"
+														 Margin="5,0,0,5" />
+								</Grid>
 							</Grid>
-
-							<Grid Grid.Row="1"
-										Margin="5,0,0,0">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="Auto" />
-									<ColumnDefinition Width="*" />
-									<ColumnDefinition Width="Auto"
-																		MinWidth="72" />
-								</Grid.ColumnDefinitions>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-									<RowDefinition Height="Auto" />
-								</Grid.RowDefinitions>
-								
-								<TextBlock Text="Overall:"
-													 Margin="0,0,0,10"
-													 FontSize="14"
-													 FontWeight="SemiBold" />
-
-								<TextBlock Text="Autonomous:"
-													 Grid.Row="1"
-													 Margin="0,0,0,5" />
-								<e:ProgressBar x:Name="AutonomousBar"
-															 Grid.Row="1"
-															 Grid.Column="1"
-															 Minimum="0"
-															 Maximum="10"
-															 Value="6.7"
-															 Margin="5,5,5,10"
-															 BorderThickness="0" />
-								<TextBlock x:Name="AutonomousTxt"
-													 Text="6.7"
-													 Grid.Row="1"
-													 Grid.Column="2"
-													 Margin="5,0,0,5" />
-
-								<TextBlock Text="Stacking:"
-													 Grid.Row="2"
-													 Margin="0,0,0,5" />
-								<e:ProgressBar x:Name="StackingBar"
-															 Grid.Row="2"
-															 Grid.Column="1"
-															 Minimum="0"
-															 Maximum="10"
-															 Value="6.7"
-															 Margin="5,6,5,11"
-															 BorderThickness="0" />
-								<TextBlock x:Name="StackingTxt"
-													 Text="6.7"
-													 Grid.Row="2"
-													 Grid.Column="2"
-													 Margin="5,0,0,5" />
-
-								<TextBlock Text="Coopertition:"
-													 Grid.Row="3"
-													 Margin="0,0,0,5" />
-								<e:ProgressBar x:Name="CoopertitionBar"
-															 Grid.Row="3"
-															 Grid.Column="1"
-															 Minimum="0"
-															 Maximum="10"
-															 Value="6.7"
-															 Margin="5,6,5,11"
-															 BorderThickness="0" />
-								<TextBlock x:Name="CoopertitionTxt"
-													 Text="6.7"
-													 Grid.Row="3"
-													 Grid.Column="2"
-													 Margin="5,0,0,5" />
-
-								<TextBlock Text="Containers:"
-													 Grid.Row="4"
-													 Margin="0,0,0,5" />
-								<e:ProgressBar x:Name="ContainersBar"
-															 Grid.Row="4"
-															 Grid.Column="1"
-															 Minimum="0"
-															 Maximum="10"
-															 Value="6.7"
-															 Margin="5,6,5,11"
-															 BorderThickness="0" />
-								<TextBlock x:Name="ContainersTxt"
-													 Text="6.7"
-													 Grid.Row="4"
-													 Grid.Column="2"
-													 Margin="5,0,0,5" />
-
-								<TextBlock Text="Mobility:"
-													 Grid.Row="5"
-													 Margin="0,0,0,5" />
-								<e:ProgressBar x:Name="MobilityBar"
-															 Grid.Row="5"
-															 Grid.Column="1"
-															 Minimum="0"
-															 Maximum="10"
-															 Value="6.7"
-															 Margin="5,6,5,11"
-															 BorderThickness="0" />
-								<TextBlock x:Name="MobilityTxt"
-													 Text="6.7"
-													 Grid.Row="5"
-													 Grid.Column="2"
-													 Margin="5,0,0,5" />
-
-								<TextBlock Text="Efficiency:"
-													 Grid.Row="6"
-													 Margin="0,0,0,5" />
-								<e:ProgressBar x:Name="EfficiencyBar"
-															 Grid.Row="6"
-															 Grid.Column="1"
-															 Minimum="0"
-															 Maximum="10"
-															 Value="6.7"
-															 Margin="5,6,5,11"
-															 BorderThickness="0" />
-								<TextBlock x:Name="EfficiencyTxt"
-													 Text="6.7"
-													 Grid.Row="6"
-													 Grid.Column="2"
-													 Margin="5,0,0,5" />
-
-								<TextBlock Text="Stability:"
-													 Grid.Row="7"
-													 Margin="0,0,0,5" />
-								<e:ProgressBar x:Name="StabilityBar"
-															 Grid.Row="7"
-															 Grid.Column="1"
-															 Minimum="0"
-															 Maximum="10"
-															 Value="6.7"
-															 Margin="5,6,5,11"
-															 BorderThickness="0" />
-								<TextBlock x:Name="StabilityTxt"
-													 Text="6.7"
-													 Grid.Row="7"
-													 Grid.Column="2"
-													 Margin="5,0,0,5" />
-
-								<TextBlock Text="Grip:"
-													 Grid.Row="8"
-													 Margin="0,0,0,5" />
-								<e:ProgressBar x:Name="GripBar"
-															 Grid.Row="8"
-															 Grid.Column="1"
-															 Minimum="0"
-															 Maximum="10"
-															 Value="6.7"
-															 Margin="5,6,5,11"
-															 BorderThickness="0" />
-								<TextBlock x:Name="GripTxt"
-													 Text="6.7"
-													 Grid.Row="8"
-													 Grid.Column="2"
-													 Margin="5,0,0,5" />
-
-								<TextBlock Text="Human Skill:"
-													 Grid.Row="9"
-													 Margin="0,0,0,5" />
-								<e:ProgressBar x:Name="HumanSkillBar"
-															 Grid.Row="9"
-															 Grid.Column="1"
-															 Minimum="0"
-															 Maximum="10"
-															 Value="6.7"
-															 Margin="5,6,5,11"
-															 BorderThickness="0" />
-								<TextBlock x:Name="HumanSkillTxt"
-													 Text="6.7"
-													 Grid.Row="9"
-													 Grid.Column="2"
-													 Margin="5,0,0,5" />
-							</Grid>
-						</Grid>
+						</ScrollViewer>
 					</Grid>
 				</TabItem>
+				
 				<TabItem x:Name="SortTab"
 								 Header="Sort">
-					more stuff
+					<DataGrid x:Name="SortDataGrid"
+										AlternationCount="1"
+										CanUserResizeRows="False"
+										AutoGenerateColumns="False"
+										FrozenColumnCount="2"
+										IsReadOnly="True">
+						<DataGrid.Columns>
+							<DataGridTextColumn Width="56"
+																	Binding="{Binding Team}">
+								<DataGridTextColumn.Header>
+									<TextBlock Text="Team #"
+														 FontWeight="Bold" />
+								</DataGridTextColumn.Header>
+							</DataGridTextColumn>
+							<DataGridTextColumn Width="80"
+																	Binding="{Binding Overall, StringFormat={}{0:n3}}">
+								<DataGridTextColumn.Header>
+									<TextBlock Text="Overall"
+														 FontWeight="Bold" />
+								</DataGridTextColumn.Header>
+							</DataGridTextColumn>
+							<DataGridTextColumn Header="Auto."
+																	Width="72"
+																	Binding="{Binding Auto, StringFormat={}{0:n3}}" />
+							<DataGridTextColumn Header="Stacking"
+																	Width="72"
+																	Binding="{Binding Stacking, StringFormat={}{0:n3}}" />
+							<DataGridTextColumn Header="Coop."
+																	Width="72"
+																	Binding="{Binding Coop, StringFormat={}{0:n3}}" />
+							<DataGridTextColumn Header="Containers"
+																	Width="72"
+																	Binding="{Binding Containers, StringFormat={}{0:n3}}" />
+							<DataGridTextColumn Header="Mobility"
+																	Width="72"
+																	Binding="{Binding Mobility, StringFormat={}{0:n3}}" />
+							<DataGridTextColumn Header="Efficiency"
+																	Width="72"
+																	Binding="{Binding Efficiency, StringFormat={}{0:n3}}" />
+							<DataGridTextColumn Header="Stability"
+																	Width="72"
+																	Binding="{Binding Stability, StringFormat={}{0:n3}}" />
+							<DataGridTextColumn Header="Grip"
+																	Width="72"
+																	Binding="{Binding Grip, StringFormat={}{0:n3}}" />
+							<DataGridTextColumn Header="Player"
+																	Width="72"
+																	Binding="{Binding Players, StringFormat={}{0:n3}}" />
+						</DataGrid.Columns>
+					</DataGrid>
 				</TabItem>
 			</TabControl>
+		</Grid>
+
+		<Grid Grid.Column="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<TextBlock Text="Import Locations"
+								 FontSize="16"
+								 FontWeight="SemiBold"
+								 Margin="5,5,0,0" />
+
+			<ListBox x:Name="DriveList"
+							 Grid.Row="1"
+							 SelectedIndex="0"
+							 BorderThickness="1"
+							 Margin="5"
+							 ItemsSource="{Binding DrivePaths}" />
+
+			<StackPanel Orientation="Vertical"
+									Grid.Row="2"
+									Margin="5,0,5,5">
+				<CheckBox x:Name="AutoRefreshCheck"
+									Content="Auto-Refresh Drives List"
+									Click="AutoRefreshCheck_Click" />
+				<CheckBox x:Name="AutoImportCheck"
+									Content="Auto-Import Lite Records"
+									Margin="0,5,0,0"
+									Click="AutoImportCheck_Click" />
+				<Button x:Name="RefreshBtn"
+								Content="Refresh List"
+								Margin="0,5,0,0"
+								Click="RefreshBtn_Click" />
+				<Button x:Name="ImportBtn"
+								Content="Import Records"
+								Margin="0,5,0,0"
+								Click="ImportBtn_Click" />
+			</StackPanel>
 		</Grid>
 	</Grid>
 </e:Window>

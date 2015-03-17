@@ -49,6 +49,9 @@ namespace ScoutingData
 		public static readonly string USERPROFILE =
 			Environment.GetEnvironmentVariable("USERPROFILE");
 
+		public static readonly string APPDATA =
+			Environment.GetEnvironmentVariable("APPDATA");
+
 		internal static readonly IFormatProvider DEF_FORMAT = 
 			CultureInfo.CurrentCulture.NumberFormat;
 
@@ -303,6 +306,17 @@ namespace ScoutingData
 			return name;
 		}
 
+		public static string GetFolderName(string folderPath)
+		{
+			if (!Directory.Exists(folderPath))
+			{
+				return null;
+			}
+
+			DirectoryInfo di = new DirectoryInfo(folderPath);
+			return di.Name;
+		}
+
 		///////////////////////
 		// Extension Methods //
 		///////////////////////
@@ -433,6 +447,12 @@ namespace ScoutingData
 			}
 
 			return obs.Remove(rem);
+		}
+
+		public static bool IsInteger(this string str)
+		{
+			int buf = 0;
+			return int.TryParse(str, out buf);
 		}
 	}
 }

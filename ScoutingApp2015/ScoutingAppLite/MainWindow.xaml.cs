@@ -51,6 +51,8 @@ namespace ScoutingAppLite
 
 		public MainWindow()
 		{
+			AppSettings.Initialize();
+
 			InitializeComponent();
 		}
 
@@ -65,6 +67,7 @@ namespace ScoutingAppLite
 			if (temp != null)
 			{
 				Event = temp;
+				AppSettings.EventFile = filepath;
 
 				if (Teams != null)
 				{
@@ -87,6 +90,8 @@ namespace ScoutingAppLite
 			TeamsList temp = ScoutingJson.ParseTeamsList(filepath);
 			if (temp != null)
 			{
+				AppSettings.TeamsFile = filepath;
+
 				if (Event != null)
 				{
 					Event.PostJsonLoading(temp);
@@ -198,6 +203,40 @@ namespace ScoutingAppLite
 			return res;
 		}
 
+		public void SaveAll()
+		{
+			List<RecordLite> records = MakeRecords();
+
+			ConfirmSaveDialog csd = new ConfirmSaveDialog();
+			bool? result = csd.ShowDialog();
+			if (result == true)
+			{
+				string rootFolder = csd.SelectedPath;
+				if (!rootFolder.EndsWith("\\")) ;
+				{
+					rootFolder += "\\";
+				}
+
+				if (!Directory.Exists(rootFolder))
+				{
+					Directory.CreateDirectory(rootFolder);
+				}
+
+				foreach (RecordLite rec in records)
+				{
+					string teamFolder = rootFolder + rec.TeamID.ToString() + "\\";
+					if (!Directory.Exists(teamFolder))
+					{
+						Directory.CreateDirectory(teamFolder);
+					}
+
+					string recordPath = teamFolder + "Match" + rec.MatchID.ToString("00") +
+						ScoutingJson.LiteRecordExtension;
+					ScoutingJson.SaveLiteRecord(rec, recordPath);
+				}
+			}
+		}
+
 		#region event handlers
 		private void EventPathBtn_Click(object sender, RoutedEventArgs e)
 		{
@@ -259,7 +298,6 @@ namespace ScoutingAppLite
 			{
 				UpdateMatchIDBoxInfo(id);
 
-				
 				if (Event != null)
 				{
 					UpdateRatingViewsMatch(Event.LoadMatch(id));
@@ -270,6 +308,12 @@ namespace ScoutingAppLite
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
 			hasLoaded = true;
+
+			EventPathBox.Text = AppSettings.EventFile;
+			LoadEvent(AppSettings.EventFile);
+			TeamsPathBox.Text = AppSettings.TeamsFile;
+			LoadTeams(AppSettings.TeamsFile);
+
 			UpdateTextBoxInfo();
 		}
 
@@ -296,36 +340,7 @@ namespace ScoutingAppLite
 
 		private void SaveBtn_Click(object sender, RoutedEventArgs e)
 		{
-			List<RecordLite> records = MakeRecords();
-
-			ConfirmSaveDialog csd = new ConfirmSaveDialog();
-			bool? result = csd.ShowDialog();
-			if (result == true)
-			{
-				string rootFolder = csd.SelectedPath;
-				if (!rootFolder.EndsWith("\\"));
-				{
-					rootFolder += "\\";
-				}
-
-				if (!Directory.Exists(rootFolder))
-				{
-					Directory.CreateDirectory(rootFolder);
-				}
-
-				foreach (RecordLite rec in records)
-				{
-					string teamFolder = rootFolder + rec.TeamID.ToString() + "\\";
-					if (!Directory.Exists(teamFolder))
-					{
-						Directory.CreateDirectory(teamFolder);
-					}
-
-					string recordPath = teamFolder + "Match" + rec.MatchID.ToString("00") + 
-						ScoutingJson.LiteRecordExtension;
-					ScoutingJson.SaveLiteRecord(rec, recordPath);
-				}
-			}
+			SaveAll();
 		}
 
 		private void Any_IsRecordingChanged(object sender, bool e)

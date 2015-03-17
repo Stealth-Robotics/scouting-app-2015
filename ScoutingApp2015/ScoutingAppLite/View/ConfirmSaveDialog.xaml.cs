@@ -47,6 +47,7 @@ namespace ScoutingAppLite.View
 
 		private void SaveBtn_Click(object sender, RoutedEventArgs e)
 		{
+			AppSettings.SavePath = LocationPathBox.Text;
 			DialogResult = true;
 			Close();
 		}
@@ -55,6 +56,11 @@ namespace ScoutingAppLite.View
 		{
 			DialogResult = false;
 			Close();
+		}
+
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			LocationPathBox.Text = AppSettings.SavePath;
 		}
 	}
 }

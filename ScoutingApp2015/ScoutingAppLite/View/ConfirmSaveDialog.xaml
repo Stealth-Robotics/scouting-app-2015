@@ -9,7 +9,9 @@
 					par:Manager.AccentBrush="{x:Static e:AccentBrushes.Purple}"
 					Title="Confirm Save"
 					Height="124"
-					Width="461">
+					Width="461"
+					Loaded="Window_Loaded"
+					WindowStartupLocation="CenterOwner">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -29,7 +31,6 @@
 								 VerticalAlignment="Center"
 								 Margin="0,0,5,0" />
 			<TextBox x:Name="LocationPathBox"
-							 Text="H:\ScoutingApp2015\"
 							 Grid.Column="1"
 							 FontSize="14"
 							 BorderThickness="1" 
