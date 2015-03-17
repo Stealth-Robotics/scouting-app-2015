@@ -364,7 +364,8 @@
 										CanUserResizeRows="False"
 										AutoGenerateColumns="False"
 										FrozenColumnCount="2"
-										IsReadOnly="True">
+										IsReadOnly="True"
+										AlternatingRowBackground="#FFEBF3F7">
 						<DataGrid.Columns>
 							<DataGridTextColumn Width="56"
 																	Binding="{Binding Team}">
