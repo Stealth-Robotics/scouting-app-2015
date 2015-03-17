@@ -82,71 +82,16 @@ namespace ScoutingApp
 		}
 
 		#region preview bindings
-
-		Team RedA
-		{
-			get
-			{
-				return Pregame.RedAlliance.A;
-			}
-		}
-		StackPanel InfoRedA
-		{
-			get
-			{
-				if (RedA == null)
-				{
-					return null;
-				}
-
-				return RedA.GetDescriptionWPF();
-			}
-		}
-
-		Team RedB
-		{
-			get
-			{
-				return Pregame.RedAlliance.B;
-			}
-		}
-		StackPanel InfoRedB
-		{
-			get
-			{
-				if (RedB == null)
-				{
-					return null;
-				}
-
-				return RedB.GetDescriptionWPF();
-			}
-		}
-
-		Team RedC
-		{
-			get
-			{
-				return Pregame.RedAlliance.C;
-			}
-		}
-		StackPanel InfoRedC
-		{
-			get
-			{
-				if (RedC == null)
-				{
-					return null;
-				}
-
-				return RedC.GetDescriptionWPF();
-			}
-		}
-
+		
 		Team BlueA
 		{
 			get
 			{
+				if (Pregame == null)
+				{
+					return null;
+				}
+
 				return Pregame.BlueAlliance.A;
 			}
 		}
@@ -167,6 +112,11 @@ namespace ScoutingApp
 		{
 			get
 			{
+				if (Pregame == null)
+				{
+					return null;
+				}
+
 				return Pregame.BlueAlliance.B;
 			}
 		}
@@ -187,6 +137,11 @@ namespace ScoutingApp
 		{
 			get
 			{
+				if (Pregame == null)
+				{
+					return null;
+				}
+
 				return Pregame.BlueAlliance.C;
 			}
 		}
@@ -200,6 +155,81 @@ namespace ScoutingApp
 				}
 
 				return BlueC.GetDescriptionWPF();
+			}
+		}
+
+		Team RedA
+		{
+			get
+			{
+				if (Pregame == null)
+				{
+					return null;
+				}
+
+				return Pregame.RedAlliance.A;
+			}
+		}
+		StackPanel InfoRedA
+		{
+			get
+			{
+				if (RedA == null)
+				{
+					return null;
+				}
+
+				return RedA.GetDescriptionWPF();
+			}
+		}
+
+		Team RedB
+		{
+			get
+			{
+				if (Pregame == null)
+				{
+					return null;
+				}
+
+				return Pregame.RedAlliance.B;
+			}
+		}
+		StackPanel InfoRedB
+		{
+			get
+			{
+				if (RedB == null)
+				{
+					return null;
+				}
+
+				return RedB.GetDescriptionWPF();
+			}
+		}
+
+		Team RedC
+		{
+			get
+			{
+				if (Pregame == null)
+				{
+					return null;
+				}
+
+				return Pregame.RedAlliance.C;
+			}
+		}
+		StackPanel InfoRedC
+		{
+			get
+			{
+				if (RedC == null)
+				{
+					return null;
+				}
+
+				return RedC.GetDescriptionWPF();
 			}
 		}
 
