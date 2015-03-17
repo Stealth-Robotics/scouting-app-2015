@@ -25,24 +25,34 @@ namespace ScoutingApp
 		{
 			InitializeComponent();
 
-			ScoutingAppSettings.Initialize();
+			AppSettings.Initialize();
 			LoadFromSettings();
 		}
 
 		public void LoadFromSettings()
 		{
-			PauseOnTeleopCheck.IsChecked = ScoutingAppSettings.PauseOnTeleop;
+			PauseOnTeleopCheck.IsChecked = AppSettings.PauseOnTeleop;
 		}
 
 		private void PauseOnTeleopCheck_Click(object sender, RoutedEventArgs e)
 		{
-			ScoutingAppSettings.PauseOnTeleop = PauseOnTeleopCheck.IsChecked ?? false;
+			AppSettings.PauseOnTeleop = PauseOnTeleopCheck.IsChecked ?? false;
 		}
 
 		private void OKBtn_Click(object sender, RoutedEventArgs e)
 		{
-			ScoutingAppSettings.Save();
+			AppSettings.Save();
 			Close();
+		}
+
+		private void DefaultEventPathBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			AppSettings.EventPath = DefaultEventPathBox.Text;
+		}
+
+		private void DefaultTeamsPathBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			AppSettings.TeamsPath = DefaultTeamsPathBox.Text;
 		}
 	}
 }

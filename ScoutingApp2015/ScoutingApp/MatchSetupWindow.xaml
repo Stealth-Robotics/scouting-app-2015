@@ -76,14 +76,14 @@
 							 Grid.Row="0"
 							 Margin="5,5,5,0"
 							 BorderThickness="1"
-							 TextChanged="PathBoxesChanged"
+							 TextChanged="PathBoxesChanged_Event"
 							 Text="C:\Users\einsteinsci\ScoutingApp2015\DefaultEvent.frc" />
 			<TextBox x:Name="TeamsPathBox"
 							 Grid.Column="1"
 							 Grid.Row="1"
 							 Margin="5"
 							 BorderThickness="1"
-							 TextChanged="PathBoxesChanged"
+							 TextChanged="PathBoxesChanged_Teams"
 							 Text="C:\Users\einsteinsci\ScoutingApp2015\Teams.teams" />
 			<Button x:Name="EventPathBtn"
 							Content="..."

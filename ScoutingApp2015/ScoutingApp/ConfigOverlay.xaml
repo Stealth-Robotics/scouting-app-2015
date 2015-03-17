@@ -6,7 +6,7 @@
 					xmlns:ex="http://schemas.extra.com/ui"
 					Style="{DynamicResource LightOverlay}"
 					Title="Config"
-					Height="160"
+					Height="200"
 					Width="500"
 					ResizeMode="NoResize"
 					WindowStartupLocation="CenterOwner"
@@ -21,6 +21,39 @@
 							IsChecked="True"
 							ToolTip="Pause automatically when the timer reaches Teleop"
 							Click="PauseOnTeleopCheck_Click" />
+		<Grid Margin="0,5,0,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<TextBlock Text="Default Event Path:"
+								 FontSize="14"
+								 VerticalAlignment="Center"
+								 Margin="0,0,5,0" />
+			<TextBox x:Name="DefaultEventPathBox"
+							 Grid.Column="1"
+							 FontSize="14"
+							 BorderThickness="1"
+							 Text="H:\DEFAULT.frc"
+							 TextChanged="DefaultEventPathBox_TextChanged" />
+			<TextBlock Text="Default Teams Path:"
+								 Grid.Row="1"
+								 FontSize="14"
+								 VerticalAlignment="Center"
+								 Margin="0,5,5,0" />
+			<TextBox x:Name="DefaultTeamsPathBox"
+							 Grid.Column="1"
+							 Grid.Row="1"
+							 FontSize="14"
+							 BorderThickness="1"
+							 Text="H:\Teams.teams"
+							 Margin="0,5,0,0"
+							 TextChanged="DefaultTeamsPathBox_TextChanged" />
+		</Grid>
 		<TextBlock Text="That's about it for now."
 							 Foreground="Gray"
 							 Margin="0,10,0,0" />

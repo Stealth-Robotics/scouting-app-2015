@@ -111,7 +111,7 @@ namespace ScoutingApp
 
 		public MainWindow()
 		{
-			ScoutingAppSettings.Initialize();
+			AppSettings.Initialize();
 
 			DispTimer = new DispatcherTimer();
 			Watch = new Stopwatch();
@@ -316,7 +316,7 @@ namespace ScoutingApp
 				TimeBar.Foreground = new SolidColorBrush(TELEOP_COLOR);
 				TimeBar.Tag = "TELEOP";
 
-				if (ScoutingAppSettings.PauseOnTeleop)
+				if (AppSettings.PauseOnTeleop)
 				{
 					PauseTimer();
 				}

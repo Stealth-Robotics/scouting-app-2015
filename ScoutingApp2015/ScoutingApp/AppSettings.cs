@@ -11,41 +11,61 @@ using Newtonsoft.Json;
 namespace ScoutingApp
 {
 	[JsonObject(MemberSerialization.OptIn)]
-	public class ScoutingAppSettings
+	public class AppSettings
 	{
-		static readonly string SETTINGS_PATH = Util.USERPROFILE + 
-			"\\AppData\\Local\\ScoutingApp2015\\";
-		static readonly string SETTINGS_FILENAME = "Settings.json";
+		static readonly string SETTINGS_PATH = Util.APPDATA + @"\ScoutingApp2015\";
+		static readonly string SETTINGS_FILENAME = "mainapp.json";
 
-		public static ScoutingAppSettings Instance
+		public static AppSettings Instance
 		{ get; private set; }
 
 		public static bool PauseOnTeleop
 		{
 			get
 			{
-				Initialize();
-				return Instance.Inst_pauseOnTeleop;
+				return Instance.pauseOnTeleop;
 			}
 			set
 			{
-				Initialize();
-				Instance.Inst_pauseOnTeleop = value;
+				Instance.pauseOnTeleop = value;
+				Save();
 			}
 		}
 		[JsonProperty]
-		public bool Inst_pauseOnTeleop
-		{ get; private set; }
+		bool pauseOnTeleop;
 
-		public static bool hasInitialized = false;
+		public static string EventPath
+		{
+			get
+			{
+				return Instance.eventPath;
+			}
+			set
+			{
+				Instance.eventPath = value;
+				Save();
+			}
+		}
+		[JsonProperty]
+		string eventPath;
+
+		public static string TeamsPath
+		{
+			get
+			{
+				return Instance.teamsPath;
+			}
+			set
+			{
+				Instance.teamsPath = value;
+				Save();
+			}
+		}
+		[JsonProperty]
+		string teamsPath;
 
 		public static void Initialize()
 		{
-			if (hasInitialized)
-			{
-				return;
-			}
-
 			if (!Directory.Exists(SETTINGS_PATH))
 			{
 				Directory.CreateDirectory(SETTINGS_PATH);
@@ -54,21 +74,19 @@ namespace ScoutingApp
 			if (File.Exists(SETTINGS_PATH + SETTINGS_FILENAME))
 			{
 				string json = File.ReadAllText(SETTINGS_PATH + SETTINGS_FILENAME);
-				Instance = JsonConvert.DeserializeObject<ScoutingAppSettings>(json);
+				Instance = JsonConvert.DeserializeObject<AppSettings>(json);
 			}
 			else
 			{
-				Instance = new ScoutingAppSettings();
+				Instance = new AppSettings();
 				Save();
 			}
-
-			hasInitialized = true;
 		}
 
 		// Defaults
-		public ScoutingAppSettings()
+		public AppSettings()
 		{
-			Inst_pauseOnTeleop = true;
+			pauseOnTeleop = true;
 		}
 
 		public static void Save()

@@ -132,7 +132,7 @@
     <Compile Include="SaveOverlay.xaml.cs">
       <DependentUpon>SaveOverlay.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScoutingAppSettings.cs" />
+    <Compile Include="AppSettings.cs" />
     <Compile Include="ConfigOverlay.xaml.cs">
       <DependentUpon>ConfigOverlay.xaml</DependentUpon>
     </Compile>

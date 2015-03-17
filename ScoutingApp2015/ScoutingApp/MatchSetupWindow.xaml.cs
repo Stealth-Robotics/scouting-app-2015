@@ -425,16 +425,33 @@ namespace ScoutingApp
 
 			hasLoaded = true;
 
+			EventPathBox.Text = AppSettings.EventPath;
+			TeamsPathBox.Text = AppSettings.TeamsPath;
+
 			DoContextualLoading();
 			UpdateTeamPreviews();
 		}
 
-		private void PathBoxesChanged(object sender, TextChangedEventArgs e)
+		private void PathBoxesChanged_Event(object sender, TextChangedEventArgs e)
 		{
 			if (!hasLoaded)
 			{
 				return;
 			}
+
+			AppSettings.EventPath = EventPathBox.Text;
+
+			DoContextualLoading();
+		}
+
+		private void PathBoxesChanged_Teams(object sender, TextChangedEventArgs e)
+		{
+			if (!hasLoaded)
+			{
+				return;
+			}
+
+			AppSettings.TeamsPath = TeamsPathBox.Text;
 
 			DoContextualLoading();
 		}
