@@ -54,11 +54,11 @@ namespace ScoutingAppLite.View
 
 		public void SetMatchContext(Match match)
 		{
-			ViewModel.IndicatedMatch = match;
 			if (match != null)
 			{
 				ViewModel.RatedTeam = match.GetTeamByInclusiveIndex(TeamIndex);
 			}
+			ViewModel.IndicatedMatch = match;
 		}
 
 		public RecordLite MakeRecord()

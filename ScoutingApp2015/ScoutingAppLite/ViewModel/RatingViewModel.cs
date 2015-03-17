@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace ScoutingAppLite.ViewModel
@@ -204,9 +205,23 @@ namespace ScoutingAppLite.ViewModel
 				OnPropertyChanged("RatedTeam");
 				OnPropertyChanged("RatedTeamName");
 				OnPropertyChanged("Color");
+				OnPropertyChanged("RatedTeamInfo");
 			}
 		}
 		Team _ratedTeam;
+
+		public StackPanel RatedTeamInfo
+		{
+			get
+			{
+				if (RatedTeam == null)
+				{
+					return null;
+				}
+
+				return RatedTeam.GetDescriptionWPF();
+			}
+		}
 
 		public Match IndicatedMatch
 		{
@@ -219,7 +234,7 @@ namespace ScoutingAppLite.ViewModel
 				_indicatedMatch = value;
 				OnPropertyChanged("IsTracked");
 				OnPropertyChanged("Color");
-				OnPropertyChanged("Color_Wpf");
+				OnPropertyChanged("Color_Brush");
 			}
 		}
 		Match _indicatedMatch;
@@ -248,7 +263,7 @@ namespace ScoutingAppLite.ViewModel
 				case AllianceColor.Red:
 					return new SolidColorBrush(Colors.Salmon);
 				default:
-					return new SolidColorBrush(Colors.White);
+					return new SolidColorBrush(Colors.Gray);
 				}
 			}
 		}

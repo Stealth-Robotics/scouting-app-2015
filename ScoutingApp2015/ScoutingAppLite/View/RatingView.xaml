@@ -25,7 +25,8 @@
 								Content="{Binding RatedTeamName, Mode=OneWay, Source={StaticResource ViewModel}}"
 								IsChecked="{Binding IsTracked, Source={StaticResource ViewModel}}"
 								Foreground="{Binding Color_Brush, Mode=OneWay, Source={StaticResource ViewModel}}"
-								Click="TitleCheck_Click" />
+								Click="TitleCheck_Click"
+								ToolTip="{Binding RatedTeamInfo, Mode=OneWay, Source={StaticResource ViewModel}}" />
 		</Expander.Header>
 
 		<Grid Margin="5">

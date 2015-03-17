@@ -112,8 +112,9 @@
 
 		<ScrollViewer Grid.Row="1"
 									Background="#FF272727"
-									BorderThickness="0,1,0,0"
-									BorderBrush="#FF424242">
+									BorderThickness="1,1,0,1"
+									BorderBrush="#FF424242"
+									Margin="5,0">
 			<Grid x:Name="_MainGrid">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*" />

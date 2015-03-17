@@ -212,7 +212,7 @@ namespace ScoutingAppLite
 			if (result == true)
 			{
 				string rootFolder = csd.SelectedPath;
-				if (!rootFolder.EndsWith("\\")) ;
+				if (!rootFolder.EndsWith("\\"))
 				{
 					rootFolder += "\\";
 				}
